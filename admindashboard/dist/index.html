@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/admindashboard/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TailAdmin - Tailwind CSS Admin Dashboard Template</title>
+    <script type="module" crossorigin src="/admindashboard/assets/index-GwRcjPUc.js"></script>
+    <script type="module" src="/admindashboard/assets/faqEditorInject.js"></script>
+    <link rel="stylesheet" crossorigin href="/admindashboard/assets/index-BLEVfhiI.css">
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+      body, #app {
+        font-family: 'Inter', sans-serif !important;
+      }
+
+      /* Clean Corporate Layout */
+      body {
+        background: #f8fafc !important;
+        color: #0f172a !important;
+      }
+      .dark body {
+        background: #0f172a !important;
+        color: #f8fafc !important;
+      }
+
+      /* Minimalist Professional Card Overrides */
+      .rounded-2xl, 
+      .rounded-sm, 
+      [class*="rounded-"], 
+      .grid .bg-white,
+      .grid .dark:bg-boxdark {
+        border-radius: 12px !important;
+        border: 1px solid #e2e8f0 !important;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05) !important;
+        transition: none !important;
+        transform: none !important;
+      }
+
+      .bg-white {
+        background: #ffffff !important;
+      }
+
+      .dark .bg-white,
+      .dark .dark:bg-boxdark,
+      .dark [class*="dark:bg-"] {
+        background: #1e293b !important;
+        border: 1px solid #334155 !important;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+      }
+
+      /* Disable Hover Translations */
+      .bg-white:hover,
+      .dark .dark:bg-boxdark:hover {
+        transform: none !important;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05) !important;
+      }
+
+      /* Sidebar Navigation (Sleek Dark Slate) */
+      aside, [class*="bg-boxdark"] {
+        background: #0f172a !important;
+        border-right: 1px solid #1e293b !important;
+      }
+      
+      /* Sidebar Menu Items */
+      aside ul li a {
+        border-radius: 8px !important;
+        margin: 1px 0 !important;
+        transition: background 0.15s ease !important;
+      }
+
+      aside ul li a:hover {
+        background: rgba(255, 255, 255, 0.05) !important;
+        transform: none !important;
+      }
+
+      /* Active Selected Item - Sleek Minimalist Grayscale Accent */
+      aside ul li a.menu-item-active,
+      aside ul li a.menu-dropdown-item-active,
+      aside ul li a.bg-meta-4,
+      aside ul li a[class*="bg-brand"] {
+        background: rgba(15, 23, 42, 0.05) !important;
+        color: #0f172a !important;
+        font-weight: 600 !important;
+        box-shadow: none !important;
+      }
+
+      .dark aside ul li a.menu-item-active,
+      .dark aside ul li a.menu-dropdown-item-active,
+      .dark aside ul li a.bg-meta-4,
+      .dark aside ul li a[class*="bg-brand"] {
+        background: rgba(255, 255, 255, 0.08) !important;
+        color: #ffffff !important;
+        font-weight: 600 !important;
+        box-shadow: none !important;
+      }
+
+      /* Header Styling */
+      header, [class*="sticky"] {
+        background: #ffffff !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+        box-shadow: none !important;
+      }
+      
+      .dark header, .dark [class*="sticky"] {
+        background: #0f172a !important;
+        border-bottom: 1px solid #1e293b !important;
+      }
+
+      /* Clean Flat Buttons */
+      button.bg-primary, 
+      a.bg-primary,
+      [class*="bg-brand-"],
+      [class*="bg-indigo-"] {
+        background: #0f172a !important;
+        border-radius: 8px !important;
+        font-weight: 500 !important;
+        box-shadow: none !important;
+        border: 1px solid #0f172a !important;
+        color: white !important;
+        transition: background 0.15s ease !important;
+      }
+      
+      .dark button.bg-primary,
+      .dark a.bg-primary {
+        background: #f8fafc !important;
+        color: #0f172a !important;
+        border: 1px solid #f8fafc !important;
+      }
+
+      button.bg-primary:hover, 
+      a.bg-primary:hover {
+        background: #1e293b !important;
+        transform: none !important;
+        box-shadow: none !important;
+      }
+      
+      .dark button.bg-primary:hover,
+      .dark a.bg-primary:hover {
+        background: #e2e8f0 !important;
+      }
+
+      /* Form Input Fields */
+      input, select, textarea {
+        border-radius: 8px !important;
+        border: 1px solid #cbd5e1 !important;
+        background: #ffffff !important;
+        transition: border-color 0.15s ease !important;
+      }
+      
+      .dark input, .dark select, .dark textarea {
+        border: 1px solid #334155 !important;
+        background: #1e293b !important;
+        color: #f8fafc !important;
+      }
+
+      input:focus, select:focus, textarea:focus {
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15) !important;
+        outline: none !important;
+      }
+
+      /* Tables */
+      table th {
+        background: #f8fafc !important;
+        text-transform: uppercase !important;
+        font-size: 11px !important;
+        letter-spacing: 0.05em !important;
+        font-weight: 600 !important;
+        color: #64748b !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+      }
+      
+      .dark table th {
+        background: #0f172a !important;
+        color: #94a3b8 !important;
+        border-bottom: 1px solid #1e293b !important;
+      }
+
+      table tr {
+        transition: background-color 0.15s ease;
+      }
+
+      table tr:hover {
+        background: #f8fafc !important;
+      }
+      
+      .dark table tr:hover {
+        background: #1e293b !important;
+      }
+
+      /* Specific adjustments for chat */
+      .grid.xl:grid-cols-12 .rounded-2xl {
+        border-radius: 12px !important;
+      }
+
+      .max-h-[70vh] button.group.bg-brand-50 {
+        background: #3b82f6 !important;
+        color: white !important;
+        box-shadow: none !important;
+      }
+
+      .rounded-2xl.px-4.py-2.text-sm.leading-relaxed.bg-brand-500 {
+        background: #3b82f6 !important;
+        color: #ffffff !important;
+        border-radius: 12px 12px 4px 12px !important;
+        box-shadow: none !important;
+      }
+      
+      .h-[74vh] form button[type="submit"] {
+        background: #0f172a !important;
+        box-shadow: none !important;
+        border-radius: 8px !important;
+      }
+      .dark .h-[74vh] form button[type="submit"] {
+        background: #f8fafc !important;
+        color: #0f172a !important;
+      }
+
+      .h-[74vh] form button[type="submit"]:hover {
+        background: #1e293b !important;
+      }
+      .dark .h-[74vh] form button[type="submit"]:hover {
+        background: #e2e8f0 !important;
+      }
+
+      /* Scrollbars */
+      .overflow-y-auto::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+
+      .overflow-y-auto::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      .overflow-y-auto::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 3px;
+      }
+      .dark .overflow-y-auto::-webkit-scrollbar-thumb {
+        background: #475569;
+      }
+    </style>
+  </head>
+  <body class="dark:bg-gray-900">
+    <div id="app"></div>
+    <script>
+      // GitHub Pages SPA redirect
+      (function(l) {
+        if (l.search[1] === '/' ) {
+          var decoded = l.search.slice(1).split('&').map(function(s) { 
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+          window.history.replaceState(null, null,
+              l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      }(window.location))
+    </script>
+  </body>
+</html>

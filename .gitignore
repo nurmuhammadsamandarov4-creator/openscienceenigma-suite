@@ -4,7 +4,6 @@ server/node_modules/
 admindashboard/node_modules/
 
 # Production build outputs
-admindashboard/dist/
 server/public/admindashboard/
 
 # SQLite databases

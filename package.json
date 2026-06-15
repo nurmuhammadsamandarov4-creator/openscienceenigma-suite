@@ -9,6 +9,6 @@
     "mac:unquarantine": "xattr -dr com.apple.quarantine . || true",
     "mac:unquarantine:server": "xattr -dr com.apple.quarantine ./server/node_modules || true",
     "mac:unquarantine:admin": "xattr -dr com.apple.quarantine ./admindashboard/node_modules || true",
-    "build": "npm run build:admin && npm --prefix server run build"
+    "build": "npm --prefix server install && npm run build:admin && npm --prefix server run build"
   }
 }

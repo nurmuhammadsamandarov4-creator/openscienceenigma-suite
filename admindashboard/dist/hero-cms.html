@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hero CMS</title>
+  <style>
+    :root{
+      --bg:#f6f7fb; --card:#fff; --text:#111827; --muted:#6b7280; --border:#e5e7eb;
+      --primary:#7c3aed; --shadow: 0 10px 30px rgba(17,24,39,.08);
+    }
+    body{ margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; background:var(--bg); color:var(--text); }
+    .wrap{ padding:14px; }
+    .header{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; }
+    .tabs{ display:flex; gap:8px; }
+    .tab{ border:1px solid var(--border); background:#fff; border-radius:999px; padding:6px 10px; font-weight:700; font-size:12px; cursor:pointer; }
+    .tab.active{ background:var(--primary); color:#fff; border-color:transparent; }
+    .status{ font-size:12px; color:var(--muted); }
+    .layout{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+    .card{ background:var(--card); border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow); padding:14px; }
+    .card h3{ margin:0 0 10px 0; font-size:14px; }
+    label{ display:block; font-size:12px; font-weight:700; margin:10px 0 6px; }
+    input, textarea{ width:100%; box-sizing:border-box; border:1px solid var(--border); border-radius:12px; padding:10px 12px; font-size:13px; outline:none; }
+    textarea{ min-height:84px; resize:vertical; }
+    .row2{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+    .btns{ display:flex; gap:10px; margin-top:12px; }
+    .btn{ border:none; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; }
+    .btn.primary{ background:var(--primary); color:#fff; }
+    .btn.ghost{ background:#fff; border:1px solid var(--border); color:#111827; }
+    .muted{ color:var(--muted); font-size:12px; }
+    .list{ margin-top:8px; display:flex; flex-direction:column; gap:8px; }
+    .item{ border:1px solid var(--border); border-radius:14px; padding:10px; display:flex; justify-content:space-between; gap:8px; }
+    .item strong{ font-size:12px; }
+    .item small{ color:var(--muted); font-size:11px; display:block; margin-top:3px; }
+    .pill{ font-size:11px; padding:6px 10px; border-radius:999px; border:1px solid var(--border); background:#fff; cursor:pointer; font-weight:800; }
+    .pill.danger{ border-color:#fecaca; color:#b91c1c; }
+    .previewBox{ border-radius:18px; padding:24px; min-height:420px; background: radial-gradient(circle at 50% 10%, rgba(255,198,170,.9) 0%, rgba(194,212,255,.75) 35%, rgba(255,255,255,1) 70%); }
+    .pvBadge{ display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; background:rgba(255,255,255,.75); border:1px solid rgba(255,255,255,.9); font-size:12px; font-weight:800; }
+    .pvTitle{ font-size:44px; line-height:1.05; margin:18px 0 10px; }
+    .pvSub{ color:#4b5563; font-size:14px; line-height:1.55; max-width:520px; }
+    .pvBtns{ display:flex; gap:10px; margin-top:18px; }
+    .pvBtn{ display:inline-flex; align-items:center; justify-content:center; padding:10px 18px; border-radius:999px; font-weight:900; text-decoration:none; font-size:13px; }
+    .pvBtn.primary{ background:#3b5bdb; color:#fff; }
+    .pvBtn.secondary{ background:rgba(255,255,255,.8); border:1px solid rgba(255,255,255,.95); color:#111827; }
+    .pvStats{ margin-top:36px; display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; }
+    .pvStat{ text-align:center; }
+    .pvStatVal{ font-size:30px; font-weight:900; }
+    .pvStatLbl{ font-size:12px; color:#4b5563; margin-top:6px; }
+    @media (max-width: 980px){ .layout{ grid-template-columns: 1fr; } .pvTitle{ font-size:36px;} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div class="tabs">
+        <button class="tab active" data-lang="en">EN</button>
+        <button class="tab" data-lang="ru">RU</button>
+        <button class="tab" data-lang="uz">UZ</button>
+      </div>
+      <div class="status" style="display:flex; align-items:center; gap:10px;">
+        <button id="saveBtn" class="pill" type="button" style="padding:6px 10px; background:#0ea5e9; color:#fff; border:none; border-radius:999px; font-weight:700; cursor:pointer;">Save</button>
+        <span>Status: <span id="status">Loading...</span></span>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="card">
+        <h3>Hero section</h3>
+        <div class="muted">Rasmdagi hero yozuvlarini shu yerda 3 tilda tahrir qilasiz. Watch Demo tugmasiga link ham beriladi. Statlar Add/Edit/Delete.</div>
+
+        <label>Badge</label>
+        <input id="badge" placeholder="60K+ Happy users worldwide • 4.9" />
+
+        <label>Title</label>
+        <textarea id="title" placeholder="Build, Launch & Scale with AI agents."></textarea>
+
+        <label>Subtitle</label>
+        <textarea id="subtitle" placeholder="Design, automate and deploy..."></textarea>
+
+        <div class="row2">
+          <div>
+            <label>Primary CTA label</label>
+            <input id="ctaPrimaryLabel" placeholder="Get Started" />
+          </div>
+          <div>
+            <label>Primary CTA link (href)</label>
+            <input id="ctaPrimaryHref" placeholder="#" />
+          </div>
+        </div>
+
+        <div class="row2">
+          <div>
+            <label>Secondary CTA label</label>
+            <input id="ctaSecondaryLabel" placeholder="Watch Demo" />
+          </div>
+          <div>
+            <label>Secondary CTA link (href)</label>
+            <input id="ctaSecondaryHref" placeholder="https://..." />
+          </div>
+        </div>
+
+        <div style="margin-top:14px;">
+          <h3 style="margin:0 0 6px 0; font-size:13px;">Stats</h3>
+          <div class="muted">3 ta bo‘lsa ideal (3x / 60% / 99.9%).</div>
+
+          <div class="list" id="statsList"></div>
+
+          <div class="card" style="padding:12px; margin-top:10px; border-radius:14px;">
+            <div class="muted" style="margin-bottom:6px;">Add / Edit stat</div>
+            <div class="row2">
+              <div>
+                <label style="margin-top:0;">Value</label>
+                <input id="statValue" placeholder="3x" />
+              </div>
+              <div>
+                <label style="margin-top:0;">Label</label>
+                <input id="statLabel" placeholder="Faster AI agent development" />
+              </div>
+            </div>
+            <div class="btns">
+              <button class="btn primary" id="saveStatBtn">Save stat</button>
+              <button class="btn ghost" id="cancelStatBtn">Cancel</button>
+              <button class="btn ghost" id="addNewBtn" title="new item">New</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="btns">
+          <button class="btn primary" id="saveAllBtn">Save all</button>
+          <button class="btn ghost" id="reloadBtn">Reload</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Preview</h3>
+        <div class="previewBox">
+          <div class="pvBadge" id="pvBadge">...</div>
+          <div class="pvTitle" id="pvTitle">...</div>
+          <div class="pvSub" id="pvSub">...</div>
+          <div class="pvBtns">
+            <a class="pvBtn primary" id="pvPrimary" href="#" target="_blank" rel="noopener">Get Started</a>
+            <a class="pvBtn secondary" id="pvSecondary" href="#" target="_blank" rel="noopener">Watch Demo</a>
+          </div>
+          <div class="pvStats" id="pvStats"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = '/api/site/hero';
+
+    function getAdminId(){
+      try{
+        const keys=['admin_id','adminId','ose_admin_id','oseAdminId'];
+        for (const k of keys){
+          const v = window.localStorage?.getItem?.(k);
+          const n = Number(v);
+          if (Number.isFinite(n) && n > 0) return n;
+        }
+      }catch(e){}
+      return 0;
+    }
+
+    const LANGS = ['en','ru','uz'];
+
+    const els = {
+      status: document.getElementById('status'),
+      langBtns: Array.from(document.querySelectorAll('.tab')),
+      badge: document.getElementById('badge'),
+      title: document.getElementById('title'),
+      subtitle: document.getElementById('subtitle'),
+      ctaPrimaryLabel: document.getElementById('ctaPrimaryLabel'),
+      ctaPrimaryHref: document.getElementById('ctaPrimaryHref'),
+      ctaSecondaryLabel: document.getElementById('ctaSecondaryLabel'),
+      ctaSecondaryHref: document.getElementById('ctaSecondaryHref'),
+      statsList: document.getElementById('statsList'),
+      statValue: document.getElementById('statValue'),
+      statLabel: document.getElementById('statLabel'),
+      saveStatBtn: document.getElementById('saveStatBtn'),
+      cancelStatBtn: document.getElementById('cancelStatBtn'),
+      addNewBtn: document.getElementById('addNewBtn'),
+      saveAllBtn: document.getElementById('saveAllBtn'),
+      reloadBtn: document.getElementById('reloadBtn'),
+      pvBadge: document.getElementById('pvBadge'),
+      pvTitle: document.getElementById('pvTitle'),
+      pvSub: document.getElementById('pvSub'),
+      pvPrimary: document.getElementById('pvPrimary'),
+      pvSecondary: document.getElementById('pvSecondary'),
+      pvStats: document.getElementById('pvStats'),
+    };
+
+    function uid(){ return Math.random().toString(36).slice(2,10) + Date.now().toString(36); }
+    function setStatus(t, cls){
+      els.status.textContent = t;
+      els.status.style.color = cls === 'ok' ? '#16a34a' : (cls === 'err' ? '#dc2626' : '#6b7280');
+    }
+
+    let lang = 'en';
+    let editingId = null;
+
+    let state = {
+      badge: { en:'', ru:'', uz:'' },
+      title: { en:'', ru:'', uz:'' },
+      subtitle: { en:'', ru:'', uz:'' },
+      ctaPrimaryLabel: { en:'', ru:'', uz:'' },
+      ctaPrimaryHref: { en:'#', ru:'#', uz:'#' },
+      ctaSecondaryLabel: { en:'', ru:'', uz:'' },
+      ctaSecondaryHref: { en:'', ru:'', uz:'' },
+      stats: [] // [{id, value:{}, label:{}}]
+    };
+
+    function normalize(json){
+      const norm = {
+        badge:{en:'',ru:'',uz:''},
+        title:{en:'',ru:'',uz:''},
+        subtitle:{en:'',ru:'',uz:''},
+        ctaPrimaryLabel:{en:'',ru:'',uz:''},
+        ctaPrimaryHref:{en:'#',ru:'#',uz:'#'},
+        ctaSecondaryLabel:{en:'',ru:'',uz:''},
+        ctaSecondaryHref:{en:'',ru:'',uz:''},
+        stats:[]
+      };
+
+      const hero = (json && json.hero) ? json.hero : json || {};
+      for (const l of LANGS){
+        const h = hero[l] || {};
+        norm.badge[l] = h.badge || '';
+        norm.title[l] = h.title || '';
+        norm.subtitle[l] = h.subtitle || '';
+        norm.ctaPrimaryLabel[l] = h.ctaPrimaryLabel || h.cta_primary_label || '';
+        norm.ctaPrimaryHref[l] = h.ctaPrimaryHref || h.cta_primary_href || '#';
+        norm.ctaSecondaryLabel[l] = h.ctaSecondaryLabel || h.cta_secondary_label || '';
+        norm.ctaSecondaryHref[l] = h.ctaSecondaryHref || h.cta_secondary_href || '';
+      }
+
+      // Merge stats by index across languages
+      const maxLen = Math.max(
+        ...(LANGS.map(l => (hero[l] && Array.isArray(hero[l].stats)) ? hero[l].stats.length : 0))
+      , 0);
+
+      for (let i=0; i<maxLen; i++){
+        const it = { id: uid(), value:{en:'',ru:'',uz:''}, label:{en:'',ru:'',uz:''} };
+        for (const l of LANGS){
+          const s = (hero[l] && Array.isArray(hero[l].stats)) ? hero[l].stats[i] : null;
+          if (s){
+            it.value[l] = (s.value || '').toString();
+            it.label[l] = (s.label || '').toString();
+          }
+        }
+        if (Object.values(it.value).some(Boolean) || Object.values(it.label).some(Boolean)) norm.stats.push(it);
+      }
+
+      // default 3 empty if none
+      if (norm.stats.length === 0){
+        norm.stats = [
+          { id: uid(), value:{en:'3x',ru:'3x',uz:'3x'}, label:{en:'Faster AI agent development',ru:'',uz:''} },
+          { id: uid(), value:{en:'60%',ru:'60%',uz:'60%'}, label:{en:'Reduction in manual workflows',ru:'',uz:''} },
+          { id: uid(), value:{en:'99.9%',ru:'99.9%',uz:'99.9%'}, label:{en:'Reliable agent execution uptime',ru:'',uz:''} },
+        ];
+      }
+      return norm;
+    }
+
+    function toServerPayload(){
+      const byLang = {};
+      for (const l of LANGS){
+        byLang[l] = {
+          badge: state.badge[l] || '',
+          title: state.title[l] || '',
+          subtitle: state.subtitle[l] || '',
+          ctaPrimaryLabel: state.ctaPrimaryLabel[l] || '',
+          ctaPrimaryHref: state.ctaPrimaryHref[l] || '#',
+          ctaSecondaryLabel: state.ctaSecondaryLabel[l] || '',
+          ctaSecondaryHref: state.ctaSecondaryHref[l] || '',
+          stats: state.stats
+            .map(it => ({ value: (it.value[l]||'').toString(), label: (it.label[l]||'').toString() }))
+            // keep a stat row if at least one field is provided in this language
+            // (users often fill RU/UZ later; we should not drop partially filled rows)
+            .filter(x => x.value || x.label)
+            .slice(0,6)
+        };
+      }
+      return byLang;
+    }
+
+    function renderStatsList(){
+      els.statsList.innerHTML = '';
+      state.stats.forEach((it) => {
+        const row = document.createElement('div');
+        row.className = 'item';
+        const left = document.createElement('div');
+        const v = (it.value[lang] || it.value.en || '').trim();
+        const lb = (it.label[lang] || it.label.en || '').trim();
+        left.innerHTML = '<strong>'+escapeHtml(v || '(value)')+'</strong><small>'+escapeHtml(lb || '(label)')+'</small>';
+        const right = document.createElement('div');
+        const editBtn = document.createElement('button');
+        editBtn.className = 'pill';
+        editBtn.textContent = 'Edit';
+        editBtn.onclick = () => {
+          editingId = it.id;
+          els.statValue.value = it.value[lang] || '';
+          els.statLabel.value = it.label[lang] || '';
+        };
+        const delBtn = document.createElement('button');
+        delBtn.className = 'pill danger';
+        delBtn.textContent = 'Delete';
+        delBtn.onclick = () => {
+          state.stats = state.stats.filter(x => x.id !== it.id);
+          if (editingId === it.id) { editingId = null; els.statValue.value=''; els.statLabel.value=''; }
+          renderStatsList();
+          renderPreview();
+          scheduleSave();
+        };
+        right.appendChild(editBtn);
+        right.appendChild(delBtn);
+        row.appendChild(left);
+        row.appendChild(right);
+        els.statsList.appendChild(row);
+      });
+    }
+
+    function escapeHtml(s){
+      return (s||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+    }
+
+    function bindLang(newLang){
+      lang = newLang;
+      els.langBtns.forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+      els.badge.value = state.badge[lang] || '';
+      els.title.value = state.title[lang] || '';
+      els.subtitle.value = state.subtitle[lang] || '';
+      els.ctaPrimaryLabel.value = state.ctaPrimaryLabel[lang] || '';
+      els.ctaPrimaryHref.value = state.ctaPrimaryHref[lang] || '#';
+      els.ctaSecondaryLabel.value = state.ctaSecondaryLabel[lang] || '';
+      els.ctaSecondaryHref.value = state.ctaSecondaryHref[lang] || '';
+      // if editing stat keep editing
+      if (editingId){
+        const it = state.stats.find(x => x.id === editingId);
+        if (it){
+          els.statValue.value = it.value[lang] || '';
+          els.statLabel.value = it.label[lang] || '';
+        }
+      }
+      renderStatsList();
+      renderPreview();
+    }
+
+    function renderPreview(){
+      els.pvBadge.textContent = state.badge[lang] || state.badge.en || '';
+      els.pvTitle.textContent = state.title[lang] || state.title.en || '';
+      els.pvSub.textContent = state.subtitle[lang] || state.subtitle.en || '';
+      els.pvPrimary.textContent = state.ctaPrimaryLabel[lang] || state.ctaPrimaryLabel.en || 'Get Started';
+      els.pvPrimary.href = state.ctaPrimaryHref[lang] || '#';
+      els.pvSecondary.textContent = state.ctaSecondaryLabel[lang] || state.ctaSecondaryLabel.en || 'Watch Demo';
+      els.pvSecondary.href = state.ctaSecondaryHref[lang] || '#';
+
+      els.pvStats.innerHTML = '';
+      const stats = state.stats.slice(0,3);
+      stats.forEach(it => {
+        const d = document.createElement('div');
+        d.className = 'pvStat';
+        const val = document.createElement('div');
+        val.className = 'pvStatVal';
+        val.textContent = it.value[lang] || it.value.en || '';
+        const lbl = document.createElement('div');
+        lbl.className = 'pvStatLbl';
+        lbl.textContent = it.label[lang] || it.label.en || '';
+        d.appendChild(val); d.appendChild(lbl);
+        els.pvStats.appendChild(d);
+      });
+    }
+
+    let saveTimer = null;
+    async function saveAll(){
+      try{
+        setStatus('Saving...');
+        const res = await fetch(API_URL, {
+          method:'PUT',
+          headers:{'Content-Type':'application/json'},
+          credentials:'include', cache:'no-store',
+          body: JSON.stringify({ admin_id: getAdminId(), hero: toServerPayload() })
+        });
+        const json = await res.json().catch(()=> ({}));
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        if (json && json.ok === false) throw new Error(json.error || 'Save failed');
+        setStatus('Saved', 'ok');
+      }catch(e){
+        console.error(e);
+        setStatus('Save error: ' + (e && e.message ? e.message : 'unknown'), 'err');
+      }
+    }
+    function scheduleSave(){
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(saveAll, 450);
+    }
+
+    async function load(){
+      try{
+        setStatus('Loading...');
+        const res = await fetch(API_URL + '?t=' + Date.now(), { credentials:'include', cache:'no-store' });
+        const json = await res.json();
+        state = normalize(json);
+        setStatus('Loaded', 'ok');
+        bindLang(lang);
+      }catch(e){
+        console.error(e);
+        setStatus('Load error', 'err');
+      }
+    }
+
+    // Bind inputs
+    function onAnyChange(){
+      state.badge[lang] = els.badge.value;
+      state.title[lang] = els.title.value;
+      state.subtitle[lang] = els.subtitle.value;
+      state.ctaPrimaryLabel[lang] = els.ctaPrimaryLabel.value;
+      state.ctaPrimaryHref[lang] = els.ctaPrimaryHref.value || '#';
+      state.ctaSecondaryLabel[lang] = els.ctaSecondaryLabel.value;
+      state.ctaSecondaryHref[lang] = els.ctaSecondaryHref.value;
+      renderPreview();
+      scheduleSave();
+    }
+    ['input','change'].forEach(evt => {
+      els.badge.addEventListener(evt, onAnyChange);
+      els.title.addEventListener(evt, onAnyChange);
+      els.subtitle.addEventListener(evt, onAnyChange);
+      els.ctaPrimaryLabel.addEventListener(evt, onAnyChange);
+      els.ctaPrimaryHref.addEventListener(evt, onAnyChange);
+      els.ctaSecondaryLabel.addEventListener(evt, onAnyChange);
+      els.ctaSecondaryHref.addEventListener(evt, onAnyChange);
+    });
+
+    els.langBtns.forEach(b => b.addEventListener('click', () => bindLang(b.dataset.lang)));
+
+    // Manual save (in addition to autosave)
+    const saveBtn = document.getElementById('saveBtn');
+    if (saveBtn) {
+      saveBtn.addEventListener('click', async () => {
+        clearTimeout(saveTimer);
+        await saveNow();
+      });
+    }
+
+    els.saveStatBtn.addEventListener('click', () => {
+      const v = (els.statValue.value || '').trim();
+      const l = (els.statLabel.value || '').trim();
+      // For a NEW stat, require at least one field.
+      // For EDIT, allow clearing fields (empty string) and allow partial edits.
+      if (!editingId && !v && !l) return;
+
+      if (!editingId){
+        const it = { id: uid(), value:{en:'',ru:'',uz:''}, label:{en:'',ru:'',uz:''} };
+        it.value[lang] = v; it.label[lang] = l;
+        // copy value to other langs if empty (helpful)
+        for (const la of LANGS){ if (!it.value[la]) it.value[la] = v; }
+        state.stats.push(it);
+        editingId = it.id;
+      } else {
+        const it = state.stats.find(x => x.id === editingId);
+        if (it){
+          it.value[lang] = v;
+          it.label[lang] = l;
+          // do not auto-copy on edit; keep other languages as-is
+        }
+      }
+      renderStatsList();
+      renderPreview();
+      scheduleSave();
+    });
+
+    els.cancelStatBtn.addEventListener('click', () => {
+      editingId = null;
+      els.statValue.value = '';
+      els.statLabel.value = '';
+    });
+
+    els.addNewBtn.addEventListener('click', () => {
+      editingId = null;
+      els.statValue.value = '';
+      els.statLabel.value = '';
+      els.statValue.focus();
+    });
+
+    els.saveAllBtn.addEventListener('click', saveAll);
+    els.reloadBtn.addEventListener('click', load);
+
+    load();
+  </script>
+</body>
+</html>

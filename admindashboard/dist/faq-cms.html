@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ CMS</title>
+  <style>
+    :root{
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border:#e2e8f0;
+      --primary:#7c3aed;
+      --danger:#ef4444;
+      --shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    *{ box-sizing:border-box; }
+    body{ margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; background: var(--bg); color: var(--text); }
+    .wrap{ max-width: 1240px; margin: 0 auto; padding: 24px; }
+    .card{ background: var(--card); border:1px solid var(--border); border-radius: 18px; box-shadow: var(--shadow); }
+    .header{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; padding: 16px 18px; }
+    .header h1{ margin:0; font-size: 18px; }
+    .header p{ margin:4px 0 0; color: var(--muted); font-size: 13px; }
+    .toolbar{ display:flex; align-items:center; gap:10px; }
+    .lang{ display:flex; background:#f1f5f9; border:1px solid var(--border); border-radius: 999px; padding:4px; }
+    .lang button{ border:0; background:transparent; padding:8px 12px; border-radius:999px; cursor:pointer; font-weight:700; font-size:12px; color:#334155; }
+    .lang button.active{ background:#0f172a; color:#fff; }
+    .btn{ border:0; cursor:pointer; border-radius:999px; padding:10px 14px; font-weight:700; }
+    .btn.primary{ background: var(--primary); color:#fff; }
+    .btn.ghost{ background: transparent; border:1px solid var(--border); color:#0f172a; }
+    .btn.danger{ background: var(--danger); color:#fff; }
+
+    .grid{ display:grid; grid-template-columns: 1fr; gap:16px; padding: 16px 18px 18px; }
+    @media (min-width: 1024px){
+      .grid{ grid-template-columns: 1.05fr 0.95fr; }
+    }
+
+    .sectionTitle{ font-weight:800; font-size: 14px; margin: 0 0 10px; }
+    .field{ margin-bottom: 12px; }
+    .label{ font-size: 12px; font-weight:800; color:#334155; margin-bottom: 6px; display:block; }
+    input[type=text], textarea{
+      width:100%; border:1px solid var(--border); border-radius: 12px;
+      padding: 11px 12px; font-size: 14px; outline:none; background:#fff;
+    }
+    textarea{ min-height: 88px; resize: vertical; }
+
+    .split{ display:grid; grid-template-columns: 1fr; gap:12px; }
+    @media (min-width: 640px){ .split{ grid-template-columns: 1fr 1fr; } }
+
+    .hint{ color: var(--muted); font-size: 12px; }
+
+    .previewWrap{ padding: 16px; }
+    .previewTitle{ font-size: 18px; font-weight: 900; margin: 0; }
+    .previewSubtitle{ color: var(--muted); margin: 8px 0 14px; }
+
+    .faqLayout{ display:grid; grid-template-columns: 1fr; gap: 14px; }
+    @media (min-width: 768px){
+      .faqLayout{ grid-template-columns: 1fr 320px; align-items:start; }
+    }
+
+    .accordion{ border:1px solid var(--border); border-radius: 14px; overflow:hidden; background:#fff; }
+    .accItem{ border-top:1px solid var(--border); }
+    .accItem:first-child{ border-top:0; }
+    .accBtn{ width:100%; text-align:left; border:0; background:#fff; padding: 14px 14px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .accQ{ font-weight:800; }
+    .accA{ padding: 0 14px 14px; color:#334155; display:none; }
+    .accItem.open .accA{ display:block; }
+    .chev{ width: 22px; height: 22px; display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--border); border-radius: 8px; color:#334155; }
+
+    .cta{ border-radius: 18px; padding: 18px; background: var(--primary); color:#fff; box-shadow: var(--shadow); }
+    .cta p{ margin: 0 0 14px; font-weight:800; }
+    .cta a{ display:inline-block; background:#fff; color:#0f172a; padding: 10px 14px; border-radius: 999px; text-decoration:none; font-weight:900; }
+    .sticky{ position: sticky; top: 88px; }
+
+    .items{ margin-top: 16px; display:grid; grid-template-columns: 1fr; gap: 10px; }
+    .itemCard{ background:#fff; border:1px solid var(--border); border-radius: 14px; padding: 12px; display:flex; align-items:flex-start; justify-content:space-between; gap: 12px; }
+    .itemCard h4{ margin:0; font-size: 13px; font-weight:900; }
+    .itemCard p{ margin:6px 0 0; color: var(--muted); font-size: 12px; line-height: 1.35; }
+    .itemActions{ display:flex; gap:8px; }
+
+    .status{ font-size:12px; color: var(--muted); padding: 0 18px 16px; }
+    .status b{ color:#0f172a; }
+
+    .divider{ height:1px; background: var(--border); margin: 12px 0 14px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="header">
+        <div>
+          <h1>FAQ CMS</h1>
+          <p>FAQ bo‘limini Core Features kabi tahrirlang: UZ / RU / EN + Add / Edit / Delete.</p>
+        </div>
+        <div class="toolbar">
+          <div class="lang" role="tablist" aria-label="Language">
+            <button id="lang-uz" data-lang="uz">UZ</button>
+            <button id="lang-ru" data-lang="ru">RU</button>
+            <button id="lang-en" data-lang="en" class="active">EN</button>
+          </div>
+          <button id="addFaq" class="btn primary">+ Add question</button>
+        </div>
+      </div>
+
+      <div class="grid">
+        <!-- Left: Editor -->
+        <div>
+          <div class="sectionTitle">Section texts</div>
+
+          <div class="field">
+            <label class="label" id="lblTitle">Title</label>
+            <input id="title" type="text" placeholder="FAQ" />
+          </div>
+
+          <div class="field">
+            <label class="label" id="lblSubtitle">Subtitle</label>
+            <textarea id="subtitle" placeholder="Short description...
+"></textarea>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="sectionTitle">CTA (right card)</div>
+
+          <div class="field">
+            <label class="label" id="lblCtaText">CTA box text</label>
+            <textarea id="ctaText" placeholder="Still have questions? Our team help you get started."></textarea>
+          </div>
+
+          <div class="split">
+            <div class="field">
+              <label class="label" id="lblCtaBtn">CTA button label</label>
+              <input id="ctaButtonLabel" type="text" placeholder="Contact support" />
+            </div>
+            <div class="field">
+              <label class="label" id="lblCtaHref">CTA button link (href)</label>
+              <input id="ctaButtonHref" type="text" placeholder="#" />
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="sectionTitle">FAQ item</div>
+          <div class="hint" id="itemHint">Add/Edit qilmoqchi bo‘lgan savol-javobni shu yerda to‘ldiring.</div>
+
+          <div class="field" style="margin-top:10px;">
+            <label class="label" id="lblQ">Question</label>
+            <input id="itemQuestion" type="text" placeholder="Question..." />
+          </div>
+
+          <div class="field">
+            <label class="label" id="lblA">Answer</label>
+            <textarea id="itemAnswer" placeholder="Answer...
+"></textarea>
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button id="saveItem" class="btn primary">Save item</button>
+            <button id="cancelEdit" class="btn ghost">Cancel</button>
+          </div>
+
+          <div class="items" id="itemsList" aria-label="FAQ items list"></div>
+        </div>
+
+        <!-- Right: Preview -->
+        <div class="card" style="border-radius:18px;">
+          <div class="previewWrap">
+            <div class="sectionTitle">Preview</div>
+            <h2 class="previewTitle" id="pvTitle">FAQ</h2>
+            <p class="previewSubtitle" id="pvSubtitle"></p>
+
+            <div class="faqLayout">
+              <div class="accordion" id="pvAccordion" aria-label="FAQ preview"></div>
+              <div class="sticky">
+                <div class="cta">
+                  <p id="pvCtaText"></p>
+                  <a id="pvCtaBtn" href="#" target="_blank" rel="noopener">Contact support</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="status" id="status">Status: <b>Loading...</b></div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = '/api/site/faq';
+    const LANGS = ['uz','ru','en'];
+
+    const els = {
+      langBtns: Array.from(document.querySelectorAll('.lang button')),
+      title: document.getElementById('title'),
+      subtitle: document.getElementById('subtitle'),
+      ctaText: document.getElementById('ctaText'),
+      ctaButtonLabel: document.getElementById('ctaButtonLabel'),
+      ctaButtonHref: document.getElementById('ctaButtonHref'),
+      addFaq: document.getElementById('addFaq'),
+      itemQuestion: document.getElementById('itemQuestion'),
+      itemAnswer: document.getElementById('itemAnswer'),
+      saveItem: document.getElementById('saveItem'),
+      cancelEdit: document.getElementById('cancelEdit'),
+      itemsList: document.getElementById('itemsList'),
+      pvTitle: document.getElementById('pvTitle'),
+      pvSubtitle: document.getElementById('pvSubtitle'),
+      pvAccordion: document.getElementById('pvAccordion'),
+      pvCtaText: document.getElementById('pvCtaText'),
+      pvCtaBtn: document.getElementById('pvCtaBtn'),
+      status: document.getElementById('status'),
+    };
+
+    let state = {
+      title: { uz:'', ru:'', en:'' },
+      subtitle: { uz:'', ru:'', en:'' },
+      ctaText: { uz:'', ru:'', en:'' },
+      ctaButtonLabel: { uz:'', ru:'', en:'' },
+      ctaButtonHref: { uz:'#', ru:'#', en:'#' },
+      items: []
+    };
+
+    let lang = 'en';
+    let editingId = null;
+    let saveTimer = null;
+
+    function uid() {
+      return 'faq_' + Math.random().toString(36).slice(2, 10);
+    }
+
+    function setStatus(text, tone='muted') {
+      const b = els.status.querySelector('b') || (()=>{ const bb=document.createElement('b'); els.status.appendChild(bb); return bb; })();
+      b.textContent = text;
+      b.style.color = tone === 'ok' ? '#16a34a' : tone === 'err' ? '#ef4444' : '#0f172a';
+    }
+
+    async function load() {
+      try{
+        setStatus('Loading...');
+        const res = await fetch(API_URL, { credentials: 'include' });
+        const json = await res.json();
+
+        // Normalize shape (server may return {uz:{},ru:{},en:{}})
+        if (json && (json.uz || json.ru || json.en)) {
+          const norm = {
+            title: { uz:'', ru:'', en:'' },
+            subtitle: { uz:'', ru:'', en:'' },
+            ctaText: { uz:'', ru:'', en:'' },
+            ctaButtonLabel: { uz:'', ru:'', en:'' },
+            ctaButtonHref: { uz:'#', ru:'#', en:'#' },
+            items: []
+          };
+
+          for (const l of LANGS) {
+            const s = json[l] || {};
+            norm.title[l] = s.title || '';
+            norm.subtitle[l] = s.subtitle || '';
+            norm.ctaText[l] = s.ctaTitle || s.ctaText || s.cta_box_text || '';
+            norm.ctaButtonLabel[l] = s.ctaButtonLabel || s.cta_button_label || '';
+            norm.ctaButtonHref[l] = s.ctaButtonHref || s.cta_button_href || '#';
+          }
+
+          // Prefer items from en if exists, but keep per-item translations
+          const itemsFrom = (json.en && Array.isArray(json.en.items) ? json.en.items : (json.uz && json.uz.items) ? json.uz.items : (json.ru && json.ru.items) ? json.ru.items : []);
+          norm.items = (itemsFrom || []).map((it) => {
+            return {
+              id: it.id || uid(),
+              question: {
+                uz: (it.question && it.question.uz) || (it.question_uz) || (it.question && it.question) || '',
+                ru: (it.question && it.question.ru) || (it.question_ru) || '',
+                en: (it.question && it.question.en) || (it.question_en) || '',
+              },
+              answer: {
+                uz: (it.answer && it.answer.uz) || (it.answer_uz) || (it.answer && it.answer) || '',
+                ru: (it.answer && it.answer.ru) || (it.answer_ru) || '',
+                en: (it.answer && it.answer.en) || (it.answer_en) || '',
+              }
+            };
+          });
+
+          // If server stores translations differently, try to merge from other languages by index
+          for (const l of ['uz','ru']) {
+            const arr = json[l] && Array.isArray(json[l].items) ? json[l].items : [];
+            for (let i=0;i<Math.min(arr.length, norm.items.length);i++) {
+              const it = arr[i];
+              if (it?.question) norm.items[i].question[l] = typeof it.question === 'string' ? it.question : (it.question[l] || norm.items[i].question[l]);
+              if (it?.answer) norm.items[i].answer[l] = typeof it.answer === 'string' ? it.answer : (it.answer[l] || norm.items[i].answer[l]);
+            }
+          }
+
+          state = norm;
+        }
+
+        bindLang(lang);
+        renderAll();
+        setStatus('Loaded', 'ok');
+      } catch (e) {
+        console.error(e);
+        setStatus('Load error', 'err');
+      }
+    }
+
+    function toServerPayload() {
+      const byLang = {};
+      for (const l of LANGS) {
+        byLang[l] = {
+          title: state.title[l] || '',
+          subtitle: state.subtitle[l] || '',
+          ctaTitle: state.ctaText[l] || '',
+          ctaButtonLabel: state.ctaButtonLabel[l] || '',
+          ctaButtonHref: state.ctaButtonHref[l] || '#',
+          items: state.items.map((it) => ({
+            id: it.id,
+            question: it.question[l] || '',
+            answer: it.answer[l] || '',
+          }))
+        };
+      }
+      return byLang;
+    }
+
+    async function saveAll() {
+      try{
+        setStatus('Saving...');
+        const res = await fetch(API_URL, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(toServerPayload())
+        });
+        if (!res.ok) throw new Error('Bad response');
+        setStatus('Saved', 'ok');
+      } catch (e) {
+        console.error(e);
+        setStatus('Save error', 'err');
+      }
+    }
+
+    function scheduleSave() {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(saveAll, 450);
+    }
+
+    function bindLang(newLang) {
+      lang = newLang;
+      els.langBtns.forEach((b) => b.classList.toggle('active', b.dataset.lang === lang));
+
+      els.title.value = state.title[lang] || '';
+      els.subtitle.value = state.subtitle[lang] || '';
+      els.ctaText.value = state.ctaText[lang] || '';
+      els.ctaButtonLabel.value = state.ctaButtonLabel[lang] || '';
+      els.ctaButtonHref.value = state.ctaButtonHref[lang] || '#';
+
+      // If currently editing an item, keep that item selected
+      if (editingId) {
+        const it = state.items.find(x => x.id === editingId);
+        if (it) {
+          els.itemQuestion.value = it.question[lang] || '';
+          els.itemAnswer.value = it.answer[lang] || '';
+        }
+      }
+
+      renderAll();
+    }
+
+    function renderPreview() {
+      els.pvTitle.textContent = state.title[lang] || 'FAQ';
+      els.pvSubtitle.textContent = state.subtitle[lang] || '';
+      els.pvCtaText.textContent = state.ctaText[lang] || 'Still have questions? Our team help you get started.';
+      els.pvCtaBtn.textContent = state.ctaButtonLabel[lang] || 'Contact support';
+      els.pvCtaBtn.href = state.ctaButtonHref[lang] || '#';
+
+      els.pvAccordion.innerHTML = '';
+      const items = state.items;
+      if (!items.length) {
+        const empty = document.createElement('div');
+        empty.style.padding = '14px';
+        empty.style.color = '#64748b';
+        empty.textContent = 'No questions yet.';
+        els.pvAccordion.appendChild(empty);
+        return;
+      }
+
+      items.forEach((it, idx) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'accItem' + (idx === 0 ? ' open' : '');
+
+        const btn = document.createElement('button');
+        btn.className = 'accBtn';
+        btn.type = 'button';
+        const q = document.createElement('span');
+        q.className = 'accQ';
+        q.textContent = it.question[lang] || '(no question)';
+        const chev = document.createElement('span');
+        chev.className = 'chev';
+        chev.textContent = '⌄';
+        btn.appendChild(q);
+        btn.appendChild(chev);
+
+        const a = document.createElement('div');
+        a.className = 'accA';
+        a.textContent = it.answer[lang] || '';
+
+        btn.addEventListener('click', () => {
+          wrap.classList.toggle('open');
+        });
+
+        wrap.appendChild(btn);
+        wrap.appendChild(a);
+        els.pvAccordion.appendChild(wrap);
+      });
+    }
+
+    function renderList() {
+      els.itemsList.innerHTML = '';
+      state.items.forEach((it) => {
+        const c = document.createElement('div');
+        c.className = 'itemCard';
+
+        const left = document.createElement('div');
+        const h = document.createElement('h4');
+        h.textContent = it.question[lang] || '(no question)';
+        const p = document.createElement('p');
+        const ans = (it.answer[lang] || '').trim();
+        p.textContent = ans.length > 120 ? ans.slice(0, 120) + '…' : ans;
+        left.appendChild(h);
+        left.appendChild(p);
+
+        const actions = document.createElement('div');
+        actions.className = 'itemActions';
+
+        const editBtn = document.createElement('button');
+        editBtn.className = 'btn ghost';
+        editBtn.textContent = 'Edit';
+        editBtn.addEventListener('click', () => {
+          editingId = it.id;
+          els.itemQuestion.value = it.question[lang] || '';
+          els.itemAnswer.value = it.answer[lang] || '';
+          els.itemQuestion.focus();
+        });
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'btn danger';
+        delBtn.textContent = 'Delete';
+        delBtn.addEventListener('click', async () => {
+          state.items = state.items.filter(x => x.id !== it.id);
+          if (editingId === it.id) {
+            editingId = null;
+            els.itemQuestion.value = '';
+            els.itemAnswer.value = '';
+          }
+          renderAll();
+          await saveAll();
+        });
+
+        actions.appendChild(editBtn);
+        actions.appendChild(delBtn);
+
+        c.appendChild(left);
+        c.appendChild(actions);
+        els.itemsList.appendChild(c);
+      });
+    }
+
+    function renderAll() {
+      renderPreview();
+      renderList();
+    }
+
+    function wire() {
+      els.langBtns.forEach((b) => b.addEventListener('click', () => bindLang(b.dataset.lang)));
+
+      els.title.addEventListener('input', () => { state.title[lang] = els.title.value; renderPreview(); scheduleSave(); });
+      els.subtitle.addEventListener('input', () => { state.subtitle[lang] = els.subtitle.value; renderPreview(); scheduleSave(); });
+      els.ctaText.addEventListener('input', () => { state.ctaText[lang] = els.ctaText.value; renderPreview(); scheduleSave(); });
+      els.ctaButtonLabel.addEventListener('input', () => { state.ctaButtonLabel[lang] = els.ctaButtonLabel.value; renderPreview(); scheduleSave(); });
+      els.ctaButtonHref.addEventListener('input', () => { state.ctaButtonHref[lang] = els.ctaButtonHref.value; renderPreview(); scheduleSave(); });
+
+      els.addFaq.addEventListener('click', () => {
+        editingId = null;
+        els.itemQuestion.value = '';
+        els.itemAnswer.value = '';
+        els.itemQuestion.focus();
+      });
+
+      els.cancelEdit.addEventListener('click', () => {
+        editingId = null;
+        els.itemQuestion.value = '';
+        els.itemAnswer.value = '';
+      });
+
+      els.saveItem.addEventListener('click', async () => {
+        const q = (els.itemQuestion.value || '').trim();
+        const a = (els.itemAnswer.value || '').trim();
+        if (!q) {
+          els.itemQuestion.focus();
+          return;
+        }
+
+        if (editingId) {
+          const it = state.items.find(x => x.id === editingId);
+          if (it) {
+            it.question[lang] = q;
+            it.answer[lang] = a;
+          }
+        } else {
+          const it = { id: uid(), question: { uz:'', ru:'', en:'' }, answer: { uz:'', ru:'', en:'' } };
+          it.question[lang] = q;
+          it.answer[lang] = a;
+          state.items.push(it);
+          editingId = it.id;
+        }
+
+        renderAll();
+        await saveAll();
+      });
+    }
+
+    wire();
+    load();
+  </script>
+</body>
+</html>
