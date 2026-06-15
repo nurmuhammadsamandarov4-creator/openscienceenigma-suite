@@ -1,0 +1,925 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard</title>
+  
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #f1f5f9;
+      --border-focus: #e2e8f0;
+      --primary-color: #f97316; /* brand orange accent */
+      --primary-hover: #ea580c;
+      --primary-glow: rgba(249, 115, 22, 0.08);
+      --font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-color);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      line-height: 1.5;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      padding: 40px 16px;
+    }
+
+    /* Ambient background decorations (hidden) */
+    .bg-spotlight, .bg-spotlight-2, .bg-grid, .ambient-lines {
+      display: none !important;
+    }
+
+    .dash-wrap {
+      max-width: 1060px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .dash-header-block {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border-color);
+      gap: 16px;
+      flex-wrap: wrap;
+      animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .muted {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    /* Cards System with delay staggered loading */
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      padding: 28px;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04);
+      margin-bottom: 24px;
+      animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 12px 35px -10px rgba(0, 0, 0, 0.06);
+    }
+    
+    .card-profile { animation-delay: 0.08s; }
+    .card-leaderboard { animation-delay: 0.16s; }
+    .card-invited { animation-delay: 0.24s; }
+    .card-earnings { animation-delay: 0.32s; }
+    .card-orders { animation-delay: 0.4s; }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 32px;
+    }
+
+    @media (max-width: 780px) {
+      .row {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+
+    /* Profile rendering */
+    .profile-details-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .profile-detail {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .detail-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .detail-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .invited-count {
+      color: var(--primary-color);
+    }
+
+    /* Interactive visual copy widget */
+    .copy-widget {
+      display: flex;
+      border: 1px solid var(--border-color);
+      background: #fafafa;
+      border-radius: 12px;
+      padding: 6px;
+      align-items: center;
+      margin-top: 10px;
+      transition: border-color 0.2s;
+    }
+
+    .copy-widget:focus-within {
+      border-color: var(--primary-color);
+    }
+
+    .copy-widget input {
+      border: none;
+      background: transparent;
+      outline: none;
+      padding: 8px 12px;
+      flex: 1;
+      font-family: inherit;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      font-weight: 600;
+      text-overflow: ellipsis;
+    }
+
+    .copy-widget-btn {
+      background: var(--primary-color);
+      color: #ffffff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 10px var(--primary-glow);
+    }
+
+    .copy-widget-btn:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Dashboard Action Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-primary {
+      background: var(--primary-color);
+      color: #ffffff;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 4px 12px var(--primary-glow);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text-main);
+      border: 1px solid var(--border-focus);
+    }
+
+    .btn-outline:hover {
+      background: #fafafa;
+      border-color: var(--text-muted);
+      box-shadow: none;
+    }
+
+    .btn-danger {
+      background: #fee2e2;
+      color: #ef4444;
+      border: none;
+    }
+
+    .btn-danger:hover {
+      background: #fecaca;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1);
+    }
+
+    /* Default fallback for old class mapping */
+    .btn.secondary {
+      background: transparent;
+      color: var(--text-main);
+      border: 1px solid var(--border-focus);
+      box-shadow: var(--shadow-sm);
+    }
+    .btn.secondary:hover {
+      background: #fafafa;
+      border-color: var(--text-muted);
+      box-shadow: none;
+      transform: translateY(-1px);
+    }
+
+    /* Podium Leaderboard layout */
+    .podium-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 20px;
+      margin: 32px 0 24px;
+      flex-wrap: wrap;
+    }
+
+    .podium-card {
+      background: #ffffff;
+      border: 2px solid var(--border-color);
+      border-radius: 20px;
+      padding: 24px 16px;
+      text-align: center;
+      flex: 1;
+      min-width: 180px;
+      max-width: 260px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.02);
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0; /* Animated dynamically via JS */
+    }
+
+    .podium-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 35px rgba(15, 23, 42, 0.06);
+    }
+
+    .podium-card.rank-1 {
+      order: 2;
+      padding: 36px 20px 28px;
+      border-color: #fbbf24; /* Gold */
+      background: linear-gradient(to bottom, rgba(251, 191, 36, 0.02), #ffffff);
+      box-shadow: 0 20px 40px -10px rgba(251, 191, 36, 0.15);
+    }
+
+    .podium-card.rank-2 {
+      order: 1;
+      border-color: #cbd5e1; /* Silver */
+      background: linear-gradient(to bottom, rgba(203, 213, 225, 0.02), #ffffff);
+    }
+
+    .podium-card.rank-3 {
+      order: 3;
+      border-color: #d97706; /* Bronze */
+      background: linear-gradient(to bottom, rgba(217, 119, 6, 0.02), #ffffff);
+    }
+
+    .podium-badge {
+      position: absolute;
+      top: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .rank-1 .podium-badge { background: #fbbf24; }
+    .rank-2 .podium-badge { background: #cbd5e1; color: #475569; }
+    .rank-3 .podium-badge { background: #d97706; }
+
+    .podium-crown {
+      font-size: 1.8rem;
+      position: absolute;
+      top: -38px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: crownFloat 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes crownFloat {
+      0% { transform: translate(-50%, 0); }
+      100% { transform: translate(-50%, -6px); }
+    }
+
+    .podium-initials {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      border: 2px solid var(--border-color);
+    }
+
+    .rank-1 .podium-initials {
+      width: 66px;
+      height: 66px;
+      font-size: 1.35rem;
+      border-color: #fbbf24;
+      background: rgba(251, 191, 36, 0.1);
+      color: #b45309;
+    }
+
+    .rank-2 .podium-initials {
+      border-color: #cbd5e1;
+      background: rgba(203, 213, 225, 0.1);
+      color: #475569;
+    }
+
+    .rank-3 .podium-initials {
+      border-color: #d97706;
+      background: rgba(217, 119, 6, 0.1);
+      color: #b45309;
+    }
+
+    .podium-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      margin-bottom: 4px;
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .podium-code {
+      margin-bottom: 12px;
+    }
+
+    .podium-code code {
+      font-size: 0.75rem;
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-family: var(--font-family);
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .podium-referrals-count {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--primary-color);
+      line-height: 1;
+    }
+
+    .podium-referrals-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+
+    /* Custom metrics layout */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+
+    .metric-card {
+      background: #fafafa;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      transition: all 0.25s ease;
+    }
+    
+    .metric-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    }
+
+    .metric-label {
+      font-size: 0.725rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .metric-value {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .metric-card.wallet {
+      border-color: rgba(249, 115, 22, 0.2);
+      background: rgba(249, 115, 22, 0.02);
+    }
+
+    .metric-card.wallet .metric-value {
+      color: var(--primary-color);
+    }
+
+    /* Refined Tables */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      margin-top: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    th {
+      background: #fafafa;
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 2px solid var(--border-color);
+      padding: 16px 20px;
+    }
+
+    th:first-child {
+      border-top-left-radius: 12px;
+    }
+    th:last-child {
+      border-top-right-radius: 12px;
+    }
+
+    td {
+      padding: 16px 20px;
+      font-size: 14px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+      transition: background-color 0.2s;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:last-child td:first-child {
+      border-bottom-left-radius: 12px;
+    }
+    tr:last-child td:last-child {
+      border-bottom-right-radius: 12px;
+    }
+
+    tr:hover td {
+      background-color: #fafafa;
+    }
+
+    td.wrap, th.wrap {
+      white-space: normal;
+    }
+
+    code {
+      background: var(--primary-glow);
+      color: var(--primary-color);
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-family: monospace;
+      border: 1px solid rgba(249, 115, 22, 0.15);
+      font-size: 13px;
+    }
+
+    a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    a:hover {
+      color: var(--primary-hover);
+      text-decoration: underline;
+    }
+
+    /* Pills */
+    /* Profile rendering */
+    .profile-header-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .profile-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(249, 115, 22, 0.05));
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      font-weight: 800;
+      border: 2px solid rgba(249, 115, 22, 0.2);
+      box-shadow: inset 0 0 12px rgba(249, 115, 22, 0.05);
+    }
+
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .profile-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+
+    .profile-email {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .profile-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--primary-glow);
+      color: var(--primary-color);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      width: fit-content;
+      margin-top: 4px;
+      border: 1px solid rgba(249, 115, 22, 0.15);
+    }
+
+    .pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      display: inline-block;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.15); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+
+    .profile-details-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .profile-detail {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .detail-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .detail-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .invited-count {
+      color: var(--primary-color);
+    }
+
+    /* Pills */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 700;
+      width: fit-content;
+    }
+
+    .pill::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .pill.sent { background: #fef3c7; color: #b45309; }
+    .pill.sent::before { background: #b45309; }
+
+    .pill.done { background: #dcfce7; color: #15803d; }
+    .pill.done::before { background: #15803d; }
+
+    .pill.in_progress { background: #dbeafe; color: #1d4ed8; }
+    .pill.in_progress::before { background: #1d4ed8; }
+
+    .pill.open { background: #f1f5f9; color: #475569; }
+    .pill.open::before { background: #475569; }
+
+    select {
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      font-family: var(--font-family);
+      font-size: 0.85rem;
+      font-weight: 600;
+      outline: none;
+      background: #ffffff;
+      transition: border-color 0.2s;
+    }
+
+    select:focus {
+      border-color: var(--primary-color);
+    }
+
+    .toast-box {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      background: var(--primary-glow);
+      border: 1px solid rgba(249, 115, 22, 0.15);
+      padding: 8px 16px;
+      border-radius: 30px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .toast-box:empty {
+      display: none !important;
+    }
+
+    /* Hardware Accelerated Keyframes */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Ambient background elements -->
+  <div class="bg-spotlight"></div>
+  <div class="bg-spotlight-2"></div>
+  <div class="bg-grid"></div>
+
+  <!-- Ambient moving laser lines -->
+  <div class="ambient-lines">
+    <div class="ambient-line" style="left: 15%; --delay: 0s; --duration: 8s;"></div>
+    <div class="ambient-line" style="left: 48%; --delay: 2.5s; --duration: 11s;"></div>
+    <div class="ambient-line" style="left: 82%; --delay: 5s; --duration: 9s;"></div>
+  </div>
+
+  <div class="dash-wrap">
+    <div class="dash-header-block">
+      <div>
+        <h1 data-i18n="dashboard_title">Dashboard</h1>
+        <p class="muted"><span data-i18n="dashboard_desc">Bu yerda sizning referral linkingiz va nechta odam chaqirganingiz ko‘rinadi.</span></p>
+      </div>
+      <div id="dashMsg" class="toast-box"></div>
+    </div>
+
+    <!-- Profile / Referral link Card -->
+    <div class="card card-profile">
+      <div class="row">
+        <div>
+          <div id="me" style="margin-bottom: 16px;"></div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <a class="btn btn-outline" href="/" style="text-decoration:none;" data-i18n="back_to_website">Back to website</a>
+            <button class="btn btn-outline" id="refreshBtn" data-i18n="refresh">Refresh</button>
+            <button class="btn btn-danger" id="logoutBtn" data-i18n="logout">Logout</button>
+          </div>
+        </div>
+        <div>
+          <h3 style="margin-bottom:8px; font-size:1.05rem; font-weight:800; letter-spacing:-0.01em;" data-i18n="your_referral_link">Your Referral Link</h3>
+          <div class="copy-widget">
+            <!-- Populated via Javascript -->
+            <input type="text" id="refLinkInput" readonly value="" />
+            <button class="copy-widget-btn" id="copyLinkBtn">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 16px; height: 16px;" id="copyIcon">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H5.25m11.9-3.664A2.251 2.251 0 0015 2.25h-1.5a2.251 2.251 0 00-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.375c0-.621.504-1.125 1.125-1.125h9.75c.621 0 1.125.504 1.125 1.125v10.5c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125v-10.5z" />
+              </svg>
+              <span id="copyBtnText">Copy</span>
+            </button>
+          </div>
+          <div style="display:none;" id="refLinkBox"></div> <!-- Keep hidden fallback to prevent js errors -->
+          <p class="muted" style="font-size:0.8rem; margin-top:8px;" data-i18n="referral_help_text">Do‘stlaringiz shu link bilan kirsa, signupdan keyin sizga +1 bo‘ladi.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leaderboard (Top 10) -->
+    <div class="card card-leaderboard">
+      <h2 style="margin-bottom:12px; font-size:1.25rem; font-weight:800; letter-spacing:-0.02em;"><span data-i18n="top10_title">Top 10 Leaderboard</span></h2>
+      
+      <!-- Top 3 Podium Cards -->
+      <div class="podium-container" id="top3Podium">
+        <!-- Loaded dynamically via dashboard.js -->
+      </div>
+      
+      <!-- Ranks 4-10 Table list -->
+      <div id="top10RemainingBox" style="display: none;">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 50px;">#</th>
+                <th class="wrap">Name</th>
+                <th style="width: 120px;">Code</th>
+                <th style="width: 100px; text-align: right;">Referrals</th>
+              </tr>
+            </thead>
+            <tbody id="top10"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Invited people list -->
+    <div class="card card-invited">
+      <h2 style="margin-bottom:12px; font-size:1.25rem; font-weight:800; letter-spacing:-0.02em;"><span data-i18n="invited_title">Siz taklif qilgan odamlar</span></h2>
+      <p class="muted" id="invitedEmpty" style="margin-top:-4px; display:none; padding:10px 0;"><span data-i18n="invited_empty">Hali hech kimni taklif qilmagansiz.</span></p>
+      <div class="table-wrap" id="invitedTableWrap">
+        <table>
+          <thead>
+            <tr><th>#</th><th class="wrap">Name</th><th class="wrap">Email</th><th>Registered</th></tr>
+          </thead>
+          <tbody id="invitedList"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Referral earnings -->
+    <div class="card card-earnings">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:12px;">
+        <h2 style="margin:0; font-size:1.25rem; font-weight:800; letter-spacing:-0.02em;" data-i18n="ref_earnings_title">Referral earnings</h2>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+          <select id="serviceSelect">
+            <option value="SVC100">Service $100</option>
+            <option value="SVC200">Service $200</option>
+            <option value="SVC300">Service $300</option>
+            <option value="SVC400">Service $400</option>
+          </select>
+          <button class="btn btn-primary" id="buyServiceBtn" data-i18n="pay_with_stripe">Pay with Stripe</button>
+        </div>
+      </div>
+      <p class="muted"><span data-i18n="ref_earnings_desc">Taklif qilgan odamlaringiz servis sotib olsa, sizga avtomatik 5% komissiya yoziladi.</span></p>
+
+      <!-- Clean metrics breakdown grid -->
+      <div id="earningsSummary" class="metrics-grid"></div>
+      <p class="muted" id="buyMsg" style="margin-top:10px; text-align:center; font-weight:600;"></p>
+
+      <h3 style="margin-top:20px; margin-bottom:8px; font-size:1.05rem; font-weight:800;" data-i18n="ref_commission_history">Commission history</h3>
+      <div class="table-wrap" id="commissionsTableWrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 50px;">#</th>
+              <th class="wrap" data-i18n="th_buyer">Buyer</th>
+              <th data-i18n="th_service">Service</th>
+              <th data-i18n="th_purchase">Purchase</th>
+              <th data-i18n="th_rate">Rate</th>
+              <th data-i18n="th_commission">Commission</th>
+              <th data-i18n="th_when">Time</th>
+              <th data-i18n="th_comm_status">Status</th>
+            </tr>
+          </thead>
+          <tbody id="commissionsList"></tbody>
+        </table>
+      </div>
+      <p class="muted" id="commissionsEmpty" style="display:none; padding:10px 0;"><span data-i18n="ref_no_commissions">Hali komissiya yo‘q.</span></p>
+    </div>
+
+    <!-- Orders -->
+    <div class="card card-orders">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:12px;">
+        <h2 style="margin:0; font-size:1.25rem; font-weight:800; letter-spacing:-0.02em;" data-i18n="orders_title">Zakazlar</h2>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn btn-primary" href="/public/create-task.html" style="text-decoration:none;" data-i18n="create_task">Create task</a>
+          <a class="btn btn-outline" id="browseOrdersBtn" href="/public/admin.html" style="text-decoration:none; display:none;" data-i18n="browse_tasks">Zakazlar ro'yxati</a>
+        </div>
+      </div>
+      <p class="muted"><span data-i18n="orders_desc">Bu yerda zakazlaringiz statusi ko‘rinadi. Zakaz ichiga kirib javob/fayllarni olasiz.</span></p>
+      <div class="table-wrap" id="myTasksTableWrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 50px;">#</th>
+              <th class="wrap" data-i18n="th_order">Zakaz</th>
+              <th style="width: 100px;" data-i18n="th_status">Status</th>
+              <th style="width: 100px;" data-i18n="th_replies">Javoblar</th>
+              <th style="width: 100px;" data-i18n="th_open">Ochish</th>
+            </tr>
+          </thead>
+          <tbody id="myTasks"></tbody>
+        </table>
+      </div>
+      <p class="muted" id="myTasksEmpty" style="display:none; padding:10px 0;"><span data-i18n="orders_empty">Hali task yaratmagansiz.</span></p>
+    </div>
+
+    <p class="muted" style="text-align: center; margin-top: 20px;"><a href="/">← Back to website</a></p>
+  </div>
+
+  <script src="/public/i18n.js?v=20260615_v6"></script>
+  <script src="/public/lang-ui.js?v=20260615_v6"></script>
+  <script src="dashboard.js"></script>
+  <script src="/auth-ui.js"></script>
+</body>
+</html>

@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>Buildify – PrebuiltUI</title>
+  <meta
+    content="Buildify is a modern AI agents template by PrebuiltUI. Build, launch and scale intelligent AI agents with production-ready components and workflows."
+    name="description" />
+  <meta content="Buildify" name="application-name" />
+  <meta content="PrebuiltUI" name="author" />
+  <link href="/assets/manifest.json" rel="manifest" />
+  <meta
+    content="AI agents,AI agent builder,AI SaaS template,PrebuiltUI,Next.js AI template,Tailwind CSS UI,AI workflow automation"
+    name="keywords" />
+  <meta content="PrebuiltUI" name="creator" />
+  <meta content="yes" name="mobile-web-app-capable" />
+  <meta content="Buildify" name="apple-mobile-web-app-title" />
+  <meta content="default" name="apple-mobile-web-app-status-bar-style" />
+  <meta content="Buildify – Build, Launch &amp; Scale with AI Agents" property="og:title" />
+  <meta
+    content="A production-ready AI agents template built with PrebuiltUI. Launch faster with scalable workflows and modern UI."
+    property="og:description" />
+  <meta content="/opengraph-image.png" property="og:image" />
+  <meta content="1280" property="og:image:width" />
+  <meta content="640" property="og:image:height" />
+  <meta content="image/png" property="og:image:type" />
+  <meta content="website" property="og:type" />
+  <meta content="summary_large_image" name="twitter:card" />
+  <meta content="Buildify – Build, Launch &amp; Scale with AI Agents" name="twitter:title" />
+  <meta content="A modern AI agents template by PrebuiltUI to build, launch and scale faster."
+    name="twitter:description" />
+  <meta content="/opengraph-image.png" name="twitter:image" />
+  <meta content="1280" name="twitter:image:width" />
+  <meta content="640" name="twitter:image:height" />
+  <meta content="image/png" name="twitter:image:type" />
+  <link href="/assets/favicon.ico" rel="icon" sizes="48x48" type="image/x-icon" />
+  <link href="/assets/icon0.svg" rel="icon" sizes="any" type="image/svg+xml" />
+  <link href="/assets/icon1.png" rel="icon" sizes="96x96" type="image/png" />
+  <link href="/assets/apple-icon.png" rel="apple-touch-icon" sizes="180x180" type="image/png" />
+  <link href="./output.css" rel="stylesheet" />
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap"
+    rel="stylesheet">
+  <!-- GSAP Animation Library -->
+  <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+</head>
+
+<body>
+
+  <!-- OSE Intro Overlay (Cinematic Science Boards Edition) -->
+  <div id="ose-intro" aria-hidden="true">
+    <div class="ose-intro-grain"></div>
+    <div class="ose-intro-vignette"></div>
+
+    <div class="ose-preloader" id="ose-preloader-el">
+      <div class="minimal-spinner">
+        <div class="center-circle"></div>
+        <div class="spin-ring-inner"></div>
+        <div class="spin-ring-outer"></div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    /* Styling isolated prefix for intro to avoid conflicting with Tailwind or custom theme */
+    #ose-intro {
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    #ose-intro.ose-show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #ose-intro.ose-hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .ose-intro-grain {
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .ose-intro-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, transparent 40%, #f8fafc 98%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .ose-preloader {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .minimal-spinner {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Central solid circle */
+    .center-circle {
+      width: 24px;
+      height: 24px;
+      background: #0f172a;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+      z-index: 2;
+    }
+
+    /* Inner rotating thin line */
+    .spin-ring-inner {
+      position: absolute;
+      width: 54px;
+      height: 54px;
+      border: 2px solid transparent;
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      animation: spin-clockwise 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+
+    /* Outer rotating dual line */
+    .spin-ring-outer {
+      position: absolute;
+      width: 78px;
+      height: 78px;
+      border: 1.5px solid transparent;
+      border-left-color: #f97316;
+      border-right-color: #10b981;
+      border-radius: 50%;
+      animation: spin-counterclockwise 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+
+    @keyframes spin-clockwise {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes spin-counterclockwise {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(-360deg); }
+    }
+  </style>
+
+  <script>
+    (function () {
+      try {
+        var intro = document.getElementById('ose-intro');
+        if (!intro) return;
+
+        // Skip intro if seen in session
+        if (sessionStorage.getItem('ose-intro-seen')) {
+          intro.remove();
+          return;
+        }
+
+        // Lock scroll
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+
+        function hideIntro() {
+          sessionStorage.setItem('ose-intro-seen', 'true');
+          intro.classList.add('ose-hide');
+          document.documentElement.style.overflow = '';
+          document.body.style.overflow = '';
+          setTimeout(function () { intro && intro.remove(); }, 600);
+        }
+
+        // Run preloader fade-in when loaded
+        window.addEventListener('load', function () {
+          if (typeof gsap === 'undefined') {
+            hideIntro();
+            return;
+          }
+
+          intro.classList.add('ose-show');
+
+          var tl = gsap.timeline({ onComplete: hideIntro });
+
+          // Page fade-in
+          tl.fromTo(intro, { opacity: 0 }, { opacity: 1, duration: 0.5 })
+            // Spin for 2.2 seconds, then fade out the whole overlay
+            .to(intro, { opacity: 0, duration: 0.5, delay: 2.2 });
+        });
+
+        // Safe fallback timeout (3.5 seconds max)
+        setTimeout(hideIntro, 3500);
+      } catch (e) {
+        var intro = document.getElementById('ose-intro');
+        if (intro) intro.remove();
+      }
+    })();
+  </script>
+
+  <div class="invisible"
+    style="translate: none; rotate: none; scale: none; visibility: visible; opacity: 1; transform: translate(0px, 0px);">
+    <nav
+      class="fixed w-full top-0 z-50 px-4 md:px-16 lg:px-24 xl:px-32 py-4 border-b transition-all duration-300 border-neutral-300">
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <a href="https://prebuiltui.com?ref=buildify">
+          <img alt="Buildify Logo" height="36" src="./assets/logo.svg" width="135" />
+        </a>
+        <div class="hidden md:flex gap-3">
+          <a class="py-1 px-3 hover:text-zinc-500" data-i18n="nav_home" href="/">Home</a>
+          <a class="py-1 px-3 hover:text-zinc-500" data-i18n="nav_features" href="#features">Features</a>
+          <a class="py-1 px-3 hover:text-zinc-500" data-i18n="nav_testimonials" href="#testimonials">Testimonials</a>
+          <a class="py-1 px-3 hover:text-zinc-500" data-i18n="nav_pricing" href="#pricing">Pricing</a>
+          <a class="py-1 px-3" data-i18n="nav_top10" href="/public/dashboard.html">Top 10</a>
+          <a class="py-1 px-3" data-i18n="nav_order" href="/public/create-task.html?service=SVC200">Zakaz berish</a>
+        </div>
+        <button class="md:hidden" id="openMenu">
+          <svg aria-hidden="true" class="lucide lucide-menu size-6.5" fill="none" height="24" stroke="currentColor"
+            stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 5h16"></path>
+            <path d="M4 12h16"></path>
+            <path d="M4 19h16"></path>
+          </svg>
+        </button>
+        <a class="hidden md:inline-block py-2.5 px-6 shadow-[inset_0_2px_4px_rgba(255,255,255,0.6)] bg-orange-500 text-white rounded-full"
+          data-auth-button="cta" href="/public/signup.html">
+          Sign Up
+        </a>
+      </div>
+    </nav>
+  </div>
+  <div
+    class="fixed top-0 right-0 z-50 w-full bg-white shadow-xl shadow-black/5 transition-all duration-300 ease-in-out h-0 overflow-hidden"
+    id="mobileMenu">
+    <div class="flex items-center justify-between p-4">
+      <img alt="Buildify Logo" height="36" src="./assets/logo.svg" width="135" />
+      <svg aria-hidden="true" class="lucide lucide-x size-6.5" fill="none" height="24" id="closeMenu"
+        stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"
+        width="24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 6 6 18"></path>
+        <path d="m6 6 12 12"></path>
+      </svg>
+    </div>
+    <div class="flex flex-col gap-4 p-4 text-base">
+      <a class="py-1 px-3" data-i18n="nav_home" href="https://prebuiltui.com?ref=buildify">Home</a>
+      <a class="py-1 px-3" data-i18n="nav_features" href="#features">Features</a>
+      <a class="py-1 px-3" data-i18n="nav_testimonials" href="#testimonials">Testimonials</a>
+      <a class="py-1 px-3" data-i18n="nav_pricing" href="#pricing">Pricing</a>
+      <a class="py-1 px-3" data-i18n="nav_top10" href="/public/dashboard.html">Top 10</a>
+      <a class="py-1 px-3" data-i18n="nav_order" href="/public/create-task.html?service=SVC200">Zakaz berish</a>
+      <a class="py-2.5 px-6 w-max text-sm shadow-[inset_0_2px_4px_rgba(255,255,255,0.6)] bg-linear-to-tl from-orange-600 to-orange-500 text-white rounded-full"
+        data-i18n="cta_get_started" id="oseHeroCtaPrimary" href="/public/create-task.html?service=SVC200">Get
+        Started</a>
+    </div>
+  </div>
+  <!-- Hero Section -->
+  <section
+    class="bg-[url('./assets/hero-gradient-bg.png')] bg-cover bg-center bg-no-repeat px-4 md:px-16 lg:px-24 xl:px-32">
+    <div class="max-w-7xl mx-auto flex flex-col items-center justify-center h-screen">
+      <div class="flex items-center gap-2 bg-white/50 backdrop-blur p-1 rounded-full" id="oseHeroBadge"
+        style="translate: none; rotate: none; scale: none; visibility: visible; opacity: 1; transform: translate(0px, 0px);">
+        <div class="flex items-center -space-x-3">
+          <img alt="userImage1" class="size-7 rounded-full border-2 border-white"
+            src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&amp;w=50" />
+          <img alt="userImage2" class="size-7 rounded-full border-2 border-white"
+            src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&amp;w=50" />
+        </div>
+        <span>60K+</span>
+        <div class="h-5 w-px mx-1 bg-white rounded-full"></div>
+        <span data-i18n="hero_badge_users" id="oseHeroBadgeUsers">Happy users worldwide</span>
+        <div class="h-5 w-px mx-1 bg-white rounded-full"></div>
+        <div class="flex items-center gap-1 pr-3">
+          <svg aria-hidden="true" class="lucide lucide-star size-4.5 fill-orange-500 stroke-orange-500" fill="none"
+            height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
+            </path>
+          </svg>
+          <span>4.9</span>
+        </div>
+      </div>
+      <div class="relative">
+        <h1 class="text-center font-urbanist text-5xl/15 md:text-6xl/18 mt-4 font-bold max-w-2xl" data-i18n="hero_title"
+          id="oseHeroTitle">Build, Launch &amp; Scale with AI agents.</h1>
+        <div class="absolute -top-5 right-13 hidden md:block">
+          <div
+            class="bg-orange-500 shadow-[inset_0_4px_4px_rgba(255,255,255,0.25),0_4px_10px_rgba(0,0,0,0.15)] p-2 aspect-square rounded-lg text-white rotate-15">
+            <svg aria-hidden="true" class="lucide lucide-sparkle" fill="none" height="24" stroke="currentColor"
+              stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z">
+              </path>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <p class="text-center text-base/7 text-zinc-500 max-w-lg mt-4" data-i18n="hero_desc" id="oseHeroSubtitle">Design,
+        automate and deploy intelligent
+        AI agents to power your products, workflows and business growth.</p>
+      <div class="flex flex-col md:flex-row items-center gap-4 mt-6 w-full md:w-auto">
+        <a class="py-3 md:py-2.5 w-full md:w-auto px-8 border border-orange-200 bg-linear-to-tl from-orange-600 to-orange-500 text-white text-center rounded-full"
+          data-i18n="cta_get_started" href="/public/create-task.html?service=SVC200">Get Started</a>
+        <a id="oseHeroCtaSecondary"
+          class="relative py-3 md:py-2.5 w-full md:w-auto px-8 bg-white/50 text-gray-600 font-medium text-center border border-white rounded-full"
+          data-i18n="cta_watch_demo" href="/"><span data-i18n="cta_watch_demo">Watch Demo</span>
+          <div class="absolute size-8 pointer-events-none right-0 top-full -translate-y-1/2">
+            <img alt="mouse-arrow" height="24" src="./assets/mouse-arrow.svg" width="24" />
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+  <!-- Stats Section -->
+  <section class="border-y border-gray-200 py-10 px-4 md:px-16 lg:px-24 xl:px-32">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="flex flex-col items-center gap-4 text-center">
+        <h3 class="text-4xl font-semibold font-urbanist"><span id="oseHeroStat0Val" class="">3</span>x</h3>
+        <p class="text-gray-500" data-i18n="stat_fast_dev"><span id="oseHeroStat0Label">Faster AI agent
+            development</span></p>
+      </div>
+      <div class="flex flex-col items-center gap-4 text-center">
+        <h3 class="text-4xl font-semibold font-urbanist"><span id="oseHeroStat1Val" class="">60</span>%</h3>
+        <p class="text-gray-500" data-i18n="stat_reduce_manual"><span id="oseHeroStat1Label">Reduction in manual
+            workflows</span></p>
+      </div>
+      <div class="flex flex-col items-center gap-4 text-center">
+        <h3 class="text-4xl font-semibold font-urbanist"><span id="oseHeroStat2Val" class="">99.9</span>%</h3>
+        <p class="text-gray-500" data-i18n="stat_uptime"><span id="oseHeroStat2Label">Reliable agent execution
+            uptime</span></p>
+      </div>
+    </div>
+  </section>
+  <!-- Features Section -->
+  <section class="px-4 md:px-16 lg:px-24 xl:px-32" id="features">
+    <div class="grid grid-cols-1 md:grid-cols-2 border-x md:divide-x border-gray-200 divide-gray-200 max-w-7xl mx-auto">
+      <div>
+        <div class="p-4 pt-16 md:p-16 flex flex-col items-start md:sticky md:top-26">
+          <div class="flex flex-col gap-6 md:items-start items-center">
+            <div class="flex flex-col md:flex-row items-center gap-4">
+              <div
+                class="bg-orange-500 shadow-[inset_0_4px_4px_rgba(255,255,255,0.25),0_4px_10px_rgba(0,0,0,0.15)] p-2 aspect-square rounded-lg text-white -rotate-15">
+                <svg aria-hidden="true" class="lucide lucide-sparkle" fill="none" height="24" stroke="currentColor"
+                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z">
+                  </path>
+                </svg>
+              </div>
+              <h2 class="text-4xl font-semibold font-urbanist" id="featuresTitle" data-i18n="features_title">Core
+                features</h2>
+            </div>
+            <p class="text-zinc-500 text-base/7 md:text-left text-center max-w-sm" id="featuresSubtitle"
+              data-i18n="features_desc">Everything you need
+              to build, deploy and scale AI agents - designed for speed, reliability and real-world
+              production use.
+            </p>
+          </div>
+          <div class="p-4 md:p-6 bg-orange-500 w-full rounded-xl mt-12">
+            <p class="text-lg text-white" id="featuresCtaText" data-i18n="testimonials_desc">Trusted by teams building
+              intelligent products with AI agents.</p>
+            <a id="featuresCtaBtn" data-i18n="cta_button"
+              class="bg-white w-max hover:bg-gray-100 px-5 py-2 rounded-full mt-6 flex items-center gap-1" href="#">
+              <span id="featuresCtaBtnText" data-i18n="cta_button">Explore use cases</span>
+              <svg aria-hidden="true" class="lucide lucide-arrow-up-right" fill="none" height="20" stroke="currentColor"
+                stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 7h10v10"></path>
+                <path d="M7 17 17 7"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div id="featuresCards" class="p-4 pt-16 md:p-16 space-y-6"></div>
+    </div>
+  </section>
+  <!-- Faq Section -->
+  <section class="border-y border-gray-200">
+    <div class="px-4 md:px-16 lg:px-24 xl:px-32">
+      <div
+        class="p-4 pt-20 md:p-20 flex flex-col items-center max-w-7xl mx-auto justify-center border-x border-gray-200">
+        <div class="flex flex-col gap-6 items-center">
+          <div
+            class="bg-orange-500 shadow-[inset_0_4px_4px_rgba(255,255,255,0.25),0_4px_10px_rgba(0,0,0,0.15)] p-2 aspect-square rounded-lg text-white -rotate-15">
+            <svg aria-hidden="true" class="lucide lucide-circle-question-mark" fill="none" height="24"
+              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"
+              width="24" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <path d="M12 17h.01"></path>
+            </svg>
+          </div>
+          <h2 class="text-4xl font-semibold font-urbanist" id="faqTitle" data-i18n="faq_title">Got questions?</h2>
+          <p id="faqDesc" class="text-zinc-500 text-base/7 text-center max-w-lg" data-i18n="faq_desc">
+            Everything you need to know about Buildify, AI agents and how to get started.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-4 md:px-16 lg:px-24 xl:px-32 border-t border-gray-200">
+      <div class="grid grid-cols-1 md:grid-cols-2 divide-x divide-gray-200 border-x border-gray-200 max-w-7xl mx-auto">
+        <div class="p-4 pt-20 md:p-20 space-y-6">
+          <div id="faqList">
+            <details class="group bg-gray-50 border border-gray-200 rounded-xl" open="">
+              <summary class="flex items-center justify-between p-6 select-none">
+                <h3 class="font-medium text-base" data-i18n="faq_q1">What is Buildify?</h3>
+                <svg aria-hidden="true" class="lucide lucide-chevron-down group-open:rotate-180" fill="none" height="20"
+                  stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="m6 9 6 6 6-6"></path>
+                </svg>
+              </summary>
+              <p class="text-sm/6 text-zinc-500 max-w-md p-6 pt-0" data-i18n="faq_a1">Buildify is a platform designed to
+                help teams build, deploy and scale AI agents efficiently. It provides tools for agent creation, workflow
+                orchestration and production-ready execution.</p>
+            </details>
+            <details class="group bg-gray-50 border border-gray-200 rounded-xl">
+              <summary class="flex items-center justify-between p-6 select-none">
+                <h3 class="font-medium text-base" data-i18n="faq_q2">
+                  Do I need prior AI or ML experience to use Buildify?
+                </h3>
+                <svg aria-hidden="true" class="lucide lucide-chevron-down group-open:rotate-180" fill="none" height="20"
+                  stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="m6 9 6 6 6-6"></path>
+                </svg>
+              </summary>
+              <p class="text-sm/6 text-zinc-500 max-w-md p-6 pt-0" data-i18n="faq_a2">No. Buildify is designed for both
+                developers and non-experts, offering simple templates and guided flows while still allowing advanced
+                customization when needed.</p>
+            </details>
+            <details class="group bg-gray-50 border border-gray-200 rounded-xl">
+              <summary class="flex items-center justify-between p-6 select-none">
+                <h3 class="font-medium text-base" data-i18n="faq_q3">Can I integrate Buildify with my existing tools?
+                </h3>
+                <svg aria-hidden="true" class="lucide lucide-chevron-down group-open:rotate-180" fill="none" height="20"
+                  stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="m6 9 6 6 6-6"></path>
+                </svg>
+              </summary>
+              <p class="text-sm/6 text-zinc-500 max-w-md p-6 pt-0" data-i18n="faq_a3">Yes. Buildify supports
+                plug-and-play integrations with APIs, databases and third-party services to fit seamlessly into your
+                existing stack.</p>
+            </details>
+            <details class="group bg-gray-50 border border-gray-200 rounded-xl">
+              <summary class="flex items-center justify-between p-6 select-none">
+                <h3 class="font-medium text-base" data-i18n="faq_q4">Is Buildify suitable for production use?</h3>
+                <svg aria-hidden="true" class="lucide lucide-chevron-down group-open:rotate-180" fill="none" height="20"
+                  stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="m6 9 6 6 6-6"></path>
+                </svg>
+              </summary>
+              <p class="text-sm/6 text-zinc-500 max-w-md p-6 pt-0" data-i18n="faq_a4">Absolutely. Buildify includes
+                monitoring, security controls and scalable infrastructure designed for reliable performance in
+                real-world production environments.</p>
+            </details>
+            <details class="group bg-gray-50 border border-gray-200 rounded-xl">
+              <summary class="flex items-center justify-between p-6 select-none">
+                <h3 class="font-medium text-base" data-i18n="faq_q5">Can I customize or extend AI agents?</h3>
+                <svg aria-hidden="true" class="lucide lucide-chevron-down group-open:rotate-180" fill="none" height="20"
+                  stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="m6 9 6 6 6-6"></path>
+                </svg>
+              </summary>
+              <p class="text-sm/6 text-zinc-500 max-w-md p-6 pt-0" data-i18n="faq_a5">Yes. You can customize agent
+                logic, workflows and integrations, or extend functionality using your own services and APIs.</p>
+            </details>
+          </div>
+        </div>
+        <div class="p-4 pt-20 md:p-20">
+          <div class="sticky top-24">
+            <div class="flex flex items-center justify-between gap-5 p-6 bg-violet-500 w-full rounded-xl">
+              <h3 id="faqCtaTitle" class="text-lg text-white text-balance" data-i18n="faq_cta_title">
+                Still have questions? Our team help you get started.
+              </h3>
+              <a class="bg-white w-max shrink-0 hover:bg-gray-100 px-5 py-2 rounded-full" id="faqCtaBtn"
+                data-i18n="faq_cta_button" href="https://prebuiltui.com?ref=buildify">
+                Contact support
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Team Section -->
+  <section class="border-b border-gray-200 px-4 md:px-16 lg:px-24 xl:px-32">
+    <div class="pt-20 pb-32 flex flex-col items-center max-w-7xl mx-auto justify-center border-x border-gray-200">
+      <div class="flex flex-col gap-6 items-center">
+        <div class="flex flex-col md:flex-row items-center gap-4">
+          <div
+            class="bg-orange-500 shadow-[inset_0_4px_4px_rgba(255,255,255,0.25),0_4px_10px_rgba(0,0,0,0.15)] p-2 aspect-square rounded-lg text-white -rotate-15">
+            <svg aria-hidden="true" class="lucide lucide-handshake" fill="none" height="24" stroke="currentColor"
+              stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path d="m11 17 2 2a1 1 0 1 0 3-3"></path>
+              <path
+                d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4">
+              </path>
+              <path d="m21 3 1 11h-2"></path>
+              <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"></path>
+              <path d="M3 4h8"></path>
+            </svg>
+          </div>
+          <h2 class="text-4xl font-semibold font-urbanist" data-i18n="team_title">Meet Our Team</h2>
+        </div>
+        <p class="text-zinc-500 text-base/7 text-center max-w-lg" data-i18n="team_desc">
+          A passionate team of builders, designers,
+          and engineers shaping the future of AI-powered products.
+        </p>
+      </div>
+
+      <div class="team-marquee mt-24">
+        <div id="teamGrid" class="team-track" aria-label="Team members marquee">
+          <div class="team-set" data-team-set="a">
+            <div class="ose-electric-card">
+              <div class="ose-electric-inner">
+                <img alt="Donald Jackman" class="team-img"
+                  src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&amp;w=600" />
+                <h3 class="team-name">Donald Jackman</h3>
+                <p class="team-role">Founder &amp; CEO</p>
+              </div>
+            </div>
+            <div class="ose-electric-card">
+              <div class="ose-electric-inner">
+                <img alt="Michael Brown" class="team-img"
+                  src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&amp;w=600" />
+                <h3 class="team-name">Michael Brown</h3>
+                <p class="team-role">Head of Engineering</p>
+              </div>
+            </div>
+            <div class="ose-electric-card">
+              <div class="ose-electric-inner">
+                <img alt="Olivia Martinez" class="team-img"
+                  src="https://images.unsplash.com/flagged/photo-1573740144655-bbb6e88fb18a?q=80&amp;w=735&amp;auto=format&amp;fit=crop" />
+                <h3 class="team-name">Olivia Martinez</h3>
+                <p class="team-role">Product Designer</p>
+              </div>
+            </div>
+            <div class="ose-electric-card">
+              <div class="ose-electric-inner">
+                <img alt="Ethan Walker" class="team-img"
+                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&amp;w=687&amp;auto=format&amp;fit=crop" />
+                <h3 class="team-name">Ethan Walker</h3>
+                <p class="team-role">AI Systems Engineer</p>
+              </div>
+            </div>
+            <div class="ose-electric-card">
+              <div class="ose-electric-inner">
+                <img alt="Sophia Lee" class="team-img"
+                  src="https://images.unsplash.com/photo-1546961329-78bef0414d7c?q=80&amp;w=687&amp;auto=format&amp;fit=crop" />
+                <h3 class="team-name">Sophia Lee</h3>
+                <p class="team-role">UX Researcher</p>
+              </div>
+            </div>
+          </div>
+          <div class="team-set" data-team-set="b" aria-hidden="true">
+            <div class="ose-electric-card">
+              <div class="ose-electric-inner">
+                <img alt="Donald Jackman" class="team-img"
+                  src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&amp;w=600" />
+                <h3 class="team-name">Donald Jackman</h3>
+                <p class="team-role">Founder &amp; CEO</p>
+              </div>
+            </div>
+            <div class="ose-electric-card">
+              <div class="ose-electric-inner">
+                <img alt="Michael Brown" class="team-img"
+                  src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&amp;w=600" />
+                <h3 class="team-name">Michael Brown</h3>
+                <p class="team-role">Head of Engineering</p>
+              </div>
+            </div>
+            <div class="ose-electric-card">
+              <div class="ose-electric-inner">
+                <img alt="Olivia Martinez" class="team-img"
+                  src="https://images.unsplash.com/flagged/photo-1573740144655-bbb6e88fb18a?q=80&amp;w=735&amp;auto=format&amp;fit=crop" />
+                <h3 class="team-name">Olivia Martinez</h3>
+                <p class="team-role">Product Designer</p>
+              </div>
+            </div>
+            <div class="ose-electric-card">
+              <div class="ose-electric-inner">
+                <img alt="Ethan Walker" class="team-img"
+                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&amp;w=687&amp;auto=format&amp;fit=crop" />
+                <h3 class="team-name">Ethan Walker</h3>
+                <p class="team-role">AI Systems Engineer</p>
+              </div>
+            </div>
+            <div class="ose-electric-card">
+              <div class="ose-electric-inner">
+                <img alt="Sophia Lee" class="team-img"
+                  src="https://images.unsplash.com/photo-1546961329-78bef0414d7c?q=80&amp;w=687&amp;auto=format&amp;fit=crop" />
+                <h3 class="team-name">Sophia Lee</h3>
+                <p class="team-role">UX Researcher</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+  <!-- Board of Soft Science Team -->
+  <section class="border-b border-gray-200 px-4 md:px-16 lg:px-24 xl:px-32">
+    <div class="pt-10 pb-20 flex flex-col items-center max-w-7xl mx-auto justify-center border-x border-gray-200">
+      <div class="flex flex-col gap-6 items-center">
+        <h2 class="text-3xl font-semibold font-urbanist text-center">Board of Soft Science Team</h2>
+      </div>
+      <div class="team-marquee mt-10 w-full">
+        <div id="softScienceBoardGrid" class="team-track team-track--rtl">
+          <div class="team-set" data-team-set="a"></div>
+          <div class="team-set" data-team-set="b" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Board of Hard Science Team -->
+  <section class="border-b border-gray-200 px-4 md:px-16 lg:px-24 xl:px-32">
+    <div class="pt-10 pb-20 flex flex-col items-center max-w-7xl mx-auto justify-center border-x border-gray-200">
+      <div class="flex flex-col gap-6 items-center">
+        <h2 class="text-3xl font-semibold font-urbanist text-center">Board of Hard Science Team</h2>
+      </div>
+      <div class="team-marquee mt-10 w-full">
+        <div id="hardScienceBoardGrid" class="team-track">
+          <div class="team-set" data-team-set="a"></div>
+          <div class="team-set" data-team-set="b" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+
+  <section class="border-b border-gray-200 px-4 md:px-16 lg:px-24 xl:px-32" id="video">
+    <div class="p-4 pt-6 pb-10 flex flex-col items-center max-w-7xl mx-auto justify-center border-x border-gray-200">
+      <div class="flex flex-col gap-4 items-center">
+        <h2 class="text-4xl font-semibold font-urbanist" data-i18n="video_title">Video</h2>
+        <p class="text-zinc-500 text-base/7 text-center max-w-2xl" data-i18n="video_desc">Watch a quick overview of how
+          the platform works.</p>
+      </div>
+
+      <div class="w-full max-w-7xl mt-6">
+        <div class="w-full overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-md">
+          <div id="videoPlayer" class="ose-video-box">
+            <!-- Loaded dynamically from /api/site/video (Admin -> Website) -->
+            <div class="ose-video-fallback">Loading video…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    /* Robust video sizing for localhost (avoids iframe height collapsing) */
+    .ose-video-box {
+      position: relative;
+      width: 100%;
+      /* Keep 16:9 but also guarantee large height */
+      aspect-ratio: 16 / 9;
+      min-height: 520px;
+    }
+
+    @media (min-width: 1024px) {
+      .ose-video-box {
+        min-height: 640px;
+      }
+    }
+
+    .ose-video-box iframe,
+    .ose-video-box video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    .ose-video-fallback {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem;
+      color: rgb(113 113 122);
+    }
+  </style>
+
+  <section class="border-b border-gray-200 px-4 md:px-16 lg:px-24 xl:px-32" id="pricing">
+    <div class="p-4 pt-20 flex flex-col items-center max-w-7xl mx-auto justify-center border-x border-gray-200">
+      <div class="flex flex-col gap-6 items-center">
+        <div class="flex flex-col md:flex-row items-center gap-4">
+          <div
+            class="bg-orange-500 shadow-[inset_0_4px_4px_rgba(255,255,255,0.25),0_4px_10px_rgba(0,0,0,0.15)] p-2 aspect-square rounded-lg text-white -rotate-15">
+            <svg aria-hidden="true" class="lucide lucide-circle-dollar-sign" fill="none" height="24"
+              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"
+              width="24" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path>
+              <path d="M12 18V6"></path>
+            </svg>
+          </div>
+          <h2 class="text-4xl font-semibold font-urbanist" data-i18n="pricing_title">Simple, transparent pricing</h2>
+        </div>
+        <p class="text-zinc-500 text-base/7 text-center max-w-lg" data-i18n="pricing_desc">Choose a plan that fits your
+          team - scale
+          as you build, launch and grow with AI agents.
+        </p>
+      </div>
+      <div class="p-1 mt-10 border border-orange-200 bg-orange-50 rounded-full">
+        <button id="pricingMonthlyBtn" data-billing="monthly"
+          class="px-6 py-2 rounded-full cursor-pointer bg-orange-500 text-white">
+          <span data-i18n="pricing_billing_monthly">Monthly</span>
+        </button>
+        <button id="pricingYearlyBtn" data-billing="yearly"
+          class="relative px-6 py-2 rounded-full cursor-pointer text-orange-500">
+          <span data-i18n="pricing_billing_yearly">Yearly</span>
+          <span class="absolute -top-8 -right-8 rotate-15 bg-green-100 rounded-full px-2 py-1 text-xs text-green-500">
+            <span data-i18n="pricing_discount_badge">20% OFF</span>
+          </span>
+        </button>
+      </div>
+      <div id="pricingCards" class="flex flex-wrap items-start justify-center gap-10 md:gap-4 px-4 mt-12">
+        <div class="p-5 pb-8 w-full sm:max-w-64 rounded-xl border border-gray-200 bg-white">
+          <div class="w-max border border-gray-200 p-2 aspect-square rounded-lg text-orange-500 bg-white">
+            <svg aria-hidden="true" class="lucide lucide-rocket" fill="none" height="24" stroke="currentColor"
+              stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z">
+              </path>
+              <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z">
+              </path>
+              <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
+              <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-medium mt-6" data-i18n="plan_free">Free</h3>
+          <p class="text-zinc-500" data-i18n="plan_free_desc">Explore Buildify and create your first AI agents.</p>
+          <p class="text-3xl font-semibold mt-4"><span data-i18n="plan_free_price">$1/mo</span></p>
+          <a class="block text-center py-2.5 rounded-full mt-6 text-zinc-600 bg-gray-50 border border-gray-200"
+            href="/public/create-task.html?service=SVC100"><span data-i18n="plan_free_cta">Start Free</span></a>
+          <div class="space-y-2 mt-6">
+            <div class="flex items-center gap-2">
+              <svg aria-hidden="true" class="lucide lucide-check size-4 text-orange-500" fill="none" height="24"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+              <p class="text-zinc-500"><span data-i18n="plan_free_f1">Up to 3 AI agents</span></p>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg aria-hidden="true" class="lucide lucide-check size-4 text-orange-500" fill="none" height="24"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+              <p class="text-zinc-500"><span data-i18n="plan_free_f2">Basic workflow builder</span></p>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg aria-hidden="true" class="lucide lucide-check size-4 text-orange-500" fill="none" height="24"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+              <p class="text-zinc-500"><span data-i18n="plan_free_f3">Community support</span></p>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg aria-hidden="true" class="lucide lucide-check size-4 text-orange-500" fill="none" height="24"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+              <p class="text-zinc-500"><span data-i18n="plan_free_f4">Limited execution runs</span></p>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg aria-hidden="true" class="lucide lucide-check size-4 text-orange-500" fill="none" height="24"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+              <p class="text-zinc-500"><span data-i18n="plan_free_f5">Starter integrations</span></p>
+            </div>
+          </div>
+        </div>
+        <div class="p-5 pb-8 w-full sm:max-w-64 rounded-xl border border-gray-200 bg-white">
+          <div class="w-max border border-gray-200 p-2 aspect-square rounded-lg text-orange-500 bg-white">
+            <svg aria-hidden="true" class="lucide lucide-user" fill="none" height="24" stroke="currentColor"
+              stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <h3 class="text-lg font-medium mt-6" data-i18n="plan_starter">Starter</h3>
+          <p class="text-zinc-500"><span data-i18n="plan_starter_desc">For individuals building and testing AI-powered
+              ideas.</span></p>
+          <p class="text-3xl font-semibold mt-4"><span data-i18n="plan_starter_price">$19/mo</span></p>
+          <a class="block text-center py-2.5 rounded-full mt-6 text-zinc-600 bg-gray-50 border border-gray-200"
+            data-i18n="cta_get_started" href="/public/create-task.html?service=SVC200">Get Started</a>
+          <div class="space-y-2 mt-6">
+            <div class="flex items-center gap-2">
+              <svg aria-hidden="true" class="lucide lucide-check size-4 text-orange-500" fill="none" height="24"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+              <p class="text-zinc-500"><span data-i18n="plan_starter_f1">Up to 10 AI agents</span></p>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg aria-hidden="true" class="lucide lucide-check size-4 text-orange-500" fill="none" height="24"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+              <p class="text-zinc-500"><span data-i18n="plan_starter_f2">Advanced workflows</span></p>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg aria-hidden="true" class="lucide lucide-check size-4 text-orange-500" fill="none" height="24"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+              <p class="text-zinc-500"><span data-i18n="plan_starter_f3">API &amp; webhook access</span></p>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg aria-hidden="true" class="lucide lucide-check size-4 text-orange-500" fill="none" height="24"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+              <p class="text-zinc-500"><span data-i18n="plan_starter_f4">Execution logs</span></p>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg aria-hidden="true" class="lucide lucide-check size-4 text-orange-500" fill="none" height="24"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+              <p class="text-zinc-500"><span data-i18n="plan_starter_f5">Email support</span></p>
+            </div>
+          </div>
+        </div>
+        <div
+          class="p-5 pb-8 w-full sm:max-w-64 rounded-xl border border-gray-200 bg-linear-to-br from-orange-50 to-orange-100">
+          <div class="w-max border border-gray-200 p-2 aspect-square rounded-lg text-orange-500 bg-white">
+            <svg aria-hidden="true" class="lucide lucide-users" fill="none" height="24" stroke="currentColor"
+              stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+              <path d="M16 3.128a4 4 0 0 1 0 7.744"></path>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <h3 class="text-lg font-medium mt-6" data-i18n="plan_pro">Pro</h3>
+          <p class="text-zinc-500"><span data-i18n="plan_pro_desc">Best for startups and growing product teams.</span>
+          </p>
+          <p class="text-3xl font-semibold mt-4"><span data-i18n="plan_pro_price">$49/mo</span></p>
+          <a class="block text-center py-2.5 rounded-full mt-6 text-zinc-600 bg-gray-50 border border-gray-200"
+            href="/public/create-task.html?service=SVC300"><span data-i18n="plan_pro_cta">Upgrade to Pro</span></a>
+          <div class="space-y-2 mt-6">
+            <div class="flex items-center gap-2">
+              <svg aria-hidden="true" class="lucide lucide-check size-4 text-orange-500" fill="none" height="24"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+              <p class="text-zinc-500"><span data-i18n="plan_pro_f1">Unlimited AI agents</span></p>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg aria-hidden="true" class="lucide lucide-check size-4 text-orange-500" fill="none" height="24"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+              <p class="text-zinc-500"><span data-i18n="plan_pro_f2">Priority execution</span></p>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg aria-hidden="true" class="lucide lucide-check size-4 text-orange-500" fill="none" height="24"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+              <p class="text-zinc-500"><span data-i18n="plan_pro_f3">Real-time monitoring</span></p>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg aria-hidden="true" class="lucide lucide-check size-4 text-orange-500" fill="none" height="24"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+              <p class="text-zinc-500"><span data-i18n="plan_pro_f4">Team collaboration</span></p>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg aria-hidden="true" class="lucide lucide-check size-4 text-orange-500" fill="none" height="24"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+              <p class="text-zinc-500"><span data-i18n="plan_pro_f5">Priority support</span></p>
+            </div>
+          </div>
+        </div>
+        <div class="p-5 pb-8 w-full sm:max-w-64 rounded-xl border border-gray-200 bg-orange-500 text-white">
+          <div class="w-max border border-gray-200 p-2 aspect-square rounded-lg text-white">
+            <svg aria-hidden="true" class="lucide lucide-user" fill="none" height="24" stroke="currentColor"
+              stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <h3 class="text-lg font-medium mt-6" data-i18n="plan_enterprise">Enterprise</h3>
+          <p class="text-white" data-i18n="plan_enterprise_desc">Custom solutions for large teams and enterprises.</p>
+          <p class="text-3xl font-semibold mt-4"><span data-i18n="plan_enterprise_price">$149/mo</span></p>
+          <a class="block text-center py-2.5 rounded-full mt-6 text-zinc-600 bg-gray-50 border border-gray-200"
+            data-i18n="pricing_contact_sales" href="/public/create-task.html?service=SVC400">
+            Contact Sales
+          </a>
+          <div class="space-y-2 mt-6">
+            <div class="flex items-center gap-2">
+              <svg aria-hidden="true" class="lucide lucide-check size-4 text-white" fill="none" height="24"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+              <p class="text-white"><span data-i18n="plan_enterprise_f1">Custom agent limits</span></p>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg aria-hidden="true" class="lucide lucide-check size-4 text-white" fill="none" height="24"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+              <p class="text-white"><span data-i18n="plan_enterprise_f2">Dedicated infrastructure</span></p>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg aria-hidden="true" class="lucide lucide-check size-4 text-white" fill="none" height="24"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+              <p class="text-white"><span data-i18n="plan_enterprise_f3">Advanced security controls</span></p>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg aria-hidden="true" class="lucide lucide-check size-4 text-white" fill="none" height="24"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+              <p class="text-white"><span data-i18n="plan_enterprise_f4">SLA &amp; compliance support</span></p>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg aria-hidden="true" class="lucide lucide-check size-4 text-white" fill="none" height="24"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+              <p class="text-white"><span data-i18n="plan_enterprise_f5">Dedicated account manager</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Testimonial Section -->
+  <section class="px-4 md:px-16 lg:px-24 xl:px-32 border-b border-gray-200" id="testimonials">
+    <div class="p-4 pt-20 md:p-20 flex flex-col items-center max-w-7xl mx-auto justify-center border-x border-gray-200">
+      <div class="flex flex-col gap-6 items-center">
+        <div class="flex flex-col md:flex-row items-center gap-4">
+          <div
+            class="bg-orange-500 shadow-[inset_0_4px_4px_rgba(255,255,255,0.25),0_4px_10px_rgba(0,0,0,0.15)] p-2 aspect-square rounded-lg text-white -rotate-15">
+            <svg aria-hidden="true" class="lucide lucide-shield-check" fill="none" height="24" stroke="currentColor"
+              stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z">
+              </path>
+              <path d="m9 12 2 2 4-4"></path>
+            </svg>
+          </div>
+          <h2 class="text-4xl font-semibold font-urbanist" data-i18n="testimonials_title" id="testimonialsTitle">What
+            our users say</h2>
+        </div>
+        <p class="text-zinc-500 text-base/7 text-center max-w-lg" id="testimonialsSubtitle">
+          Teams trust Buildify to build, deploy and
+          scale reliable AI agents in real-world production.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-8 items-center justify-center mt-24" id="testimonialsCards">
+      </div>
+      <a class="mt-20 px-8 py-2.5 rounded-full bg-orange-50 border border-orange-200 text-orange-500" href="#">
+        See more
+      </a>
+    </div>
+  </section>
+  <!-- Footer -->
+  <footer class="px-4 md:px-16 lg:px-24 xl:px-32">
+    <div class="border-x border-gray-200 px-4 md:px-12 max-w-7xl mx-auto pt-40">
+      <div
+        class="flex flex-col md:flex-row items-start justify-between relative p-8 md:p-12 overflow-hidden pb-32 md:pb-42 bg-linear-to-t from-orange-50 to-orange-100 rounded-t-2xl">
+        <div class="max-w-72">
+          <img alt="Logo" class="h-62 w-auto absolute -bottom-18 opacity-7 select-none pointer-events-none" height="35"
+            src="./assets/logo-colored.svg" width="135" />
+          <img alt="Logo" class="h-9" height="35" src="./assets/logo-colored.svg" width="135" />
+          <p class="text-zinc-500 mt-4 pb-6">
+            For further assistance or additional inquiries, feel free to contact us
+          </p>
+        </div>
+        <div>
+          <p class="uppercase font-semibold text-orange-600 text-base">Social</p>
+          <div class="flex flex-col mt-6 gap-3">
+            <a class="flex items-center gap-2 text-orange-500" href="https://prebuiltui.com?ref=buildify">
+              <svg aria-hidden="true" class="lucide lucide-twitter" fill="none" height="20" stroke="currentColor"
+                stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z">
+                </path>
+              </svg>
+              <p>Twitter</p>
+            </a>
+            <a class="flex items-center gap-2 text-orange-500" href="https://prebuiltui.com?ref=buildify">
+              <svg aria-hidden="true" class="lucide lucide-linkedin" fill="none" height="20" stroke="currentColor"
+                stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                <rect height="12" width="4" x="2" y="9"></rect>
+                <circle cx="4" cy="4" r="2"></circle>
+              </svg>
+              <p>Linkedin</p>
+            </a>
+            <a class="flex items-center gap-2 text-orange-500" href="https://prebuiltui.com?ref=buildify">
+              <svg aria-hidden="true" class="lucide lucide-instagram" fill="none" height="20" stroke="currentColor"
+                stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"
+                xmlns="http://www.w3.org/2000/svg">
+                <rect height="20" rx="5" ry="5" width="20" x="2" y="2"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+              </svg>
+              <p>Instagram</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="/public/i18n.js?v=20260615_v6"></script>
+  <script src="/public/lang-ui.js?v=20260615_v6"></script>
+
+  <!-- Apply brand theme color (overrides Tailwind orange accents via CSS variables) -->
+  <script>
+    (function () {
+      function applyColor(c) {
+        // Tailwind v4 in this project uses --color-orange-* for orange accents
+        document.documentElement.style.setProperty('--color-orange-500', c);
+        document.documentElement.style.setProperty('--color-orange-600', c);
+        document.documentElement.style.setProperty('--color-orange-400', c);
+      }
+      fetch('/api/site/theme')
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          var c = data && data.theme && data.theme.primaryColor;
+          if (c) applyColor(c);
+        })
+        .catch(function () { /* ignore */ });
+    })();
+  </script>
+
+  <!-- SVG filter for electric border removed -->
+  <script src="./script.js?v=20260615_v6"></script>
+  <script src="/auth-ui.js"></script>
+  <script src="./hero-dynamic.js" defer></script>
+  <script src="/visual-editor.js" defer></script>
+</body>
+
+</html>

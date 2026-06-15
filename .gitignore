@@ -1,0 +1,42 @@
+# Dependency directories
+node_modules/
+server/node_modules/
+admindashboard/node_modules/
+
+# Production build outputs
+admindashboard/dist/
+server/public/admindashboard/
+
+# SQLite databases
+*.sqlite
+server/*.sqlite
+db.sqlite
+ose_database.sqlite
+referral.sqlite
+
+# User uploaded files
+server/uploads/
+uploads/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Zipped files and archives
+*.zip
+Archive.zip
+
+# Screenshots & Local media backups (except specific assets)
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+!server/public/images/
+!server/public/assets/

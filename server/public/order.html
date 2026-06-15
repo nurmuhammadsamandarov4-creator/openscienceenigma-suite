@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title data-i18n="order_title">Order Details</title>
+  
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --primary-color: #f97316; /* brand orange accent */
+      --primary-hover: #ea580c;
+      --primary-glow: rgba(249, 115, 22, 0.12);
+      --font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-color);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      line-height: 1.5;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      padding: 40px 16px;
+    }
+
+    /* Ambient background decorations */
+    .bg-spotlight {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(249, 115, 22, 0.04) 0%, transparent 70%);
+      filter: blur(80px);
+      top: -100px;
+      right: -100px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .bg-spotlight-2 {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.03) 0%, transparent 70%);
+      filter: blur(100px);
+      bottom: -150px;
+      left: -150px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(15, 23, 42, 0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 23, 42, 0.012) 1px, transparent 1px);
+      background-size: 60px 60px;
+      background-position: center center;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrap {
+      max-width: 1060px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Top Navigation Row */
+    .header-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+      gap: 16px;
+      flex-wrap: wrap;
+      animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .back-link svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.25s ease;
+    }
+
+    .back-link:hover {
+      color: var(--primary-color);
+    }
+
+    .back-link:hover svg {
+      transform: translateX(-4px);
+    }
+
+    .btn {
+      background: linear-gradient(135deg, var(--primary-color) 0%, #ff8c3b 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 24px;
+      font-family: var(--font-family);
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 8px 20px -4px rgba(249, 115, 22, 0.25);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px -4px rgba(249, 115, 22, 0.35);
+    }
+
+    .btn.secondary {
+      background: #ffffff;
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+    }
+    
+    .btn.secondary:hover {
+      background: #f8fafc;
+      border-color: var(--text-muted);
+    }
+
+    /* Responsive Two-Column Layout */
+    .order-layout {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    @media (max-width: 860px) {
+      .order-layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+
+    /* Column animations */
+    .main-content-side {
+      animation: slideInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation-delay: 0.15s;
+    }
+
+    .sidebar-side {
+      animation: slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation-delay: 0.15s;
+    }
+
+    /* Cards System */
+    .card {
+      background: var(--card-bg);
+      border-radius: 24px;
+      border: 1px solid rgba(15, 23, 42, 0.05);
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.03);
+      margin-bottom: 24px;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Status & Paid Pills */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.725rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .pill.sent { background: #fef3c7; color: #b45309; box-shadow: 0 0 10px rgba(245, 158, 11, 0.1); }
+    .pill.done { background: #dcfce7; color: #15803d; box-shadow: 0 0 10px rgba(34, 197, 94, 0.1); }
+    .pill.in_progress { background: #dbeafe; color: #1d4ed8; box-shadow: 0 0 10px rgba(59, 130, 246, 0.1); }
+    .pill.open { background: #f1f5f9; color: #475569; box-shadow: 0 0 10px rgba(100, 116, 139, 0.05); }
+
+    /* Timeline Communication style */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 14px;
+    }
+
+    .timeline-item {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.02);
+      transition: border-color 0.25s ease;
+      opacity: 0; /* Animated dynamically via JS */
+    }
+
+    .timeline-item.admin {
+      border-left: 4px solid var(--primary-color);
+      background: rgba(249, 115, 22, 0.005);
+    }
+
+    .timeline-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 0.85rem;
+    }
+
+    .timeline-sender {
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .timeline-sender .badge {
+      font-size: 0.65rem;
+      background: var(--primary-color);
+      color: #ffffff;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .timeline-time {
+      color: var(--text-muted);
+    }
+
+    .timeline-content {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--text-main);
+    }
+
+    .timeline-files {
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border-color);
+    }
+
+    /* Form Fields inside Cards */
+    .textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+      font-family: var(--font-family);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: var(--text-main);
+      outline: none;
+      resize: vertical;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      margin-bottom: 14px;
+    }
+
+    .textarea:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 4px var(--primary-glow);
+    }
+
+    /* Dynamic attachment cards */
+    .file-download-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      font-size: 0.825rem;
+      font-weight: 600;
+      color: var(--text-main);
+      text-decoration: none;
+      transition: all 0.2s ease;
+      margin-right: 8px;
+      margin-top: 8px;
+    }
+
+    .file-download-card:hover {
+      background: #f1f5f9;
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+
+    .file-download-card svg {
+      width: 16px;
+      height: 16px;
+      color: var(--text-muted);
+    }
+
+    .file-download-card:hover svg {
+      color: var(--primary-color);
+    }
+
+    /* Simple stats wrapper inside sidebar */
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(15, 23, 42, 0.04);
+    }
+
+    .meta-row:last-child {
+      border-bottom: none;
+    }
+
+    .meta-label {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .meta-value {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    /* Styled native file input trigger button */
+    .file-trigger-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #f1f5f9;
+      border: 1px solid var(--border-color);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+      margin-bottom: 12px;
+    }
+
+    .file-trigger-btn:hover {
+      background: #e2e8f0;
+      border-color: var(--text-muted);
+    }
+
+    .file-trigger-btn svg {
+      width: 16px;
+      height: 16px;
+      color: var(--text-muted);
+    }
+
+    .file-indicator-text {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--primary-color);
+      margin-left: 8px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 30px 20px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .msg-feedback {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    /* Hardware Accelerated Keyframes */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Ambient background laser lines styles */
+    .ambient-lines {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0; /* behind all page content (.wrap has z-index: 1) */
+      overflow: hidden;
+    }
+    .ambient-line {
+      position: absolute;
+      top: 0;
+      width: 1px;
+      height: 100%;
+      background: linear-gradient(to bottom, transparent, rgba(249, 115, 22, 0.04) 50%, transparent);
+    }
+    .ambient-line::before {
+      content: "";
+      position: absolute;
+      top: -150px;
+      left: -1px;
+      width: 3px;
+      height: 150px;
+      background: linear-gradient(to bottom, transparent, var(--primary-color), transparent);
+      filter: blur(2px);
+      animation: travelDown var(--duration, 8s) infinite linear;
+      animation-delay: var(--delay, 0s);
+    }
+    @keyframes travelDown {
+      0% { top: -150px; }
+      100% { top: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Ambient background elements -->
+  <div class="bg-spotlight"></div>
+  <div class="bg-spotlight-2"></div>
+  <div class="bg-grid"></div>
+
+  <!-- Ambient moving laser lines -->
+  <div class="ambient-lines">
+    <div class="ambient-line" style="left: 15%; --delay: 0s; --duration: 8s;"></div>
+    <div class="ambient-line" style="left: 48%; --delay: 2.5s; --duration: 11s;"></div>
+    <div class="ambient-line" style="left: 82%; --delay: 5s; --duration: 9s;"></div>
+  </div>
+
+  <div class="wrap">
+    <!-- Top Action Nav -->
+    <div class="header-nav">
+      <a href="/public/dashboard.html" class="back-link" data-i18n="back_dashboard">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
+        <span>Dashboard</span>
+      </a>
+      <a href="/public/create-task.html" class="btn">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 16px; height: 16px;">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+        <span data-i18n="new_order">+ Yangi zakaz</span>
+      </a>
+    </div>
+
+    <!-- Main Two-Column Layout -->
+    <div class="order-layout">
+      <!-- Left Column: Description & Chat timeline -->
+      <div class="main-content-side">
+        <!-- Order details card -->
+        <div class="card">
+          <h2 class="card-title" data-i18n="order_title">Order details</h2>
+          <div id="orderBox" class="empty-state">Loading...</div>
+        </div>
+
+        <!-- Replies Timeline -->
+        <div class="card">
+          <h2 class="card-title" data-i18n="order_admin_replies">Admin replies</h2>
+          <div id="subsMsg" class="empty-state">Loading...</div>
+          <div id="subsBox" class="timeline"></div>
+        </div>
+
+        <!-- Reply Message submission Box -->
+        <div class="card" id="replyCard">
+          <h2 class="card-title" data-i18n="order_send_title">Xabar / fayl yuborish</h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;" data-i18n="order_send_desc">Admin uchun qo‘shimcha ma’lumot yoki 10 tagacha fayl yuborishingiz mumkin (har biri 500MB gacha).</p>
+          
+          <textarea id="message" placeholder="Xabar (ixtiyoriy)" data-i18n-placeholder="order_msg_ph" class="textarea"></textarea>
+          
+          <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="file-trigger-btn" id="attachBtn">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m0 0l-5.656-5.656" />
+              </svg>
+              <span data-i18n="attach_file">Attach File</span>
+            </div>
+            <span id="fileCountIndicator" class="file-indicator-text"></span>
+          </div>
+
+          <input id="files" type="file" multiple style="display: none;" />
+          
+          <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
+            <button id="sendBtn" class="btn" data-i18n="order_send_btn">Yuborish</button>
+          </div>
+          <div class="msg-feedback" id="sendMsg"></div>
+        </div>
+      </div>
+
+      <!-- Right Column: Sidebar Metadata -->
+      <div class="sidebar-side">
+        <!-- Order Stats sidebar card -->
+        <div class="card" id="sidebarMetaBox" style="display: none;">
+          <h3 class="card-title">Order Status</h3>
+          <div class="meta-row">
+            <span class="meta-label">Status</span>
+            <span class="meta-value" id="metaStatus">-</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Created</span>
+            <span class="meta-value" id="metaCreated">-</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Service Plan</span>
+            <span class="meta-value" id="metaPlanName">-</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Paid Amount</span>
+            <span class="meta-value" id="metaPaidAmount">-</span>
+          </div>
+        </div>
+
+        <!-- Files list card -->
+        <div class="card" id="sidebarFilesBox" style="display: none;">
+          <h3 class="card-title" data-i18n="order_your_files">Your files</h3>
+          <div id="metaFilesContainer" style="display: flex; flex-direction: column;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script includes -->
+  <script src="/public/i18n.js?v=20260615_v6"></script>
+  <script src="/public/lang-ui.js?v=20260615_v6"></script>
+  <script src="/auth-ui.js"></script>
+  <script src="/order.js"></script>
+</body>
+</html>

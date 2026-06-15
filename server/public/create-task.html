@@ -1,0 +1,825 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Create Order — Open Science Enigma</title>
+  
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --primary-color: #f97316; /* brand orange accent */
+      --primary-hover: #ea580c;
+      --primary-glow: rgba(249, 115, 22, 0.12);
+      --font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-color);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      line-height: 1.4;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden; /* strictly no scroll */
+      padding: 0;
+    }
+
+    /* Ambient soft background decorations */
+    .bg-spotlight, .bg-spotlight-2, .bg-grid {
+      display: none;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 100%;
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* Form Container Card */
+    .card {
+      background: var(--card-bg);
+      border-radius: 0;
+      border: none;
+      padding: 40px 60px;
+      box-shadow: none;
+      height: 100%;
+      max-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    h1 {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text-main);
+      margin-bottom: 4px;
+      text-align: center;
+      line-height: 1.2;
+      animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+      animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation-delay: 0.1s;
+    }
+
+    /* Layout Split */
+    .order-layout {
+      display: grid;
+      grid-template-columns: 2.5fr 1fr;
+      gap: 24px;
+      align-items: start;
+      flex: 1;
+    }
+
+    .form-side {
+      animation: slideInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation-delay: 0.15s;
+      min-width: 0; /* prevents horizontal overflow blowout */
+    }
+
+    .summary-side {
+      animation: slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation-delay: 0.15s;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .field-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    /* Service Card Selection Grid */
+    .service-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .service-cards-grid.disabled-cards {
+      opacity: 0.4;
+      pointer-events: none;
+      filter: grayscale(100%);
+    }
+
+    @media (max-width: 900px) {
+      .service-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .service-card {
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: #ffffff;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      opacity: 0; /* Staggered load animation target */
+    }
+
+    .service-card:hover {
+      border-color: rgba(249, 115, 22, 0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    .service-card.active {
+      border-color: var(--primary-color);
+      background: rgba(249, 115, 22, 0.01);
+      box-shadow: 0 12px 30px -5px var(--primary-glow);
+    }
+
+    .service-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .service-card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .service-card-price {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: baseline;
+      gap: 2px;
+      margin-bottom: 8px;
+    }
+
+    .service-card-price span {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .service-card-original-price {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-decoration: line-through;
+      margin-left: 6px;
+    }
+
+    .service-card-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #f97316;
+      color: #ffffff;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 999px;
+      letter-spacing: 0.05em;
+    }
+
+    .service-card-features {
+      margin-top: 8px;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      list-style: none;
+      border-top: 1px dashed var(--border-color);
+      padding-top: 8px;
+    }
+
+    .service-card-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .service-card-features li::before {
+      content: "✓";
+      color: var(--primary-color);
+      font-weight: bold;
+    }
+
+    /* Selected state ring indicator */
+    .service-card-select-indicator {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .service-card.active .service-card-select-indicator {
+      border-color: var(--primary-color);
+      background: var(--primary-color);
+    }
+
+    .service-card-select-indicator::after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ffffff;
+      transform: scale(0);
+      transition: transform 0.2s ease;
+    }
+
+    .service-card.active .service-card-select-indicator::after {
+      transform: scale(1);
+    }
+
+    /* Service Note */
+    .service-note-container {
+      margin-top: 14px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(249, 115, 22, 0.04);
+      border-left: 3px solid var(--primary-color);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #c2410c;
+      transition: all 0.3s ease;
+    }
+
+    /* Textarea Design */
+    .textarea {
+      width: 100%;
+      height: 80px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      font-family: var(--font-family);
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: var(--text-main);
+      outline: none;
+      resize: vertical;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.01);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .textarea::placeholder {
+      color: #94a3b8;
+    }
+    .textarea:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 4px var(--primary-glow);
+    }
+
+    /* Modern Dropzone */
+    .dropzone {
+      border: 2px dashed var(--border-color);
+      border-radius: 12px;
+      padding: 16px 20px;
+      text-align: center;
+      cursor: pointer;
+      background: #ffffff;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dropzone:hover, .dropzone.dragover {
+      border-color: var(--primary-color);
+      background: rgba(249, 115, 22, 0.01);
+    }
+    
+    .dropzone.dragover {
+      animation: pulseBorder 1.5s infinite;
+    }
+
+    .dropzone-icon {
+      width: 36px;
+      height: 36px;
+      color: var(--text-muted);
+      transition: color 0.2s ease;
+    }
+
+    .dropzone:hover .dropzone-icon {
+      color: var(--primary-color);
+    }
+
+    .dropzone-text {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .dropzone-text .highlight {
+      color: var(--primary-color);
+      text-decoration: underline;
+    }
+
+    .dropzone-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Attached Files List */
+    .file-list {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 160px;
+      overflow-y: auto;
+      padding-right: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(15, 23, 42, 0.12) transparent;
+    }
+
+    .file-list::-webkit-scrollbar {
+      width: 4px;
+    }
+    .file-list::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .file-list::-webkit-scrollbar-thumb {
+      background: rgba(15, 23, 42, 0.15);
+      border-radius: 99px;
+    }
+    .file-list::-webkit-scrollbar-thumb:hover {
+      background: rgba(249, 115, 22, 0.4);
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 0.875rem;
+      animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .file-item-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+
+    .file-item-info svg {
+      width: 18px;
+      height: 18px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .file-item-size {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    .file-item-remove {
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.2rem;
+      padding: 0 4px;
+      line-height: 1;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .file-item-remove:hover {
+      color: #ef4444;
+    }
+
+    /* Summary Card (Right Side) */
+    .summary-card {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 16px 20px;
+      position: sticky;
+      top: 0px;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.01);
+    }
+
+    .summary-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    .summary-details {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .summary-label {
+      color: var(--text-muted);
+    }
+
+    .summary-value {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .discount-row {
+      color: #16a34a;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .discount-value {
+      color: #16a34a;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border-color);
+      margin: 8px 0;
+    }
+
+    .total-row {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    .total-row .summary-value {
+      font-size: 1.2rem;
+      color: var(--primary-color);
+      font-weight: 800;
+    }
+
+    /* Submit Button */
+    .btn {
+      background: linear-gradient(135deg, var(--primary-color) 0%, #ff8c3b 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      padding: 14px 32px;
+      font-family: var(--font-family);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 25px -5px rgba(249, 115, 22, 0.3);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    .btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px -5px rgba(249, 115, 22, 0.4);
+    }
+
+    .btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Feedback messages */
+    .msg-box {
+      margin-top: 14px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: color 0.3s ease;
+      text-align: center;
+    }
+
+    .msg-box:not(:empty) {
+      padding: 10px;
+      background: rgba(15, 23, 42, 0.02);
+      border-radius: 10px;
+    }
+
+    /* Back Dashboard Link */
+    .back-dashboard-wrap {
+      margin-top: 16px;
+      display: flex;
+      justify-content: center;
+      animation: fadeIn 1s ease both;
+      animation-delay: 0.4s;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .back-link svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.25s ease;
+    }
+
+    .back-link:hover {
+      color: var(--primary-color);
+    }
+
+    .back-link:hover svg {
+      transform: translateX(-4px);
+    }
+
+    /* Hardware Accelerated Animations */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes pulseBorder {
+      0% { border-color: var(--border-color); }
+      50% { border-color: var(--primary-color); box-shadow: 0 0 10px var(--primary-glow); }
+      100% { border-color: var(--border-color); }
+    }
+
+    @media (max-width: 640px) {
+      .card {
+        padding: 32px 20px;
+      }
+    }
+
+    /* Ambient background laser lines styles */
+    .ambient-lines {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0; /* behind all page content (.wrap has z-index: 1) */
+      overflow: hidden;
+    }
+    .ambient-line {
+      position: absolute;
+      top: 0;
+      width: 1px;
+      height: 100%;
+      background: linear-gradient(to bottom, transparent, rgba(249, 115, 22, 0.04) 50%, transparent);
+    }
+    .ambient-line::before {
+      content: "";
+      position: absolute;
+      top: -150px;
+      left: -1px;
+      width: 3px;
+      height: 150px;
+      background: linear-gradient(to bottom, transparent, var(--primary-color), transparent);
+      filter: blur(2px);
+      animation: travelDown var(--duration, 8s) infinite linear;
+      animation-delay: var(--delay, 0s);
+    }
+    @keyframes travelDown {
+      0% { top: -150px; }
+      100% { top: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Ambient background elements -->
+  <div class="bg-spotlight"></div>
+  <div class="bg-spotlight-2"></div>
+  <div class="bg-grid"></div>
+
+  <!-- Ambient moving laser lines -->
+  <div class="ambient-lines">
+    <div class="ambient-line" style="left: 15%; --delay: 0s; --duration: 8s;"></div>
+    <div class="ambient-line" style="left: 48%; --delay: 2.5s; --duration: 11s;"></div>
+    <div class="ambient-line" style="left: 82%; --delay: 5s; --duration: 9s;"></div>
+  </div>
+
+  <div class="wrap">
+    <div class="card">
+      <h1 data-i18n="create_task_title">Создание задания</h1>
+      <p class="subtitle" data-i18n="services_desc">Choose a service and place an order. After payment, referral commission is credited automatically.</p>
+
+      <!-- Error banner for validation warnings -->
+      <div id="errorBanner" style="display: none; background: #fee2e2; border: 1px solid #fecaca; color: #dc2626; padding: 12px 16px; border-radius: 12px; margin-bottom: 20px; font-weight: 600; font-size: 0.9rem; text-align: center; animation: fadeUp 0.3s ease both;"></div>
+
+      <div class="order-layout">
+        <!-- Form Fields Side -->
+        <div class="form-side">
+          <h3 class="section-title" id="chooseServiceTitle">CHOOSE A SERVICE</h3>
+          <div id="serviceCards" class="service-cards-grid">
+            <!-- Rendered via JS -->
+          </div>
+
+          <!-- Custom Amount Block -->
+          <div id="customAmountWrapper" style="margin-top: 16px; margin-bottom: 24px;">
+            <h3 class="section-title" style="margin-bottom: 8px;" id="customAmountTitle">OR ENTER CUSTOM AMOUNT</h3>
+            <div style="position: relative; display: flex; align-items: center; gap: 8px;">
+              <div style="position: relative; flex: 1;">
+                <span style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-weight: 500; color: var(--text-main);">$</span>
+                <input type="number" id="customAmountInput" class="textarea" style="height: 48px; padding-left: 32px; padding-top: 0; padding-bottom: 0; min-height: unset; width: 100%; border-radius: 12px; margin: 0;" placeholder="0.00" min="1" step="0.01">
+              </div>
+              <button type="button" id="clearCustomAmountBtn" style="height: 48px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--border-color); background: #f8fafc; cursor: pointer; display: none; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">Clear</button>
+            </div>
+          </div>
+
+          <!-- Visually hidden select for compatibility with legacy create-task.js -->
+          <select id="serviceSelect" style="display:none;"></select>
+
+          <!-- Description textarea group -->
+          <div class="form-group">
+            <label class="field-label" data-i18n="create_task_title_ph" style="font-size: 0.85rem;">Request details</label>
+            <textarea id="desc" class="textarea" data-i18n-placeholder="create_task_ph" placeholder="Подробно опишите задание"></textarea>
+          </div>
+
+          <!-- Upload Dropzone group -->
+          <div class="form-group">
+            <label class="field-label" data-i18n="attach_file">Прикрепить файл</label>
+            <div class="dropzone" id="dropzone">
+              <svg class="dropzone-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+              </svg>
+              <div class="dropzone-text">
+                <span class="highlight">Click to upload</span> or drag and drop
+              </div>
+              <div class="dropzone-sub">Supports files up to 500MB each (max 10 files)</div>
+            </div>
+            <!-- Hidden native file input -->
+            <input id="files" type="file" multiple style="display:none" />
+            <!-- Attachment details file list -->
+            <div id="fileList" class="file-list"></div>
+          </div>
+        </div>
+
+        <!-- Checkout / Summary Side -->
+        <div class="summary-side">
+          <div class="summary-card">
+            <h3 class="summary-title" data-i18n="pricing_title">Order Summary</h3>
+            
+            <div class="summary-details">
+              <div class="summary-row">
+                <span class="summary-label" data-i18n="th_service">Service Plan</span>
+                <span class="summary-value" id="summaryPlanName">-</span>
+              </div>
+              <div class="summary-row">
+                <span class="summary-label" data-i18n="th_purchase">Original Price</span>
+                <span class="summary-value" id="summaryOriginalPrice">-</span>
+              </div>
+              <div class="summary-row discount-row" id="summaryDiscountRow" style="display: none;">
+                <span class="summary-label discount-label">Referral Discount</span>
+                <span class="summary-value discount-value" id="summaryDiscountAmount">-</span>
+              </div>
+              <div class="divider"></div>
+              <div class="summary-row total-row">
+                <span class="summary-label" data-i18n="ref_total">Total Payment</span>
+                <span class="summary-value" id="summaryTotalPrice">-</span>
+              </div>
+            </div>
+
+            <!-- Action Button inside summary -->
+            <button id="submitBtn" class="btn btn-block" data-i18n="submit_order">
+              <span>Zakaz berish</span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 18px; height: 18px;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </button>
+            
+            <!-- Feedback notifications block -->
+            <div id="msg" class="msg-box"></div>
+            
+            <!-- Dynamic note container -->
+            <div id="serviceNote" class="service-note-container" style="display:none;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation back link -->
+      <div class="back-dashboard-wrap">
+        <a href="/public/dashboard.html" class="back-link" data-i18n="back_dashboard">
+          <!-- Left arrow icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+          <span>Dashboard</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Translation & Authentication Core Scripts -->
+  <script src="/public/i18n.js?v=20260615_v6"></script>
+  <script src="/public/lang-ui.js?v=20260615_v6"></script>
+  <script src="/auth-ui.js"></script>
+  <script src="/create-task.js"></script>
+</body>
+</html>

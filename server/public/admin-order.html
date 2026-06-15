@@ -1,0 +1,744 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title data-i18n="admin_order_title">Admin — Zakaz</title>
+  
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #f1f5f9;
+      --border-focus: #e2e8f0;
+      --primary-color: #f97316; /* brand orange accent */
+      --primary-hover: #ea580c;
+      --primary-glow: rgba(249, 115, 22, 0.08);
+      --font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      
+      --status-open-bg: #f1f5f9;
+      --status-open-txt: #475569;
+      --status-sent-bg: #fef3c7;
+      --status-sent-txt: #d97706;
+      --status-prog-bg: #dbeafe;
+      --status-prog-txt: #2563eb;
+      --status-done-bg: #dcfce7;
+      --status-done-txt: #16a34a;
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-color);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      line-height: 1.5;
+      padding: 0;
+      margin: 0;
+    }
+
+    .wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    /* Elegant Top Navbar Area */
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .header-title-area {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .back-link:hover {
+      color: var(--primary-color);
+      transform: translateX(-3px);
+    }
+
+    /* Cards System */
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      padding: 24px;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04);
+      margin-bottom: 24px;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 12px 35px -10px rgba(0, 0, 0, 0.06);
+    }
+
+    /* Order Meta Grid */
+    .order-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .meta-item-card {
+      background: #fafafa;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .meta-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .meta-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      word-break: break-all;
+    }
+
+    .meta-subvalue {
+      font-size: 13px;
+      color: var(--text-muted);
+      word-break: break-all;
+    }
+
+    .price-tag {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--primary-color);
+    }
+
+    /* Custom badges */
+    .status-badge, .paid-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 12px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 700;
+      width: fit-content;
+      margin-top: 4px;
+    }
+
+    .status-badge.open { background: var(--status-open-bg); color: var(--status-open-txt); }
+    .status-badge.sent { background: var(--status-sent-bg); color: var(--status-sent-txt); }
+    .status-badge.in_progress { background: var(--status-prog-bg); color: var(--status-prog-txt); }
+    .status-badge.done { background: var(--status-done-bg); color: var(--status-done-txt); }
+
+    .paid-badge.done { background: var(--status-done-bg); color: var(--status-done-txt); }
+    .paid-badge.unpaid { background: #fee2e2; color: #ef4444; }
+
+    /* Order Details Content layout */
+    .order-details-content {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .order-details-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .desc-section, .files-section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .desc-body {
+      background: #fafafa;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 15px;
+      color: var(--text-main);
+      white-space: pre-wrap;
+      min-height: 100px;
+    }
+
+    /* Modern file link styles */
+    .modern-file-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .modern-file-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      text-decoration: none;
+      background: #ffffff;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .modern-file-card:hover {
+      border-color: var(--primary-color);
+      background: var(--primary-glow);
+      transform: translateY(-1px);
+    }
+
+    .file-icon {
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(249, 115, 22, 0.08);
+      border-radius: 8px;
+      width: 36px;
+      height: 36px;
+    }
+
+    .file-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .file-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .file-download-icon {
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      transition: color 0.2s;
+    }
+
+    .modern-file-card:hover .file-download-icon {
+      color: var(--primary-color);
+    }
+
+    .no-files-notice {
+      color: var(--text-muted);
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    /* Grid layout for lower sections */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-title-area {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .section-heading {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: var(--text-main);
+    }
+
+    /* Form and Reply styles */
+    .reply-form-group {
+      margin-bottom: 16px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 140px;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      font-family: var(--font-family);
+      font-size: 15px;
+      color: var(--text-main);
+      resize: vertical;
+      background: #fafafa;
+      transition: all 0.2s ease;
+    }
+
+    textarea:focus {
+      outline: none;
+      background: #ffffff;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 4px var(--primary-glow);
+    }
+
+    /* Custom drag & drop upload zone */
+    .upload-zone {
+      border: 2px dashed var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      background: #fafafa;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-bottom: 16px;
+    }
+
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: var(--primary-color);
+      background: var(--primary-glow);
+    }
+
+    .upload-zone-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .upload-icon {
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+
+    .upload-zone:hover .upload-icon {
+      color: var(--primary-color);
+    }
+
+    .upload-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .upload-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Dynamic File List Preview inside upload zone */
+    .file-list-preview {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 140px;
+      overflow-y: auto;
+      padding-right: 4px;
+      text-align: left;
+    }
+
+    .preview-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    .preview-item svg {
+      color: var(--primary-color);
+    }
+
+    .preview-name {
+      flex: 1;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .preview-size {
+      color: var(--text-muted);
+      font-size: 11px;
+    }
+
+    .preview-remove-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0 4px;
+    }
+
+    .preview-remove-btn:hover {
+      color: #ef4444;
+    }
+
+    /* Buttons */
+    .button-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 20px;
+      cursor: pointer;
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 700;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-send {
+      background: var(--primary-color);
+      color: #ffffff;
+    }
+
+    .btn-send:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 4px 12px var(--primary-glow);
+    }
+
+    .btn-paid {
+      background: #f59e0b;
+      color: #ffffff;
+    }
+
+    .btn-paid:hover {
+      background: #d97706;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+    }
+
+    .btn-done {
+      background: #10b981;
+      color: #ffffff;
+    }
+
+    .btn-done:hover {
+      background: #059669;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .muted-msg {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-color);
+    }
+
+    /* Previous Replies Timeline */
+    .subs-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-height: 480px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    .reply-item {
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      background: #fafafa;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: all 0.2s ease;
+    }
+
+    .reply-item:hover {
+      border-color: var(--border-focus);
+    }
+
+    .reply-item.admin-reply {
+      background: #ffffff;
+      border-left: 4px solid var(--primary-color);
+    }
+
+    .reply-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sender-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--primary-glow);
+      color: var(--primary-color);
+      font-weight: 800;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(249, 115, 22, 0.15);
+    }
+
+    .reply-item.user-reply .sender-avatar {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+
+    .sender-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .sender-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sender-email {
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .reply-time {
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .reply-body {
+      font-size: 14px;
+      color: var(--text-main);
+      white-space: pre-wrap;
+    }
+
+    .reply-files {
+      border-top: 1px solid var(--border-color);
+      padding-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .reply-files-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .reply-files-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .reply-file-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      color: var(--text-main);
+      font-size: 12px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .reply-file-chip:hover {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+      background: var(--primary-glow);
+    }
+
+    .chip-name {
+      max-width: 140px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- Header Navbar Area -->
+    <div class="admin-header">
+      <div class="header-title-area">
+        <a href="/public/admin.html" class="back-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          <span data-i18n="admin_back_inbox">← Kelgan zakazlar</span>
+        </a>
+        <h1 data-i18n="admin_order_title">Admin — Zakaz</h1>
+      </div>
+    </div>
+
+    <!-- Main Order Details Box -->
+    <!-- NOTE: do NOT attach data-i18n to dynamic containers; it will overwrite loaded HTML -->
+    <div class="card" id="orderBox">Loading...</div>
+
+    <!-- Actions / Replies Grid -->
+    <div class="grid">
+      <!-- Reply Form (Left Card) -->
+      <div class="card">
+        <div class="form-title-area">
+          <h2 class="section-heading" data-i18n="admin_reply_title">Javob yuborish (faqat admin)</h2>
+        </div>
+        
+        <div class="reply-form-group">
+          <textarea id="message" placeholder="Javob (ixtiyoriy)" data-i18n-placeholder="admin_reply_ph"></textarea>
+        </div>
+
+        <!-- Custom Styled Drag & Drop File Zone -->
+        <div class="upload-zone" id="uploadZone">
+          <input id="files" type="file" multiple style="display: none;" />
+          <div class="upload-zone-content">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" class="upload-icon"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            <span class="upload-title" data-i18n="attach_file">Fayllarni biriktirish</span>
+            <span class="upload-subtitle">Drag & drop yoki kompyuterdan tanlang</span>
+          </div>
+          <div class="file-list-preview" id="fileListPreview" style="display: none;"></div>
+        </div>
+
+        <div class="button-group">
+          <button class="btn btn-send" id="sendBtn" data-i18n="admin_send_btn">Yuborish</button>
+          <button class="btn btn-paid" id="paidBtn" data-i18n="admin_paid_btn">Paid</button>
+          <button class="btn btn-done" id="doneBtn" data-i18n="admin_done_btn">Tugatish</button>
+        </div>
+        <div class="muted-msg" id="sendMsg"></div>
+      </div>
+
+      <!-- Timeline of Previous Replies (Right Card) -->
+      <div class="card">
+        <div class="form-title-area">
+          <h2 class="section-heading" data-i18n="admin_prev_replies">Oldingi javoblar</h2>
+        </div>
+        <div id="subsBox" class="subs-container">
+          <div class="no-files-notice">Loading...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="/public/i18n.js?v=20260615_v6"></script>
+  <script src="/public/lang-ui.js?v=20260615_v6"></script>
+  <script src="/admin-order.js"></script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Login</title>
+  <style>
+    body{ margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; background:#f4f6fb; }
+    .wrap{ max-width:520px; margin:0 auto; padding:60px 16px; }
+    .card{ background:#fff; border-radius:18px; padding:22px; box-shadow: 0 12px 30px rgba(16,24,40,.08); }
+    h1{ margin:0 0 12px; }
+    label{ display:block; margin-top:12px; font-size:14px; color:#475467; }
+    input{ width:100%; padding:12px; border-radius:12px; border:1px solid #cbd5e1; font-size:16px; }
+    button{ width:100%; margin-top:16px; padding:12px; border:none; border-radius:12px; background:#512da8; color:#fff; font-size:16px; cursor:pointer; }
+    .muted{ margin-top:12px; color:#667085; font-size:14px; }
+    a{ color:#1d9bf0; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Admin login</h1>
+      <div class="muted">Faqat adminlar uchun.</div>
+
+      <label>Email</label>
+      <input id="email" type="email" placeholder="nurmuhammad@gmail.com" />
+
+      <label>Password</label>
+      <input id="password" type="password" placeholder="••••••••" />
+
+      <button id="btn">Login</button>
+      <div class="muted" id="msg"></div>
+
+      <div class="muted" style="margin-top:16px;">
+        <a href="/">← Back to site</a>
+      </div>
+    </div>
+  </div>
+  <script src="/public/i18n.js?v=20260615_v6"></script>
+  <script src="/public/lang-ui.js?v=20260615_v6"></script>
+
+
+  <script src="/admin-login.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+# OpenScienceEnigma Suite (Single localhost)
+
+This repo contains:
+- `server/`  (OpenScienceEnigma referral + Stripe backend)
+- `admindashboard/` (TailAdmin Vue)
+
+## One-command setup
+
+```bash
+npm run install:all
+npm start
+```
+
+Then open:
+- Backend UI: http://localhost:3000/
+- Admin Dashboard: http://localhost:3000/admindashboard
+
+## Notes
+- `npm start` will build the admin dashboard and copy it into `server/public/admindashboard`.
+- If you want to run the dashboard in dev mode separately: 
+  - `npm --prefix admindashboard run dev` (usually on http://localhost:5173)

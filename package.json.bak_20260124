@@ -1,0 +1,10 @@
+{
+  "name": "openscienceenigma-suite",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "install:all": "npm --prefix server install && npm --prefix admindashboard install",
+    "build:admin": "npm --prefix admindashboard run build && rm -rf server/public/admindashboard && mkdir -p server/public/admindashboard && cp -R admindashboard/dist/* server/public/admindashboard/",
+    "start": "npm run build:admin && npm --prefix server start"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "openscienceenigma-suite",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "install:all": "npm --prefix server install && ( [ -f admindashboard/package.json ] && npm --prefix admindashboard install || echo \"admindashboard/package.json not found; skipping admin install\" )",
+    "build:admin": "set -e; if [ -f admindashboard/package.json ]; then npm --prefix admindashboard run build; else echo \"admindashboard/package.json not found; using prebuilt dist\"; fi; rm -rf server/public/admindashboard; mkdir -p server/public/admindashboard; if [ -d admindashboard/dist ]; then cp -R admindashboard/dist/* server/public/admindashboard/; else echo \"admindashboard/dist not found\"; fi",
+    "start": "npm run build:admin && npm --prefix server start",
+    "mac:unquarantine": "xattr -dr com.apple.quarantine . || true",
+    "mac:unquarantine:server": "xattr -dr com.apple.quarantine ./server/node_modules || true",
+    "mac:unquarantine:admin": "xattr -dr com.apple.quarantine ./admindashboard/node_modules || true",
+    "build": "npm run build:admin && npm --prefix server run build"
+  }
+}

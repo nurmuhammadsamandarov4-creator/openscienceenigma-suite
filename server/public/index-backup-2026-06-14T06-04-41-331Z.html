@@ -1,0 +1,2110 @@
+<!DOCTYPE html>
+<html lang="en" style="--color-orange-500: #3C50E0; --color-orange-600: #3C50E0; --color-orange-400: #3C50E0;"><head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <title>Buildify – PrebuiltUI</title>
+  <meta content="Buildify is a modern AI agents template by PrebuiltUI. Build, launch and scale intelligent AI agents with production-ready components and workflows." name="description">
+  <meta content="Buildify" name="application-name">
+  <meta content="PrebuiltUI" name="author">
+  <link href="/assets/manifest.json" rel="manifest">
+  <meta content="AI agents,AI agent builder,AI SaaS template,PrebuiltUI,Next.js AI template,Tailwind CSS UI,AI workflow automation" name="keywords">
+  <meta content="PrebuiltUI" name="creator">
+  <meta content="yes" name="mobile-web-app-capable">
+  <meta content="Buildify" name="apple-mobile-web-app-title">
+  <meta content="default" name="apple-mobile-web-app-status-bar-style">
+  <meta content="Buildify – Build, Launch &amp; Scale with AI Agents" property="og:title">
+  <meta content="A production-ready AI agents template built with PrebuiltUI. Launch faster with scalable workflows and modern UI." property="og:description">
+  <meta content="/opengraph-image.png" property="og:image">
+  <meta content="1280" property="og:image:width">
+  <meta content="640" property="og:image:height">
+  <meta content="image/png" property="og:image:type">
+  <meta content="website" property="og:type">
+  <meta content="summary_large_image" name="twitter:card">
+  <meta content="Buildify – Build, Launch &amp; Scale with AI Agents" name="twitter:title">
+  <meta content="A modern AI agents template by PrebuiltUI to build, launch and scale faster." name="twitter:description">
+  <meta content="/opengraph-image.png" name="twitter:image">
+  <meta content="1280" name="twitter:image:width">
+  <meta content="640" name="twitter:image:height">
+  <meta content="image/png" name="twitter:image:type">
+  <link href="/assets/favicon.ico" rel="icon" sizes="48x48" type="image/x-icon">
+  <link href="/assets/icon0.svg" rel="icon" sizes="any" type="image/svg+xml">
+  <link href="/assets/icon1.png" rel="icon" sizes="96x96" type="image/png">
+  <link href="/assets/apple-icon.png" rel="apple-touch-icon" sizes="180x180" type="image/png">
+  <link href="./output.css" rel="stylesheet">
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Syne:wght@700;800&amp;display=swap" rel="stylesheet">
+  <!-- GSAP Animation Library -->
+  <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+<style>
+        .editor-mode [contenteditable="true"] {
+            outline: 2px dashed #4f46e5 !important;
+            outline-offset: 2px;
+            cursor: text;
+            transition: outline 0.2s;
+        }
+        .editor-mode [contenteditable="true"]:hover {
+            outline: 2px solid #4f46e5 !important;
+            background-color: rgba(79, 70, 229, 0.05);
+        }
+        .editor-mode [contenteditable="true"]:focus {
+            outline: 2px solid #22c55e !important;
+            background-color: rgba(34, 197, 94, 0.05);
+        }
+        .editor-mode img {
+            outline: 2px dashed #eab308 !important;
+            cursor: pointer;
+        }
+        .editor-mode img:hover {
+            outline: 2px solid #eab308 !important;
+        }
+        /* Card Actions Overlay */
+        .editor-mode .ose-editor-card {
+            position: relative !important;
+            outline: 2px dashed #38bdf8 !important;
+            outline-offset: 2px;
+            transition: outline 0.2s;
+        }
+        .editor-mode .ose-editor-card:hover {
+            outline: 2px solid #38bdf8 !important;
+        }
+        .ose-card-actions {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            display: none;
+            gap: 6px;
+            z-index: 99999;
+            background: #1e293b;
+            padding: 4px;
+            border-radius: 6px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
+            border: 1px solid #475569;
+        }
+        .ose-editor-card:hover > .ose-card-actions {
+            display: flex !important;
+        }
+        .ose-card-actions button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            pointer-events: auto !important;
+        }
+        .ose-card-actions button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .ose-card-clone {
+            color: #38bdf8 !important;
+        }
+        .ose-card-delete {
+            color: #f87171 !important;
+        }
+
+        /* Floating Toolbar */
+        #ose-editor-toolbar {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0f172a;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5);
+            z-index: 9999999;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            font-family: sans-serif;
+            border: 1px solid #334155;
+        }
+        #ose-editor-toolbar .title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        #ose-editor-toolbar button {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        #ose-save-btn {
+            background: #22c55e;
+            color: white;
+        }
+        #ose-save-btn:hover {
+            background: #16a34a;
+        }
+        #ose-cancel-btn {
+            background: #334155;
+            color: white;
+        }
+        #ose-cancel-btn:hover {
+            background: #475569;
+        }
+        
+        /* Stop link clicks in edit mode */
+        .editor-mode a {
+            pointer-events: none;
+        }
+
+        /* Prevent card scaling and pause animations */
+        .editor-mode * {
+            --tw-scale-x: 1 !important;
+            --tw-scale-y: 1 !important;
+        }
+        .editor-mode *:hover, .editor-mode *:hover * {
+            animation-play-state: paused !important;
+        }
+
+        /* Modal Dialog for Image Editor */
+        .ose-editor-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000000;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .ose-editor-modal.is-open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .ose-editor-modal-content {
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 24px;
+            padding: 24px;
+            width: 400px;
+            max-width: calc(100vw - 40px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            transform: scale(0.95) translateY(10px);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .ose-editor-modal.is-open .ose-editor-modal-content {
+            transform: scale(1) translateY(0);
+        }
+        .ose-editor-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .ose-editor-modal-title {
+            font-weight: 700;
+            font-size: 18px;
+            color: #0f172a;
+        }
+        .ose-editor-modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #64748b;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+        .ose-editor-modal-close:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+        .ose-editor-modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .ose-editor-upload-btn {
+            background: #0f172a;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .ose-editor-upload-btn:hover {
+            background: #1e293b;
+        }
+        .ose-editor-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+        .ose-editor-divider::before, .ose-editor-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .ose-editor-divider:not(:empty)::before {
+            margin-right: .5em;
+        }
+        .ose-editor-divider:not(:empty)::after {
+            margin-left: .5em;
+        }
+        .ose-editor-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .ose-editor-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+        }
+        .ose-editor-input {
+            width: 100%;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+            box-sizing: border-box;
+        }
+        .ose-editor-input:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+        }
+        .ose-editor-save-btn {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .ose-editor-save-btn:hover {
+            background: #16a34a;
+        }
+    </style><style>
+        .editor-mode [contenteditable="true"] {
+            outline: 2px dashed #4f46e5 !important;
+            outline-offset: 2px;
+            cursor: text;
+            transition: outline 0.2s;
+        }
+        .editor-mode [contenteditable="true"]:hover {
+            outline: 2px solid #4f46e5 !important;
+            background-color: rgba(79, 70, 229, 0.05);
+        }
+        .editor-mode [contenteditable="true"]:focus {
+            outline: 2px solid #22c55e !important;
+            background-color: rgba(34, 197, 94, 0.05);
+        }
+        .editor-mode img {
+            outline: 2px dashed #eab308 !important;
+            cursor: pointer;
+        }
+        .editor-mode img:hover {
+            outline: 2px solid #eab308 !important;
+        }
+        /* Card Actions Overlay */
+        .editor-mode .ose-editor-card {
+            position: relative !important;
+            outline: 2px dashed #38bdf8 !important;
+            outline-offset: 2px;
+            transition: outline 0.2s;
+        }
+        .editor-mode .ose-editor-card:hover {
+            outline: 2px solid #38bdf8 !important;
+        }
+        .ose-card-actions {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            display: none;
+            gap: 6px;
+            z-index: 99999;
+            background: #1e293b;
+            padding: 4px;
+            border-radius: 6px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
+            border: 1px solid #475569;
+        }
+        .ose-editor-card:hover > .ose-card-actions {
+            display: flex !important;
+        }
+        .ose-card-actions button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            pointer-events: auto !important;
+        }
+        .ose-card-actions button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .ose-card-clone {
+            color: #38bdf8 !important;
+        }
+        .ose-card-delete {
+            color: #f87171 !important;
+        }
+
+        /* Floating Toolbar */
+        #ose-editor-toolbar {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0f172a;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5);
+            z-index: 9999999;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            font-family: sans-serif;
+            border: 1px solid #334155;
+        }
+        #ose-editor-toolbar .title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        #ose-editor-toolbar button {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        #ose-save-btn {
+            background: #22c55e;
+            color: white;
+        }
+        #ose-save-btn:hover {
+            background: #16a34a;
+        }
+        #ose-cancel-btn {
+            background: #334155;
+            color: white;
+        }
+        #ose-cancel-btn:hover {
+            background: #475569;
+        }
+        
+        /* Stop link clicks in edit mode */
+        .editor-mode a {
+            pointer-events: none;
+        }
+
+        /* Prevent card scaling and pause animations */
+        .editor-mode * {
+            --tw-scale-x: 1 !important;
+            --tw-scale-y: 1 !important;
+        }
+        .editor-mode *:hover, .editor-mode *:hover * {
+            animation-play-state: paused !important;
+        }
+
+        /* Modal Dialog for Image Editor */
+        .ose-editor-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000000;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .ose-editor-modal.is-open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .ose-editor-modal-content {
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 24px;
+            padding: 24px;
+            width: 400px;
+            max-width: calc(100vw - 40px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            transform: scale(0.95) translateY(10px);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .ose-editor-modal.is-open .ose-editor-modal-content {
+            transform: scale(1) translateY(0);
+        }
+        .ose-editor-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .ose-editor-modal-title {
+            font-weight: 700;
+            font-size: 18px;
+            color: #0f172a;
+        }
+        .ose-editor-modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #64748b;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+        .ose-editor-modal-close:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+        .ose-editor-modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .ose-editor-upload-btn {
+            background: #0f172a;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .ose-editor-upload-btn:hover {
+            background: #1e293b;
+        }
+        .ose-editor-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+        .ose-editor-divider::before, .ose-editor-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .ose-editor-divider:not(:empty)::before {
+            margin-right: .5em;
+        }
+        .ose-editor-divider:not(:empty)::after {
+            margin-left: .5em;
+        }
+        .ose-editor-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .ose-editor-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+        }
+        .ose-editor-input {
+            width: 100%;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+            box-sizing: border-box;
+        }
+        .ose-editor-input:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+        }
+        .ose-editor-save-btn {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .ose-editor-save-btn:hover {
+            background: #16a34a;
+        }
+    </style><style>
+        .editor-mode [contenteditable="true"] {
+            outline: 2px dashed #4f46e5 !important;
+            outline-offset: 2px;
+            cursor: text;
+            transition: outline 0.2s;
+        }
+        .editor-mode [contenteditable="true"]:hover {
+            outline: 2px solid #4f46e5 !important;
+            background-color: rgba(79, 70, 229, 0.05);
+        }
+        .editor-mode [contenteditable="true"]:focus {
+            outline: 2px solid #22c55e !important;
+            background-color: rgba(34, 197, 94, 0.05);
+        }
+        .editor-mode img {
+            outline: 2px dashed #eab308 !important;
+            cursor: pointer;
+        }
+        .editor-mode img:hover {
+            outline: 2px solid #eab308 !important;
+        }
+        /* Card Actions Overlay */
+        .editor-mode .ose-editor-card {
+            position: relative !important;
+            outline: 2px dashed #38bdf8 !important;
+            outline-offset: 2px;
+            transition: outline 0.2s;
+        }
+        .editor-mode .ose-editor-card:hover {
+            outline: 2px solid #38bdf8 !important;
+        }
+        .ose-card-actions {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            display: none;
+            gap: 6px;
+            z-index: 99999;
+            background: #1e293b;
+            padding: 4px;
+            border-radius: 6px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
+            border: 1px solid #475569;
+        }
+        .ose-editor-card:hover > .ose-card-actions {
+            display: flex !important;
+        }
+        .ose-card-actions button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            pointer-events: auto !important;
+        }
+        .ose-card-actions button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .ose-card-clone {
+            color: #38bdf8 !important;
+        }
+        .ose-card-delete {
+            color: #f87171 !important;
+        }
+
+        /* Floating Toolbar */
+        #ose-editor-toolbar {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #0f172a;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5);
+            z-index: 9999999;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            font-family: sans-serif;
+            border: 1px solid #334155;
+        }
+        #ose-editor-toolbar .title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        #ose-editor-toolbar button {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        #ose-save-btn {
+            background: #22c55e;
+            color: white;
+        }
+        #ose-save-btn:hover {
+            background: #16a34a;
+        }
+        #ose-cancel-btn {
+            background: #334155;
+            color: white;
+        }
+        #ose-cancel-btn:hover {
+            background: #475569;
+        }
+        
+        /* Stop link clicks in edit mode */
+        .editor-mode a {
+            pointer-events: none;
+        }
+
+        /* Prevent card scaling and pause animations */
+        .editor-mode * {
+            --tw-scale-x: 1 !important;
+            --tw-scale-y: 1 !important;
+        }
+        .editor-mode *:hover, .editor-mode *:hover * {
+            animation-play-state: paused !important;
+        }
+
+        /* Modal Dialog for Image Editor */
+        .ose-editor-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000000;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .ose-editor-modal.is-open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .ose-editor-modal-content {
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 24px;
+            padding: 24px;
+            width: 400px;
+            max-width: calc(100vw - 40px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            transform: scale(0.95) translateY(10px);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .ose-editor-modal.is-open .ose-editor-modal-content {
+            transform: scale(1) translateY(0);
+        }
+        .ose-editor-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .ose-editor-modal-title {
+            font-weight: 700;
+            font-size: 18px;
+            color: #0f172a;
+        }
+        .ose-editor-modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #64748b;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+        .ose-editor-modal-close:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+        .ose-editor-modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .ose-editor-upload-btn {
+            background: #0f172a;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .ose-editor-upload-btn:hover {
+            background: #1e293b;
+        }
+        .ose-editor-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+        .ose-editor-divider::before, .ose-editor-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .ose-editor-divider:not(:empty)::before {
+            margin-right: .5em;
+        }
+        .ose-editor-divider:not(:empty)::after {
+            margin-left: .5em;
+        }
+        .ose-editor-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .ose-editor-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+        }
+        .ose-editor-input {
+            width: 100%;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+            box-sizing: border-box;
+        }
+        .ose-editor-input:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+        }
+        .ose-editor-save-btn {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .ose-editor-save-btn:hover {
+            background: #16a34a;
+        }
+    </style><style>
+        .editor-mode [contenteditable="true"] {
+            outline: 2px dashed #4f46e5 !important;
+            outline-offset: 2px;
+            cursor: text;
+            transition: outline 0.2s;
+        }
+        .editor-mode [contenteditable="true"]:hover {
+            outline: 2px solid #4f46e5 !important;
+            background-color: rgba(79, 70, 229, 0.05);
+        }
+        .editor-mode [contenteditable="true"]:focus {
+            outline: 2px solid #22c55e !important;
+            background-color: rgba(34, 197, 94, 0.05);
+        }
+        .editor-mode img {
+            outline: 2px dashed #eab308 !important;
+            cursor: pointer;
+        }
+        .editor-mode img:hover {
+            outline: 2px solid #eab308 !important;
+        }
+        /* Card Actions Overlay */
+        .editor-mode .ose-editor-card {
+            position: relative !important;
+            outline: 2px dashed #38bdf8 !important;
+            outline-offset: 2px;
+            transition: outline 0.2s;
+        }
+        .editor-mode .ose-editor-card:hover {
+            outline: 2px solid #38bdf8 !important;
+        }
+        .ose-card-actions {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            display: none;
+            gap: 6px;
+            z-index: 99999;
+            background: #1e293b;
+            padding: 4px;
+            border-radius: 6px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
+            border: 1px solid #475569;
+        }
+        .ose-editor-card:hover > .ose-card-actions {
+            display: flex !important;
+        }
+        .ose-card-actions button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            pointer-events: auto !important;
+        }
+        .ose-card-actions button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .ose-card-clone {
+            color: #38bdf8 !important;
+        }
+        .ose-card-delete {
+            color: #f87171 !important;
+        }
+
+        /* Floating Toolbar */
+        #ose-editor-toolbar {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #0f172a;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5);
+            z-index: 9999999;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            font-family: sans-serif;
+            border: 1px solid #334155;
+        }
+        #ose-editor-toolbar .title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        #ose-editor-toolbar button {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        #ose-save-btn {
+            background: #22c55e;
+            color: white;
+        }
+        #ose-save-btn:hover {
+            background: #16a34a;
+        }
+        #ose-cancel-btn {
+            background: #334155;
+            color: white;
+        }
+        #ose-cancel-btn:hover {
+            background: #475569;
+        }
+        
+        /* Stop link clicks in edit mode */
+        .editor-mode a {
+            pointer-events: none;
+        }
+
+        /* Prevent card scaling and pause animations */
+        .editor-mode * {
+            --tw-scale-x: 1 !important;
+            --tw-scale-y: 1 !important;
+        }
+        .editor-mode *:hover, .editor-mode *:hover * {
+            animation-play-state: paused !important;
+        }
+
+        /* Modal Dialog for Image Editor */
+        .ose-editor-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000000;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .ose-editor-modal.is-open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .ose-editor-modal-content {
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 24px;
+            padding: 24px;
+            width: 400px;
+            max-width: calc(100vw - 40px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            transform: scale(0.95) translateY(10px);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .ose-editor-modal.is-open .ose-editor-modal-content {
+            transform: scale(1) translateY(0);
+        }
+        .ose-editor-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .ose-editor-modal-title {
+            font-weight: 700;
+            font-size: 18px;
+            color: #0f172a;
+        }
+        .ose-editor-modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #64748b;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+        .ose-editor-modal-close:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+        .ose-editor-modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .ose-editor-upload-btn {
+            background: #0f172a;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .ose-editor-upload-btn:hover {
+            background: #1e293b;
+        }
+        .ose-editor-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+        .ose-editor-divider::before, .ose-editor-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .ose-editor-divider:not(:empty)::before {
+            margin-right: .5em;
+        }
+        .ose-editor-divider:not(:empty)::after {
+            margin-left: .5em;
+        }
+        .ose-editor-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .ose-editor-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+        }
+        .ose-editor-input {
+            width: 100%;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+            box-sizing: border-box;
+        }
+        .ose-editor-input:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+        }
+        .ose-editor-save-btn {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .ose-editor-save-btn:hover {
+            background: #16a34a;
+        }
+    </style><style>
+        .editor-mode [contenteditable="true"] {
+            outline: 2px dashed #4f46e5 !important;
+            outline-offset: 2px;
+            cursor: text;
+            transition: outline 0.2s;
+        }
+        .editor-mode [contenteditable="true"]:hover {
+            outline: 2px solid #4f46e5 !important;
+            background-color: rgba(79, 70, 229, 0.05);
+        }
+        .editor-mode [contenteditable="true"]:focus {
+            outline: 2px solid #22c55e !important;
+            background-color: rgba(34, 197, 94, 0.05);
+        }
+        .editor-mode img {
+            outline: 2px dashed #eab308 !important;
+            cursor: pointer;
+        }
+        .editor-mode img:hover {
+            outline: 2px solid #eab308 !important;
+        }
+        /* Card Actions Overlay */
+        .editor-mode .ose-editor-card {
+            position: relative !important;
+            outline: 2px dashed #38bdf8 !important;
+            outline-offset: 2px;
+            transition: outline 0.2s;
+        }
+        .editor-mode .ose-editor-card:hover {
+            outline: 2px solid #38bdf8 !important;
+        }
+        .ose-card-actions {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            display: none;
+            gap: 6px;
+            z-index: 99999;
+            background: #1e293b;
+            padding: 4px;
+            border-radius: 6px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
+            border: 1px solid #475569;
+        }
+        .ose-editor-card:hover > .ose-card-actions {
+            display: flex !important;
+        }
+        .ose-card-actions button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            pointer-events: auto !important;
+        }
+        .ose-card-actions button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .ose-card-clone {
+            color: #38bdf8 !important;
+        }
+        .ose-card-delete {
+            color: #f87171 !important;
+        }
+
+        /* Floating Toolbar */
+        #ose-editor-toolbar {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #0f172a;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5);
+            z-index: 9999999;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            font-family: sans-serif;
+            border: 1px solid #334155;
+        }
+        #ose-editor-toolbar .title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        #ose-editor-toolbar button {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        #ose-save-btn {
+            background: #22c55e;
+            color: white;
+        }
+        #ose-save-btn:hover {
+            background: #16a34a;
+        }
+        #ose-cancel-btn {
+            background: #334155;
+            color: white;
+        }
+        #ose-cancel-btn:hover {
+            background: #475569;
+        }
+        
+        /* Stop link clicks in edit mode */
+        .editor-mode a {
+            pointer-events: none;
+        }
+
+        /* Prevent card scaling and pause animations */
+        .editor-mode * {
+            --tw-scale-x: 1 !important;
+            --tw-scale-y: 1 !important;
+        }
+        .editor-mode *:hover, .editor-mode *:hover * {
+            animation-play-state: paused !important;
+        }
+
+        /* Modal Dialog for Image Editor */
+        .ose-editor-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000000;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .ose-editor-modal.is-open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .ose-editor-modal-content {
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 24px;
+            padding: 24px;
+            width: 400px;
+            max-width: calc(100vw - 40px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            transform: scale(0.95) translateY(10px);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .ose-editor-modal.is-open .ose-editor-modal-content {
+            transform: scale(1) translateY(0);
+        }
+        .ose-editor-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .ose-editor-modal-title {
+            font-weight: 700;
+            font-size: 18px;
+            color: #0f172a;
+        }
+        .ose-editor-modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #64748b;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+        .ose-editor-modal-close:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+        .ose-editor-modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .ose-editor-upload-btn {
+            background: #0f172a;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .ose-editor-upload-btn:hover {
+            background: #1e293b;
+        }
+        .ose-editor-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+        .ose-editor-divider::before, .ose-editor-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .ose-editor-divider:not(:empty)::before {
+            margin-right: .5em;
+        }
+        .ose-editor-divider:not(:empty)::after {
+            margin-left: .5em;
+        }
+        .ose-editor-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .ose-editor-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+        }
+        .ose-editor-input {
+            width: 100%;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+            box-sizing: border-box;
+        }
+        .ose-editor-input:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+        }
+        .ose-editor-save-btn {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .ose-editor-save-btn:hover {
+            background: #16a34a;
+        }
+    </style></head>
+
+<body class="" style="">
+
+  <!-- OSE Intro Overlay (Cinematic Science Boards Edition) -->
+  
+
+  <style>
+    /* Styling isolated prefix for intro to avoid conflicting with Tailwind or custom theme */
+    #ose-intro {
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    #ose-intro.ose-show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #ose-intro.ose-hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .ose-intro-grain {
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .ose-intro-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, transparent 40%, #f8fafc 98%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .ose-preloader {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .minimal-spinner {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Central solid circle */
+    .center-circle {
+      width: 24px;
+      height: 24px;
+      background: #0f172a;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+      z-index: 2;
+    }
+
+    /* Inner rotating thin line */
+    .spin-ring-inner {
+      position: absolute;
+      width: 54px;
+      height: 54px;
+      border: 2px solid transparent;
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      animation: spin-clockwise 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+
+    /* Outer rotating dual line */
+    .spin-ring-outer {
+      position: absolute;
+      width: 78px;
+      height: 78px;
+      border: 1.5px solid transparent;
+      border-left-color: #f97316;
+      border-right-color: #10b981;
+      border-radius: 50%;
+      animation: spin-counterclockwise 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+
+    @keyframes spin-clockwise {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes spin-counterclockwise {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(-360deg); }
+    }
+  </style>
+
+  <script>
+    (function () {
+      try {
+        var intro = document.getElementById('ose-intro');
+        if (!intro) return;
+
+        // Skip intro if seen in session
+        if (sessionStorage.getItem('ose-intro-seen')) {
+          intro.remove();
+          return;
+        }
+
+        // Lock scroll
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+
+        function hideIntro() {
+          sessionStorage.setItem('ose-intro-seen', 'true');
+          intro.classList.add('ose-hide');
+          document.documentElement.style.overflow = '';
+          document.body.style.overflow = '';
+          setTimeout(function () { intro && intro.remove(); }, 600);
+        }
+
+        // Run preloader fade-in when loaded
+        window.addEventListener('load', function () {
+          if (typeof gsap === 'undefined') {
+            hideIntro();
+            return;
+          }
+
+          intro.classList.add('ose-show');
+
+          var tl = gsap.timeline({ onComplete: hideIntro });
+
+          // Page fade-in
+          tl.fromTo(intro, { opacity: 0 }, { opacity: 1, duration: 0.5 })
+            // Spin for 2.2 seconds, then fade out the whole overlay
+            .to(intro, { opacity: 0, duration: 0.5, delay: 2.2 });
+        });
+
+        // Safe fallback timeout (3.5 seconds max)
+        setTimeout(hideIntro, 3500);
+      } catch (e) {
+        var intro = document.getElementById('ose-intro');
+        if (intro) intro.remove();
+      }
+    })();
+  </script>
+
+  <div class="invisible" style="translate: none; rotate: none; scale: none; visibility: visible; opacity: 1; transform: translate(0px, 0px);">
+    <nav class="fixed w-full top-0 z-50 px-4 md:px-16 lg:px-24 xl:px-32 py-4 border-b transition-all duration-300 border-neutral-300">
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <a href="https://prebuiltui.com?ref=buildify">
+          <img alt="Buildify Logo" height="36" src="./assets/logo.svg" width="135">
+        </a>
+        <div class="hidden md:flex gap-3">
+          <a class="py-1 px-3 hover:text-zinc-500" data-i18n="nav_home" href="/">Bosh sahifa</a>
+          <a class="py-1 px-3 hover:text-zinc-500" data-i18n="nav_features" href="#features">Xususiyatlar</a>
+          <a class="py-1 px-3 hover:text-zinc-500" data-i18n="nav_testimonials" href="#testimonials">Sharhlar</a>
+          <a class="py-1 px-3 hover:text-zinc-500" data-i18n="nav_pricing" href="#pricing">Narxlar</a>
+          <a class="py-1 px-3" data-i18n="nav_top10" href="/public/dashboard.html">Top 10</a>
+          <a class="py-1 px-3" data-i18n="nav_order" href="/public/create-task.html?service=SVC200">Zakaz berish</a>
+        </div>
+        <button class="md:hidden" id="openMenu">
+          <svg aria-hidden="true" class="lucide lucide-menu size-6.5" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 5h16"></path>
+            <path d="M4 12h16"></path>
+            <path d="M4 19h16"></path>
+          </svg>
+        </button>
+        <div id="authLangWrap" style="display: flex; align-items: center; gap: 10px;"><a class="hidden md:inline-block py-2.5 px-6 shadow-[inset_0_2px_4px_rgba(255,255,255,0.6)] bg-orange-500 text-white rounded-full" data-auth-button="cta" href="#">Chiqish</a><div id="langSelector" style="position: relative; font-family: system-ui, -apple-system, &quot;Segoe UI&quot;, Roboto, Arial; user-select: none;"><button type="button" style="border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.85)); backdrop-filter: blur(12px); border-radius: 30px; padding: 10px 18px; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: rgba(0, 0, 0, 0.08) 0px 8px 32px, rgba(255, 255, 255, 0.6) 0px 0px 0px 1px inset; transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);"><span>🌐</span><span style="font-size: 14px; font-weight: 600; color: rgb(15, 23, 42); letter-spacing: 0.3px;">Til: UZ</span><span style="display: flex; align-items: center; color: rgb(71, 85, 105); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); transform: rotate(0deg);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></span></button><div style="position: absolute; top: 56px; right: 0px; min-width: 180px; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 20px; box-shadow: rgba(0, 0, 0, 0.12) 0px 24px 48px, rgba(0, 0, 0, 0.02) 0px 0px 0px 1px; padding: 8px; opacity: 0; transform: translateY(-10px) scale(0.95); pointer-events: none; transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1); transform-origin: right top;"><button type="button" style="width: 100%; text-align: left; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; background: transparent; border-radius: 12px; padding: 12px 14px; cursor: pointer; font-size: 14px; font-weight: 500; color: rgb(30, 41, 59); transition: 0.2s;">Oʻzbekcha</button><button type="button" style="width: 100%; text-align: left; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; background: transparent; border-radius: 12px; padding: 12px 14px; cursor: pointer; font-size: 14px; font-weight: 500; color: rgb(30, 41, 59); transition: 0.2s;">Русский</button><button type="button" style="width: 100%; text-align: left; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; background: transparent; border-radius: 12px; padding: 12px 14px; cursor: pointer; font-size: 14px; font-weight: 500; color: rgb(30, 41, 59); transition: 0.2s;">English</button></div></div></div>
+      </div>
+    </nav>
+  </div>
+  <div class="fixed top-0 right-0 z-50 w-full bg-white shadow-xl shadow-black/5 transition-all duration-300 ease-in-out h-0 overflow-hidden" id="mobileMenu">
+    <div class="flex items-center justify-between p-4">
+      <img alt="Buildify Logo" height="36" src="./assets/logo.svg" width="135">
+      <svg aria-hidden="true" class="lucide lucide-x size-6.5" fill="none" height="24" id="closeMenu" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 6 6 18"></path>
+        <path d="m6 6 12 12"></path>
+      </svg>
+    </div>
+    <div class="flex flex-col gap-4 p-4 text-base">
+      <a class="py-1 px-3" data-i18n="nav_home" href="https://prebuiltui.com?ref=buildify">Bosh sahifa</a>
+      <a class="py-1 px-3" data-i18n="nav_features" href="#features">Xususiyatlar</a>
+      <a class="py-1 px-3" data-i18n="nav_testimonials" href="#testimonials">Sharhlar</a>
+      <a class="py-1 px-3" data-i18n="nav_pricing" href="#pricing">Narxlar</a>
+      <a class="py-1 px-3" data-i18n="nav_top10" href="/public/dashboard.html">Top 10</a>
+      <a class="py-1 px-3" data-i18n="nav_order" href="/public/create-task.html?service=SVC200">Zakaz berish</a>
+      <a class="py-2.5 px-6 w-max text-sm shadow-[inset_0_2px_4px_rgba(255,255,255,0.6)] bg-linear-to-tl from-orange-600 to-orange-500 text-white rounded-full" data-i18n="cta_get_started" href="/public/create-task.html?service=SVC200">Boshlash</a>
+    </div>
+  </div>
+  <!-- Hero Section -->
+  <section class="bg-[url('./assets/hero-gradient-bg.png')] bg-cover bg-center bg-no-repeat px-4 md:px-16 lg:px-24 xl:px-32">
+    <div class="max-w-7xl mx-auto flex flex-col items-center justify-center h-screen">
+      <div class="flex items-center gap-2 bg-white/50 backdrop-blur p-1 rounded-full" id="oseHeroBadge" style="translate: none; rotate: none; scale: none; visibility: visible; opacity: 1; transform: translate(0px, 0px);"><span id="oseHeroBadgeText">60K+ Happy users worldwide • 4.9</span></div>
+      <div class="relative">
+        <h1 class="text-center font-urbanist text-5xl/15 md:text-6xl/18 mt-4 font-bold max-w-2xl" data-i18n="hero_title" id="oseHeroTitle">Open Science Enigma - Inline Saved Title UZ</h1>
+        <div class="absolute -top-5 right-13 hidden md:block">
+          <div class="bg-orange-500 shadow-[inset_0_4px_4px_rgba(255,255,255,0.25),0_4px_10px_rgba(0,0,0,0.15)] p-2 aspect-square rounded-lg text-white rotate-15">
+            <svg aria-hidden="true" class="lucide lucide-sparkle" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z">
+              </path>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <p class="text-center text-base/7 text-zinc-500 max-w-lg mt-4" data-i18n="hero_desc" id="oseHeroSubtitle">Test Hero Subtitle Uz</p>
+      <div class="flex flex-col md:flex-row items-center gap-4 mt-6 w-full md:w-auto">
+        <a id="oseHeroCtaPrimary" class="py-3 md:py-2.5 w-full md:w-auto px-8 border border-orange-200 bg-linear-to-tl from-orange-600 to-orange-500 text-white text-center rounded-full" data-i18n="cta_get_started" href="/public/create-task.html">Boshlash</a>
+        <a id="oseHeroCtaSecondary" class="relative py-3 md:py-2.5 w-full md:w-auto px-8 bg-white/50 text-gray-600 font-medium text-center border border-white rounded-full" data-i18n="cta_watch_demo" href="#">Demo</a>
+      </div>
+    </div>
+  </section>
+  <!-- Stats Section -->
+  <section class="border-y border-gray-200 py-10 px-4 md:px-16 lg:px-24 xl:px-32">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="flex flex-col items-center gap-4 text-center">
+        <h3 class="text-4xl font-semibold font-urbanist"><span id="oseHeroStat0Val" class="">5</span>x</h3>
+        <p class="text-gray-500" data-i18n="stat_fast_dev">AI agentlarni tezroq yaratish</p>
+      </div>
+      <div class="flex flex-col items-center gap-4 text-center">
+        <h3 class="text-4xl font-semibold font-urbanist"><span id="oseHeroStat1Val" class="">80</span>%</h3>
+        <p class="text-gray-500" data-i18n="stat_reduce_manual">Qo‘lda ishlarni kamaytirish</p>
+      </div>
+      <div class="flex flex-col items-center gap-4 text-center">
+        <h3 class="text-4xl font-semibold font-urbanist"><span id="oseHeroStat2Val" class="">99.9</span>%</h3>
+        <p class="text-gray-500" data-i18n="stat_uptime">Agentlarning barqaror ishlashi</p>
+      </div>
+    </div>
+  </section>
+  <!-- Features Section -->
+  <section class="px-4 md:px-16 lg:px-24 xl:px-32" id="features" style="display: none;">
+    <div class="grid grid-cols-1 md:grid-cols-2 border-x md:divide-x border-gray-200 divide-gray-200 max-w-7xl mx-auto">
+      <div>
+        <div class="p-4 pt-16 md:p-16 flex flex-col items-start md:sticky md:top-26">
+          <div class="flex flex-col gap-6 md:items-start items-center">
+            <div class="flex flex-col md:flex-row items-center gap-4">
+              <div class="bg-orange-500 shadow-[inset_0_4px_4px_rgba(255,255,255,0.25),0_4px_10px_rgba(0,0,0,0.15)] p-2 aspect-square rounded-lg text-white -rotate-15">
+                <svg aria-hidden="true" class="lucide lucide-sparkle" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z">
+                  </path>
+                </svg>
+              </div>
+              <h2 class="text-4xl font-semibold font-urbanist" id="featuresTitle" data-i18n="features_title">Asosiy imkoniyatlar</h2>
+            </div>
+            <p class="text-zinc-500 text-base/7 md:text-left text-center max-w-sm" id="featuresSubtitle" data-i18n="features_desc">AI agentlarni yaratish, ishga tushirish va masshtablash uchun kerak bo’lgan hammasi — tezlik, ishonchlilik va prodakshen uchun tayyor.</p>
+          </div>
+          <div class="p-4 md:p-6 bg-orange-500 w-full rounded-xl mt-12">
+            <p class="text-lg text-white" id="featuresCtaText" data-i18n="testimonials_desc">AI agentlar bilan aqlli mahsulotlar yaratayotgan jamoalar bizga ishonadi.</p>
+            <a id="featuresCtaBtn" data-i18n="cta_button" class="bg-white w-max hover:bg-gray-100 px-5 py-2 rounded-full mt-6 flex items-center gap-1" href="#" rel="noopener">cta_button</a>
+          </div>
+        </div>
+      </div>
+      <div id="featuresCards" class="p-4 pt-16 md:p-16 space-y-6"></div>
+    </div>
+  </section>
+  <!-- Faq Section -->
+  <section class="border-y border-gray-200" style="display: none;">
+    <div class="px-4 md:px-16 lg:px-24 xl:px-32">
+      <div class="p-4 pt-20 md:p-20 flex flex-col items-center max-w-7xl mx-auto justify-center border-x border-gray-200">
+        <div class="flex flex-col gap-6 items-center">
+          <div class="bg-orange-500 shadow-[inset_0_4px_4px_rgba(255,255,255,0.25),0_4px_10px_rgba(0,0,0,0.15)] p-2 aspect-square rounded-lg text-white -rotate-15">
+            <svg aria-hidden="true" class="lucide lucide-circle-question-mark" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <path d="M12 17h.01"></path>
+            </svg>
+          </div>
+          <h2 class="text-4xl font-semibold font-urbanist" id="faqTitle" data-i18n="faq_title">FAQ</h2>
+          <p id="faqDesc" class="text-zinc-500 text-base/7 text-center max-w-lg" data-i18n="faq_desc">Ko‘p beriladigan savollarga tezkor javoblar.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-4 md:px-16 lg:px-24 xl:px-32 border-t border-gray-200">
+      <div class="grid grid-cols-1 md:grid-cols-2 divide-x divide-gray-200 border-x border-gray-200 max-w-7xl mx-auto">
+        <div class="p-4 pt-20 md:p-20 space-y-6">
+          <div id="faqList"></div>
+        </div>
+        <div class="p-4 pt-20 md:p-20">
+          <div class="sticky top-24">
+            <div class="flex flex items-center justify-between gap-5 p-6 bg-violet-500 w-full rounded-xl">
+              <h3 id="faqCtaTitle" class="text-lg text-white text-balance" data-i18n="faq_cta_title">Hali ham savollaringiz bormi? Jamoamiz boshlashga yordam beradi.</h3>
+              <a class="bg-white w-max shrink-0 hover:bg-gray-100 px-5 py-2 rounded-full" id="faqCtaBtn" data-i18n="faq_cta_button" href="#">Qo‘llab-quvvatlash</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Team Section -->
+  <section class="border-b border-gray-200 px-4 md:px-16 lg:px-24 xl:px-32" style="display: none;">
+    <div class="pt-20 pb-32 flex flex-col items-center max-w-7xl mx-auto justify-center border-x border-gray-200">
+      <div class="flex flex-col gap-6 items-center">
+        <div class="flex flex-col md:flex-row items-center gap-4">
+          <div class="bg-orange-500 shadow-[inset_0_4px_4px_rgba(255,255,255,0.25),0_4px_10px_rgba(0,0,0,0.15)] p-2 aspect-square rounded-lg text-white -rotate-15">
+            <svg aria-hidden="true" class="lucide lucide-handshake" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path d="m11 17 2 2a1 1 0 1 0 3-3"></path>
+              <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4">
+              </path>
+              <path d="m21 3 1 11h-2"></path>
+              <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"></path>
+              <path d="M3 4h8"></path>
+            </svg>
+          </div>
+          <h2 class="text-4xl font-semibold font-urbanist" data-i18n="team_title">Jamoamiz</h2>
+        </div>
+        <p class="text-zinc-500 text-base/7 text-center max-w-lg" data-i18n="team_desc">AI asosidagi mahsulotlar kelajagini yaratayotgan quruvchilar, dizaynerlar va muhandislar jamoasi.</p>
+      </div>
+
+      <div class="team-marquee mt-24">
+        <div id="teamGrid" class="team-track" aria-label="Team members marquee">
+          <div class="team-set" data-team-set="a"></div>
+          <div class="team-set" data-team-set="b" aria-hidden="true"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+  <!-- Board of Soft Science Team -->
+  <section class="border-b border-gray-200 px-4 md:px-16 lg:px-24 xl:px-32" style="display: none;">
+    <div class="pt-10 pb-20 flex flex-col items-center max-w-7xl mx-auto justify-center border-x border-gray-200">
+      <div class="flex flex-col gap-6 items-center">
+        <h2 class="text-3xl font-semibold font-urbanist text-center">Board of Soft Science Team</h2>
+      </div>
+      <div class="team-marquee mt-10 w-full">
+        <div id="softScienceBoardGrid" class="team-track team-track--rtl">
+          <div class="team-set" data-team-set="a"></div>
+          <div class="team-set" data-team-set="b" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Board of Hard Science Team -->
+  <section class="border-b border-gray-200 px-4 md:px-16 lg:px-24 xl:px-32" style="display: none;">
+    <div class="pt-10 pb-20 flex flex-col items-center max-w-7xl mx-auto justify-center border-x border-gray-200">
+      <div class="flex flex-col gap-6 items-center">
+        <h2 class="text-3xl font-semibold font-urbanist text-center">Board of Hard Science Team</h2>
+      </div>
+      <div class="team-marquee mt-10 w-full">
+        <div id="hardScienceBoardGrid" class="team-track">
+          <div class="team-set" data-team-set="a"></div>
+          <div class="team-set" data-team-set="b" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+
+  <section class="border-b border-gray-200 px-4 md:px-16 lg:px-24 xl:px-32" id="video">
+    <div class="p-4 pt-6 pb-10 flex flex-col items-center max-w-7xl mx-auto justify-center border-x border-gray-200">
+      <div class="flex flex-col gap-4 items-center">
+        <h2 class="text-4xl font-semibold font-urbanist" data-i18n="video_title">Video</h2>
+        <p class="text-zinc-500 text-base/7 text-center max-w-2xl" data-i18n="video_desc">Platforma qanday ishlashini qisqa videoda ko‘ring.</p>
+      </div>
+
+      <div class="w-full max-w-7xl mt-6">
+        <div class="w-full overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-md">
+          <div id="videoPlayer" class="ose-video-box" title="Click to change video URL" style="cursor: pointer; outline: rgb(249, 115, 22) dashed 2px;"><div class="absolute inset-0 flex items-center justify-center text-sm text-zinc-500">Video not configured yet.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    /* Robust video sizing for localhost (avoids iframe height collapsing) */
+    .ose-video-box {
+      position: relative;
+      width: 100%;
+      /* Keep 16:9 but also guarantee large height */
+      aspect-ratio: 16 / 9;
+      min-height: 520px;
+    }
+
+    @media (min-width: 1024px) {
+      .ose-video-box {
+        min-height: 640px;
+      }
+    }
+
+    .ose-video-box iframe,
+    .ose-video-box video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    .ose-video-fallback {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem;
+      color: rgb(113 113 122);
+    }
+  </style>
+
+  <section class="border-b border-gray-200 px-4 md:px-16 lg:px-24 xl:px-32" id="pricing" style="display: none;">
+    <div class="p-4 pt-20 flex flex-col items-center max-w-7xl mx-auto justify-center border-x border-gray-200">
+      <div class="flex flex-col gap-6 items-center">
+        <div class="flex flex-col md:flex-row items-center gap-4">
+          <div class="bg-orange-500 shadow-[inset_0_4px_4px_rgba(255,255,255,0.25),0_4px_10px_rgba(0,0,0,0.15)] p-2 aspect-square rounded-lg text-white -rotate-15">
+            <svg aria-hidden="true" class="lucide lucide-circle-dollar-sign" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path>
+              <path d="M12 18V6"></path>
+            </svg>
+          </div>
+          <h2 class="text-4xl font-semibold font-urbanist" data-i18n="pricing_title">Oddiy va shaffof narxlar</h2>
+        </div>
+        <p class="text-zinc-500 text-base/7 text-center max-w-lg" data-i18n="pricing_desc">Jamoangizga mos reja tanlang — AI agentlar bilan qurish, ishga tushirish va o‘sish jarayonida kengaytiring.</p>
+      </div>
+      <div class="p-1 mt-10 border border-orange-200 bg-orange-50 rounded-full">
+        <button id="pricingMonthlyBtn" data-billing="monthly" class="px-6 py-2 rounded-full cursor-pointer bg-orange-500 text-white">
+          <span data-i18n="pricing_billing_monthly">Oylik</span>
+        </button>
+        <button id="pricingYearlyBtn" data-billing="yearly" class="relative px-6 py-2 rounded-full cursor-pointer text-orange-500">
+          <span data-i18n="pricing_billing_yearly">Yillik
+          
+            </span>
+          <span class="absolute -top-8 -right-8 rotate-15 bg-green-100 rounded-full px-2 py-1 text-xs text-green-500">
+            <span data-i18n="pricing_discount_badge">20% chegirma</span>
+          </span>
+        </button>
+      </div>
+      <div id="pricingCards" class="flex flex-wrap items-start justify-center gap-10 md:gap-4 px-4 mt-12"></div>
+    </div>
+  </section>
+  <!-- Testimonial Section -->
+  <section class="px-4 md:px-16 lg:px-24 xl:px-32 border-b border-gray-200" id="testimonials" style="display: none;">
+    <div class="p-4 pt-20 md:p-20 flex flex-col items-center max-w-7xl mx-auto justify-center border-x border-gray-200">
+      <div class="flex flex-col gap-6 items-center">
+        <div class="flex flex-col md:flex-row items-center gap-4">
+          <div class="bg-orange-500 shadow-[inset_0_4px_4px_rgba(255,255,255,0.25),0_4px_10px_rgba(0,0,0,0.15)] p-2 aspect-square rounded-lg text-white -rotate-15">
+            <svg aria-hidden="true" class="lucide lucide-shield-check" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z">
+              </path>
+              <path d="m9 12 2 2 4-4"></path>
+            </svg>
+          </div>
+          <h2 class="text-4xl font-semibold font-urbanist" data-i18n="testimonials_title" id="testimonialsTitle">Foydalanuvchilarimiz fikri</h2>
+        </div>
+        <p class="text-zinc-500 text-base/7 text-center max-w-lg" id="testimonialsSubtitle">Jamoalar Buildify’ga real ishlab chiqarish muhitida ishonchli AI agentlarini yaratish, ishga tushirish va kengaytirish uchun ishonishadi.</p>
+      </div>
+      <div class="flex flex-wrap gap-8 items-center justify-center mt-24" id="testimonialsCards" style="display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: center;"></div>
+      <a class="mt-20 px-8 py-2.5 rounded-full bg-orange-50 border border-orange-200 text-orange-500" href="#">
+        See more
+      </a>
+    </div>
+  </section>
+  <!-- Footer -->
+  <footer class="px-4 md:px-16 lg:px-24 xl:px-32">
+    <div class="border-x border-gray-200 px-4 md:px-12 max-w-7xl mx-auto pt-40">
+      <div class="flex flex-col md:flex-row items-start justify-between relative p-8 md:p-12 overflow-hidden pb-32 md:pb-42 bg-linear-to-t from-orange-50 to-orange-100 rounded-t-2xl">
+        <div class="max-w-72">
+          <img alt="Logo" class="h-62 w-auto absolute -bottom-18 opacity-7 select-none pointer-events-none" height="35" src="./assets/logo-colored.svg" width="135">
+          <img alt="Logo" class="h-9" height="35" src="./assets/logo-colored.svg" width="135">
+          <p class="text-zinc-500 mt-4 pb-6">
+            For further assistance or additional inquiries, feel free to contact us
+          </p>
+        </div>
+        <div>
+          <p class="uppercase font-semibold text-orange-600 text-base">Social</p>
+          <div class="flex flex-col mt-6 gap-3">
+            <a class="flex items-center gap-2 text-orange-500" href="https://prebuiltui.com?ref=buildify">
+              <svg aria-hidden="true" class="lucide lucide-twitter" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z">
+                </path>
+              </svg>
+              <p>Twitter</p>
+            </a>
+            <a class="flex items-center gap-2 text-orange-500" href="https://prebuiltui.com?ref=buildify">
+              <svg aria-hidden="true" class="lucide lucide-linkedin" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                <rect height="12" width="4" x="2" y="9"></rect>
+                <circle cx="4" cy="4" r="2"></circle>
+              </svg>
+              <p>Linkedin</p>
+            </a>
+            <a class="flex items-center gap-2 text-orange-500" href="https://prebuiltui.com?ref=buildify">
+              <svg aria-hidden="true" class="lucide lucide-instagram" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                <rect height="20" rx="5" ry="5" width="20" x="2" y="2"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+              </svg>
+              <p>Instagram</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="/public/i18n.js?v=20260615_v6"></script>
+  <script src="/public/lang-ui.js?v=20260615_v6"></script>
+
+  <!-- Apply brand theme color (overrides Tailwind orange accents via CSS variables) -->
+  <script>
+    (function () {
+      function applyColor(c) {
+        // Tailwind v4 in this project uses --color-orange-* for orange accents
+        document.documentElement.style.setProperty('--color-orange-500', c);
+        document.documentElement.style.setProperty('--color-orange-600', c);
+        document.documentElement.style.setProperty('--color-orange-400', c);
+      }
+      fetch('/api/site/theme')
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          var c = data && data.theme && data.theme.primaryColor;
+          if (c) applyColor(c);
+        })
+        .catch(function () { /* ignore */ });
+    })();
+  </script>
+
+  <!-- SVG filter for electric border removed -->
+  <script src="./script.js?v=20260615_v6"></script>
+    
+  
+    <div id="ose-ai-widget">
+      <div id="ose-ai-window" class="ose-ai-window">
+        <div class="ose-ai-header">
+          <div class="ose-ai-header-left">
+            <div class="ose-ai-avatar">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+            </div>
+            <div>
+              <h3 class="ose-ai-title">AI Support Assistant</h3>
+              <div class="ose-ai-status">
+                <div class="ose-ai-dot"></div> Online
+              </div>
+            </div>
+          </div>
+          <button id="ose-ai-close" class="ose-ai-close">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+        <div id="ose-ai-messages" class="ose-ai-messages">
+          <div class="ose-msg-row ai">
+            <div class="ose-msg-bubble">Hello! Welcome to OpenScienceEnigma. How can I help you today?</div>
+          </div>
+        </div>
+        <div class="ose-ai-input-area">
+          <form id="ose-ai-form" class="ose-ai-form">
+            <input type="text" id="ose-ai-input" class="ose-ai-input" placeholder="Type your message..." autocomplete="off">
+            <button type="submit" id="ose-ai-submit" class="ose-ai-submit">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+          </form>
+        </div>
+      </div>
+      <button id="ose-ai-toggle" class="ose-ai-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        <span>AI Support</span>
+      </button>
+    </div>
+  
+    
+  
+    <div id="ose-ai-widget">
+      <div id="ose-ai-window" class="ose-ai-window">
+        <div class="ose-ai-header">
+          <div class="ose-ai-header-left">
+            <div class="ose-ai-avatar">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+            </div>
+            <div>
+              <h3 class="ose-ai-title">AI Support Assistant</h3>
+              <div class="ose-ai-status">
+                <div class="ose-ai-dot"></div> Online
+              </div>
+            </div>
+          </div>
+          <button id="ose-ai-close" class="ose-ai-close">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+        <div id="ose-ai-messages" class="ose-ai-messages">
+          <div class="ose-msg-row ai">
+            <div class="ose-msg-bubble">Hello! Welcome to OpenScienceEnigma. How can I help you today?</div>
+          </div>
+        </div>
+        <div class="ose-ai-input-area">
+          <form id="ose-ai-form" class="ose-ai-form">
+            <input type="text" id="ose-ai-input" class="ose-ai-input" placeholder="Type your message..." autocomplete="off">
+            <button type="submit" id="ose-ai-submit" class="ose-ai-submit">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+          </form>
+        </div>
+      </div>
+      <button id="ose-ai-toggle" class="ose-ai-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        <span>AI Support</span>
+      </button>
+    </div>
+  
+  <script src="/auth-ui.js"></script>
+  <script src="./hero-dynamic.js" defer=""></script>
+  <script src="/visual-editor.js?v=20260614" defer=""></script>
+<script src="/visual-editor.js?v=3"></script>
+
+<script src="/visual-editor.js?v=3"></script><div id="ose-editor-toolbar">
+        <div class="title">✨ Visual Editor</div>
+        <button id="ose-cancel-btn">Cancel</button>
+        <button id="ose-save-btn">Save Changes</button>
+    </div><div id="ose-image-modal" class="ose-editor-modal">
+            <div class="ose-editor-modal-content">
+                <div class="ose-editor-modal-header">
+                    <div class="ose-editor-modal-title">Edit Image</div>
+                    <button type="button" class="ose-editor-modal-close" id="ose-modal-close-btn">×</button>
+                </div>
+                <div class="ose-editor-modal-body">
+                    <button type="button" class="ose-editor-upload-btn" id="ose-modal-upload-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        Upload Image
+                    </button>
+                    <input type="file" id="ose-modal-file-input" accept="image/*" style="display:none;">
+                    <div class="ose-editor-divider">or</div>
+                    <div class="ose-editor-input-group">
+                        <label class="ose-editor-label">Image URL</label>
+                        <input type="text" id="ose-modal-url-input" class="ose-editor-input" placeholder="https://example.com/image.png">
+                    </div>
+                    <button type="button" class="ose-editor-save-btn" id="ose-modal-save-btn">Save Image</button>
+                </div>
+            </div>
+        </div><div id="ose-editor-toolbar">
+        <div class="title">✨ Visual Editor</div>
+        <button id="ose-cancel-btn">Cancel</button>
+        <button id="ose-save-btn">Save Changes</button>
+    </div><div id="ose-image-modal" class="ose-editor-modal">
+            <div class="ose-editor-modal-content">
+                <div class="ose-editor-modal-header">
+                    <div class="ose-editor-modal-title">Edit Image</div>
+                    <button type="button" class="ose-editor-modal-close" id="ose-modal-close-btn">×</button>
+                </div>
+                <div class="ose-editor-modal-body">
+                    <button type="button" class="ose-editor-upload-btn" id="ose-modal-upload-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        Upload Image
+                    </button>
+                    <input type="file" id="ose-modal-file-input" accept="image/*" style="display:none;">
+                    <div class="ose-editor-divider">or</div>
+                    <div class="ose-editor-input-group">
+                        <label class="ose-editor-label">Image URL</label>
+                        <input type="text" id="ose-modal-url-input" class="ose-editor-input" placeholder="https://example.com/image.png">
+                    </div>
+                    <button type="button" class="ose-editor-save-btn" id="ose-modal-save-btn">Save Image</button>
+                </div>
+            </div>
+        </div><div id="ose-editor-toolbar">
+        <div class="title">✨ Visual Editor</div>
+        <button id="ose-cancel-btn">Cancel</button>
+        <button id="ose-save-btn">Save Changes</button>
+    </div><div id="ose-image-modal" class="ose-editor-modal">
+            <div class="ose-editor-modal-content">
+                <div class="ose-editor-modal-header">
+                    <div class="ose-editor-modal-title">Edit Image</div>
+                    <button type="button" class="ose-editor-modal-close" id="ose-modal-close-btn">×</button>
+                </div>
+                <div class="ose-editor-modal-body">
+                    <button type="button" class="ose-editor-upload-btn" id="ose-modal-upload-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        Upload Image
+                    </button>
+                    <input type="file" id="ose-modal-file-input" accept="image/*" style="display:none;">
+                    <div class="ose-editor-divider">or</div>
+                    <div class="ose-editor-input-group">
+                        <label class="ose-editor-label">Image URL</label>
+                        <input type="text" id="ose-modal-url-input" class="ose-editor-input" placeholder="https://example.com/image.png">
+                    </div>
+                    <button type="button" class="ose-editor-save-btn" id="ose-modal-save-btn">Save Image</button>
+                </div>
+            </div>
+        </div></body></html>

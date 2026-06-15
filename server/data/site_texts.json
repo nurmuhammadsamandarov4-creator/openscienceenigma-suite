@@ -1,0 +1,28 @@
+{
+  "hero": {
+    "en": {
+      "badge": "60K+ Happy users worldwide • 4.9",
+      "title": "Build, Launch & Scale with AI agents.",
+      "subtitle": "Design, automate and deploy intelligent AI agents to power your products, workflows and business growth.",
+      "cta_primary": "Get Started",
+      "cta_secondary": "Watch Demo",
+      "cta_secondary_url": "https://example.com/demo",
+      "stats": [
+        {
+          "value": "3x",
+          "label": "Faster AI agent development"
+        },
+        {
+          "value": "60%",
+          "label": "Reduction in manual workflows"
+        },
+        {
+          "value": "99.9%",
+          "label": "Reliable agent execution uptime"
+        }
+      ]
+    },
+    "ru": {},
+    "uz": {}
+  }
+}

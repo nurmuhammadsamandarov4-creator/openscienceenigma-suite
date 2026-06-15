@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title data-i18n="admin_orders_title">Admin — Kelgan zakazlar</title>
+  
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #f1f5f9;
+      --border-focus: #e2e8f0;
+      --primary-color: #f97316; /* brand orange accent */
+      --primary-hover: #ea580c;
+      --primary-glow: rgba(249, 115, 22, 0.08);
+      --font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      
+      --status-open-bg: #f1f5f9;
+      --status-open-txt: #475569;
+      --status-sent-bg: #fef3c7;
+      --status-sent-txt: #d97706;
+      --status-prog-bg: #dbeafe;
+      --status-prog-txt: #2563eb;
+      --status-done-bg: #dcfce7;
+      --status-done-txt: #16a34a;
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-color);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      line-height: 1.5;
+      padding: 0;
+      margin: 0;
+    }
+
+    .wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    /* Elegant Top Navbar Area */
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border-color);
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .header-title-area {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+
+    .muted {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-primary {
+      background: var(--primary-color);
+      color: #ffffff;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 4px 12px var(--primary-glow);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text-main);
+      border: 1px solid var(--border-focus);
+    }
+
+    .btn-outline:hover {
+      background: #fafafa;
+      border-color: var(--text-muted);
+    }
+
+    .btn-danger {
+      background: #fee2e2;
+      color: #ef4444;
+      border: none;
+    }
+
+    .btn-danger:hover {
+      background: #fecaca;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1);
+    }
+
+    /* Cards System */
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      padding: 8px;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04);
+      margin-bottom: 24px;
+      overflow-x: auto;
+    }
+
+    /* Table styles */
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    th {
+      text-align: left;
+      padding: 16px 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 2px solid var(--border-color);
+      background: #fafafa;
+    }
+
+    th:first-child {
+      border-top-left-radius: 12px;
+    }
+    th:last-child {
+      border-top-right-radius: 12px;
+    }
+
+    td {
+      padding: 18px 20px;
+      font-size: 14px;
+      vertical-align: middle;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+      transition: background-color 0.2s;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:last-child td:first-child {
+      border-bottom-left-radius: 12px;
+    }
+    tr:last-child td:last-child {
+      border-bottom-right-radius: 12px;
+    }
+
+    tr:hover td {
+      background-color: #fafafa;
+    }
+
+    /* Status Pill Badge styles */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 12px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 700;
+      width: fit-content;
+    }
+
+    .status-badge.open { background: var(--status-open-bg); color: var(--status-open-txt); }
+    .status-badge.sent { background: var(--status-sent-bg); color: var(--status-sent-txt); }
+    .status-badge.in_progress { background: var(--status-prog-bg); color: var(--status-prog-txt); }
+    .status-badge.done { background: var(--status-done-bg); color: var(--status-done-txt); }
+
+    .loading-notice {
+      padding: 24px;
+      text-align: center;
+      color: var(--text-muted);
+      font-style: italic;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- Top Navbar Area -->
+    <div class="admin-header">
+      <div class="header-title-area">
+        <h1 data-i18n="admin_orders_title">Admin — Kelgan zakazlar</h1>
+        <div class="muted" data-i18n="admin_orders_desc">Zakazni ochib, foydalanuvchiga javob/fayl yuborasiz.</div>
+      </div>
+      <div class="btn-group">
+        <a class="btn btn-outline" href="/public/tasks.html" data-i18n="nav_public_tasks">Public tasks</a>
+        <a class="btn btn-outline" href="/public/admin-referrals.html" data-i18n="nav_referrals">Referrals</a>
+        <button class="btn btn-danger" id="logoutBtn" data-i18n="logout">Logout</button>
+      </div>
+    </div>
+
+    <!-- Table Container Card -->
+    <div class="card">
+      <div class="loading-notice" id="msg" data-i18n="loading">Loading...</div>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 60px;">#</th>
+            <th data-i18n="admin_user">Owner</th>
+            <th data-i18n="order_desc_title">Description</th>
+            <th data-i18n="th_status" style="width: 140px;">Status</th>
+            <th data-i18n="th_replies" style="width: 120px;">Submissions</th>
+            <th data-i18n="th_open" style="width: 100px;">Open</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </div>
+  
+  <script src="/public/i18n.js?v=20260615_v6"></script>
+  <script src="/public/lang-ui.js?v=20260615_v6"></script>
+  <script src="/admin.js"></script>
+</body>
+</html>

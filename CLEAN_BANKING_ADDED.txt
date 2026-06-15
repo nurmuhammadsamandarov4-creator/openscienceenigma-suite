@@ -1,0 +1,10 @@
+Clean Banking login form added.
+
+Copied to:
+1) server/public/assets/forms/clean-banking/
+2) server/public/assets/screenshots/clean-banking.png
+3) admindashboard/public/assets/forms/clean-banking/
+4) admindashboard/public/assets/screenshots/clean-banking.png
+
+Open (static):
+- /assets/forms/clean-banking/index.html

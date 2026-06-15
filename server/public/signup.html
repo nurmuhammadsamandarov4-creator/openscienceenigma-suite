@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="auth.css">
+  <title>Buildify</title>
+  <script src="/public/i18n.js?v=20260615_v6"></script>
+  <script src="/public/lang-ui.js?v=20260615_v6"></script>
+
+</head>
+
+<body>
+  <div class="container" id="container">
+    <!-- SIGN UP -->
+    <div class="form-container sign-up">
+      <form id="signupForm">
+        <h1>Create Account</h1>
+
+        <div class="social-icons" style="display:none">
+          <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+          <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
+          <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
+        </div>
+
+        <span data-i18n="su_register_with_email">Register with email</span>
+
+        <input id="su_name" type="text" data-i18n-placeholder="su_name_ph" placeholder="Name" required>
+        <input id="su_email" type="email" data-i18n-placeholder="su_email_ph" placeholder="Email" required>
+        <input id="su_password" type="password" data-i18n-placeholder="su_password_ph" placeholder="Password (min 6)" minlength="6" required>
+
+        <button id="sendCodeBtn" type="button" data-i18n="su_send_code">Sign Up</button>
+
+        <!-- Verification UI removed (direct sign-up). Kept as hidden placeholders to avoid breaking old JS references in cached browsers. -->
+        <div id="codeBlock" style="width:100%; display:none;">
+          <input id="su_code" type="text" inputmode="numeric" maxlength="6" data-i18n-placeholder="su_code_ph" placeholder="Enter 6-digit code">
+          <button id="verifyBtn" type="button" data-i18n="su_verify_signup">Verify & Sign Up</button>
+        </div>
+
+        <p id="su_msg" style="margin-top:10px; font-size:13px;"></p>
+      </form>
+    </div>
+
+    <!-- SIGN IN -->
+    <div class="form-container sign-in">
+      <form id="loginForm">
+        <h1 data-i18n="si_title" data-i18n="si_btn">Sign In</h1>
+
+        <div class="social-icons" style="display:none">
+          <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+          <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
+          <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
+        </div>
+
+        <span data-i18n="si_use_email_pw">Use your email & password</span>
+
+        <input id="si_email" type="email" data-i18n-placeholder="su_email_ph" placeholder="Email" required>
+        <input id="si_password" type="password" data-i18n-placeholder="si_password_ph" placeholder="Password" required>
+
+        <a href="#" onclick="return false;" data-i18n="si_forgot">(demo) Forgot password?</a>
+        <button id="loginBtnSubmit" type="button">Sign In</button>
+
+        <p id="si_msg" style="margin-top:10px; font-size:13px;"></p>
+      </form>
+    </div>
+
+    <!-- TOGGLE -->
+    <div class="toggle-container">
+      <div class="toggle">
+        <div class="toggle-panel toggle-left">
+          <h1 data-i18n="toggle_welcome_back">Welcome Back!</h1>
+          <p data-i18n="toggle_login_desc">Login to see your dashboard & referrals</p>
+          <button class="hidden" id="login" data-i18n="toggle_btn_login">Sign In</button>
+        </div>
+        <div class="toggle-panel toggle-right">
+          <h1 data-i18n="toggle_hello_friend">Hello, Friend!</h1>
+          <p data-i18n="toggle_signup_desc">Sign up, get your referral link, invite friends</p>
+          <button class="hidden" id="register" data-i18n="toggle_btn_signup">Sign Up</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+  <script src="/auth-ui.js"></script>
+</body>
+
+</html>
