@@ -1,0 +1,338 @@
+/* ============================================================
+   OSE — Mobile / Tablet / Desktop Responsive Fixes
+   Breakpoints:
+     xs  < 480px   (kichik telefon)
+     sm  < 640px   (telefon)
+     md  < 768px   (katta telefon / kichik planshet)
+     lg  < 1024px  (planshet)
+     xl  ≥ 1024px  (kompyuter) — asosiy dizayn shu uchun
+   ============================================================ */
+
+/* ── 0. Global: no horizontal overflow ──────────────────────── */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* ── 1. Nav ─────────────────────────────────────────────────── */
+
+/* Shrink nav padding on small screens */
+@media (max-width: 640px) {
+  nav.fixed {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+  }
+  nav.fixed img[alt*="Logo"] {
+    width: 100px !important;
+    height: auto !important;
+  }
+}
+
+/* Mobile menu link tap target */
+#mobileMenu a {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+/* Close mobile menu on link click */
+
+/* ── 2. Hero Section ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Allow hero to grow instead of fixed viewport height */
+  section.bg-cover > div.h-screen {
+    height: auto !important;
+    min-height: 100svh;
+    padding-top: 96px;
+    padding-bottom: 48px;
+  }
+
+  /* Hero title */
+  #oseHeroTitle {
+    font-size: clamp(1.75rem, 7vw, 2.8rem) !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Hero subtitle */
+  #oseHeroSubtitle {
+    font-size: 0.9rem !important;
+    padding: 0 8px;
+  }
+
+  /* Hero badge */
+  #oseHeroBadge {
+    font-size: 0.78rem !important;
+  }
+
+  /* Hero CTA buttons — stack vertically */
+  section.bg-cover .flex.flex-col.md\:flex-row {
+    gap: 12px !important;
+  }
+
+  #oseHeroCtaPrimary,
+  #oseHeroCtaSecondary {
+    width: 100% !important;
+    padding: 14px 24px !important;
+    text-align: center;
+    font-size: 0.95rem;
+  }
+
+  /* Sparkle icon decoration — hide on small */
+  section.bg-cover .absolute.-top-5 {
+    display: none !important;
+  }
+}
+
+/* ── 3. Stats Section ───────────────────────────────────────── */
+@media (max-width: 640px) {
+  .border-y.border-gray-200 > div {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+    padding: 32px 16px !important;
+  }
+
+  .border-y.border-gray-200 h3.text-4xl {
+    font-size: 2.25rem !important;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 900px) {
+  .border-y.border-gray-200 > div {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* ── 4. Section headings ─────────────────────────────────────── */
+@media (max-width: 640px) {
+  h2.text-4xl {
+    font-size: 1.75rem !important;
+    line-height: 1.25 !important;
+  }
+  h2.text-3xl {
+    font-size: 1.5rem !important;
+  }
+}
+
+/* ── 5. Team marquee ─────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .ose-electric-card {
+    width: 200px !important;
+  }
+  .team-img {
+    width: 152px !important;
+    height: 190px !important;
+  }
+  .team-name {
+    font-size: 15px !important;
+  }
+  .team-role {
+    font-size: 12px !important;
+  }
+  .team-track {
+    --team-gap: 1rem !important;
+    animation-duration: 22s !important;
+  }
+}
+
+/* Board sections vertical spacing on mobile */
+@media (max-width: 768px) {
+  section.border-b > div.pt-10 {
+    padding-top: 32px !important;
+    padding-bottom: 32px !important;
+  }
+  section.border-b > div.pt-20 {
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
+  }
+  section.border-b h2.text-3xl,
+  section.border-b h2.text-4xl {
+    font-size: 1.5rem !important;
+    text-align: center !important;
+  }
+}
+
+/* ── 6. Video section ───────────────────────────────────────── */
+@media (max-width: 768px) {
+  .ose-video-box {
+    min-height: 220px !important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .ose-video-box {
+    min-height: 380px !important;
+  }
+}
+
+/* ── 7. Pricing cards ───────────────────────────────────────── */
+@media (max-width: 640px) {
+  #pricingCards {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 0 !important;
+  }
+  #pricingCards > div {
+    min-width: unset !important;
+    max-width: 100% !important;
+    flex: 1 1 auto !important;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 900px) {
+  #pricingCards {
+    gap: 16px !important;
+  }
+  #pricingCards > div {
+    min-width: 260px !important;
+    max-width: 340px !important;
+  }
+}
+
+/* ── 8. Testimonials ─────────────────────────────────────────── */
+@media (max-width: 640px) {
+  #testimonialsCards {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .ose-testimonial-card {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* ── 9. Footer ──────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  footer > div {
+    padding-top: 40px !important;
+  }
+  footer > div > div {
+    border-radius: 16px !important;
+    padding: 24px 20px !important;
+    padding-bottom: 60px !important;
+  }
+  footer > div > div .max-w-72 {
+    max-width: 100% !important;
+  }
+  /* Hide big watermark logo on mobile */
+  footer img.h-62 {
+    display: none !important;
+  }
+  footer > div > div {
+    flex-direction: column !important;
+    gap: 24px !important;
+  }
+}
+
+/* ── 10. Lang selector on mobile ─────────────────────────────── */
+@media (max-width: 480px) {
+  #langSelector button:first-child span:nth-child(2) {
+    display: none !important;
+  }
+}
+
+/* ── 11. AI chat widget on mobile ────────────────────────────── */
+@media (max-width: 480px) {
+  #ose-ai-widget {
+    bottom: 16px !important;
+    right: 16px !important;
+  }
+  .ose-ai-window {
+    width: calc(100vw - 32px) !important;
+    height: 65vh !important;
+    max-height: 480px !important;
+  }
+  .ose-ai-btn span {
+    display: none !important;
+  }
+  .ose-ai-btn {
+    padding: 14px !important;
+    border-radius: 50% !important;
+  }
+}
+
+/* ── 12. Sections horizontal padding on mobile ───────────────── */
+@media (max-width: 640px) {
+  section[class*="px-4"] {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+}
+
+/* ── 13. FAQ grid on mobile ──────────────────────────────────── */
+@media (max-width: 768px) {
+  .grid.grid-cols-1.md\:grid-cols-2.divide-x {
+    grid-template-columns: 1fr !important;
+    divide-x: 0 !important;
+  }
+  .grid.grid-cols-1.md\:grid-cols-2.divide-x > div:first-child {
+    border-right: none !important;
+  }
+}
+
+/* ── 14. Features grid on mobile ─────────────────────────────── */
+@media (max-width: 768px) {
+  .grid.grid-cols-1.md\:grid-cols-2.border-x.md\:divide-x > div:first-child {
+    position: static !important;
+    padding: 32px 16px !important;
+  }
+  #featuresCards {
+    padding: 16px !important;
+  }
+}
+
+/* ── 15. Touch tap highlight ─────────────────────────────────── */
+@media (hover: none) {
+  a, button {
+    -webkit-tap-highlight-color: rgba(60, 80, 224, 0.12);
+  }
+  /* Remove hover-only transforms on touch */
+  .ose-electric-card:hover {
+    transform: none !important;
+  }
+}
+
+/* ── 16. Safe area insets (iPhone notch / home bar) ─────────── */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+  #ose-ai-widget {
+    bottom: max(20px, env(safe-area-inset-bottom)) !important;
+    right: max(20px, env(safe-area-inset-right)) !important;
+  }
+}
+
+/* ── 17. Tablet (planshet) specific ──────────────────────────── */
+@media (min-width: 768px) and (max-width: 1024px) {
+  nav.fixed {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+
+  section.bg-cover > div.h-screen {
+    height: auto !important;
+    min-height: 100svh;
+    padding-top: 80px;
+    padding-bottom: 48px;
+  }
+
+  #oseHeroTitle {
+    font-size: clamp(2.2rem, 5vw, 3.5rem) !important;
+  }
+
+  #pricingCards > div {
+    min-width: 220px !important;
+  }
+}
+
+/* ── 18. Mobile menu close on nav links ──────────────────────── */
+/* (Handled via JS below — CSS placeholder) */
+
+/* ── 19. Image max-width safety ──────────────────────────────── */
+img {
+  max-width: 100%;
+  height: auto;
+}
