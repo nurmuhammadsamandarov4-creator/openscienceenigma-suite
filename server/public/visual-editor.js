@@ -863,8 +863,29 @@ document.addEventListener("DOMContentLoaded", () => {
         const listWrap = document.createElement('div'); listWrap.className = 'ose-items-list'; container.appendChild(listWrap);
         const addBtn = document.createElement('button'); addBtn.className = 'ose-add-btn'; addBtn.innerHTML = '+ A\'zo qo\'shish'; container.appendChild(addBtn);
 
+        // Expose flusher so applySidebarChanges can call it before saving
+        window.__ose_flushTeamTab = function() { flushTabToState(); };
+
+        // Save current tab's DOM data into siteData.team before switching tabs
+        function flushTabToState() {
+            const readItems = (cls, prefix) => {
+                const arr = [];
+                listWrap.querySelectorAll('.' + cls).forEach(el => {
+                    const name = el.querySelector('.' + prefix + '-name')?.value.trim();
+                    const role = el.querySelector('.' + prefix + '-role')?.value.trim();
+                    const imageUrl = el.querySelector('.' + prefix + '-img')?.value.trim();
+                    if (name) arr.push({ name, role: role || '', imageUrl: imageUrl || '' });
+                });
+                return arr;
+            };
+            if (activeTab === 'main') siteData.team.members = readItems('sidebar-team-item', 'team-item');
+            else if (activeTab === 'soft') siteData.team.softScienceBoard = readItems('sidebar-soft-item', 'soft-item');
+            else if (activeTab === 'hard') siteData.team.hardScienceBoard = readItems('sidebar-hard-item', 'hard-item');
+        }
+
         tabBar.querySelectorAll('.ose-tab').forEach(t => {
             t.addEventListener('click', () => {
+                flushTabToState(); // save current tab before switching
                 tabBar.querySelectorAll('.ose-tab').forEach(x => x.classList.remove('active'));
                 t.classList.add('active');
                 activeTab = t.dataset.tab;
@@ -1144,27 +1165,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // ─── 13. APPLY SIDEBAR CHANGES ──────────────────────────────
     async function applySidebarChanges(section) {
         if (section === 'team') {
-            const members = [];
-            document.querySelectorAll('.sidebar-team-item').forEach(el => {
-                const name = el.querySelector('.team-item-name')?.value.trim();
-                const role = el.querySelector('.team-item-role')?.value.trim();
-                const imageUrl = el.querySelector('.team-item-img')?.value.trim();
-                if (name) members.push({ name, role, imageUrl });
-            });
-            const softScienceBoard = [];
-            document.querySelectorAll('.sidebar-soft-item').forEach(el => {
-                const name = el.querySelector('.soft-item-name')?.value.trim();
-                const role = el.querySelector('.soft-item-role')?.value.trim();
-                const imageUrl = el.querySelector('.soft-item-img')?.value.trim();
-                if (name) softScienceBoard.push({ name, role, imageUrl });
-            });
-            const hardScienceBoard = [];
-            document.querySelectorAll('.sidebar-hard-item').forEach(el => {
-                const name = el.querySelector('.hard-item-name')?.value.trim();
-                const role = el.querySelector('.hard-item-role')?.value.trim();
-                const imageUrl = el.querySelector('.hard-item-img')?.value.trim();
-                if (name) hardScienceBoard.push({ name, role, imageUrl });
-            });
+            // Flush the currently visible tab's DOM into siteData before reading
+            if (typeof window.__ose_flushTeamTab === 'function') window.__ose_flushTeamTab();
+            // siteData.team now has all three boards up-to-date (other tabs were flushed on tab switch)
+            const members = siteData.team.members || [];
+            const softScienceBoard = siteData.team.softScienceBoard || [];
+            const hardScienceBoard = siteData.team.hardScienceBoard || [];
             siteData.team = { members, softScienceBoard, hardScienceBoard };
             if (typeof window.loadTeamSection === 'function') await window.loadTeamSection();
         }
