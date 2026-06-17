@@ -132,8 +132,7 @@
   function proceedToOrder() {
     const cart = getCart();
     if (!cart.length) return;
-    const first = cart[0];
-    window.location.href = first.href || `/public/create-task.html?service=${first.service}`;
+    window.location.href = '/public/create-task.html?from=cart';
   }
 
   function escHtml(s) {

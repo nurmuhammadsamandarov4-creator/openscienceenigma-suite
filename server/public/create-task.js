@@ -355,7 +355,57 @@ async function loadServices() {
   });
 }
 
-loadServices();
+loadServices().then(() => {
+  if (new URLSearchParams(window.location.search).get('from') === 'cart') {
+    applyCartMode();
+  }
+});
+
+// ── Cart Mode: override summary panel with cart items & prices ──
+function parsePriceToCents(str) {
+  const n = parseFloat(String(str || '').replace(/[^0-9.]/g, ''));
+  return isNaN(n) ? 0 : Math.round(n * 100);
+}
+
+function applyCartMode() {
+  let cart = [];
+  try { cart = JSON.parse(localStorage.getItem('ose_cart') || '[]'); } catch {}
+  if (!cart.length) return;
+
+  // Pre-select first service from cart
+  const firstCode = (cart[0].service || '').toUpperCase();
+  if (firstCode) selectServiceCard(firstCode);
+
+  // Build summary rows for each cart item
+  let totalCents = 0;
+  const rowsHtml = cart.map(item => {
+    const lineCents = parsePriceToCents(item.price) * (item.qty || 1);
+    totalCents += lineCents;
+    const qty = item.qty || 1;
+    const qtyLabel = qty > 1 ? ` <span style="color:var(--muted);font-weight:500;">×${qty}</span>` : '';
+    const lineStr = '$' + (lineCents / 100).toFixed(0);
+    return `<div class="summary-row">
+      <span class="summary-label">${escapeHtml(item.name)}${qtyLabel}</span>
+      <span class="summary-value">${lineStr}</span>
+    </div>`;
+  }).join('');
+
+  // Replace Service / Price rows with cart rows
+  const planRow = planNameEl && planNameEl.closest('.summary-row');
+  const priceRow = originalPriceEl && originalPriceEl.closest('.summary-row');
+  const divider = document.querySelector('.summary-divider');
+
+  if (planRow) planRow.outerHTML = rowsHtml;
+  if (priceRow) priceRow.remove();
+  if (discountRowEl) discountRowEl.style.display = 'none';
+
+  // Update total
+  const totalStr = '$' + (totalCents / 100).toFixed(0);
+  if (totalPriceEl) totalPriceEl.textContent = totalStr;
+
+  // Store for submit handler
+  window.__cartMode = { totalCents, cart };
+}
 
 // Submit Handlers
 submitBtn.addEventListener("click", async () => {
@@ -395,7 +445,11 @@ submitBtn.addEventListener("click", async () => {
   let serviceCode = serviceSelect ? String(serviceSelect.value || "").trim() : "SVC100";
   let customAmountCents = 0;
 
-  if (customAmountInput && customAmountInput.value) {
+  if (window.__cartMode && window.__cartMode.totalCents > 0) {
+    customAmountCents = window.__cartMode.totalCents;
+    serviceCode = (window.__cartMode.cart[0]?.service || serviceCode).toUpperCase();
+    // Clear cart after successful order (done below after res.ok)
+  } else if (customAmountInput && customAmountInput.value) {
     const val = Number(customAmountInput.value);
     if (val > 0) {
       serviceCode = "CUSTOM";
@@ -451,6 +505,7 @@ submitBtn.addEventListener("click", async () => {
         });
       } catch (e) {}
 
+      if (window.__cartMode) localStorage.removeItem('ose_cart');
       window.location.href = j.url;
       return;
     } catch (e) {
@@ -463,6 +518,7 @@ submitBtn.addEventListener("click", async () => {
   submitBtn.disabled = false;
   msg.textContent = "✅ " + (window.t ? window.t("submit_order") : "Zakazingiz ketti");
   localStorage.setItem("toast", "✅ Zakazingiz ketti");
+  if (window.__cartMode) localStorage.removeItem('ose_cart');
   window.location.href = "/public/dashboard.html";
 });
 
