@@ -2,6 +2,7 @@
 (function () {
   const CART_KEY = 'ose_cart';
 
+  // Each cart item: { name, price, service, href, qty }
   function getCart() {
     try { return JSON.parse(localStorage.getItem(CART_KEY) || '[]'); } catch { return []; }
   }
@@ -13,12 +14,21 @@
   }
 
   function getTotal() {
-    return getCart().reduce((sum, c) => sum + parsePrice(c.price), 0);
+    return getCart().reduce((sum, c) => sum + parsePrice(c.price) * (c.qty || 1), 0);
+  }
+
+  function getTotalCount() {
+    return getCart().reduce((sum, c) => sum + (c.qty || 1), 0);
   }
 
   function addToCart(item) {
     const cart = getCart();
-    cart.push(item);
+    const existing = cart.find(c => c.service === item.service);
+    if (existing) {
+      existing.qty = (existing.qty || 1) + 1;
+    } else {
+      cart.push({ ...item, qty: 1 });
+    }
     saveCart(cart);
     renderCartBadge();
     showToast(item.name);
@@ -29,6 +39,24 @@
     saveCart(getCart().filter(c => c.service !== service));
     renderCart();
     renderCartBadge();
+  }
+
+  function incrementQty(service) {
+    const cart = getCart();
+    const item = cart.find(c => c.service === service);
+    if (item) { item.qty = (item.qty || 1) + 1; saveCart(cart); renderCart(); renderCartBadge(); }
+  }
+
+  function decrementQty(service) {
+    const cart = getCart();
+    const item = cart.find(c => c.service === service);
+    if (item) {
+      item.qty = (item.qty || 1) - 1;
+      if (item.qty < 1) item.qty = 1;
+      saveCart(cart);
+      renderCart();
+      renderCartBadge();
+    }
   }
 
   function showToast(name) {
@@ -47,7 +75,7 @@
   function renderCartBadge() {
     const badge = document.getElementById('cart-badge');
     if (!badge) return;
-    const count = getCart().length;
+    const count = getTotalCount();
     badge.textContent = count;
     badge.style.display = count > 0 ? 'flex' : 'none';
   }
@@ -65,14 +93,23 @@
       if (footer) footer.style.display = 'none';
       return;
     }
-    list.innerHTML = cart.map(item => `
-      <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;">
+    list.innerHTML = cart.map(item => {
+      const qty = item.qty || 1;
+      const svc = escHtml(item.service);
+      return `
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;">
         <div style="flex:1;min-width:0;">
-          <div style="font-weight:600;font-size:14px;color:#0f172a;margin-bottom:4px;">${escHtml(item.name)}</div>
+          <div style="font-weight:600;font-size:14px;color:#0f172a;margin-bottom:6px;">${escHtml(item.name)}</div>
           <div style="font-size:13px;color:#2563eb;font-weight:600;">${escHtml(item.price)}</div>
         </div>
-        <button onclick="window.__cart.remove('${escHtml(item.service)}')" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:20px;line-height:1;padding:2px;flex-shrink:0;transition:color 0.2s;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#94a3b8'">×</button>
-      </div>`).join('');
+        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+          <button onclick="window.__cart.decrement('${svc}')" style="width:28px;height:28px;border-radius:50%;border:1.5px solid #e2e8f0;background:#fff;cursor:pointer;font-size:16px;font-weight:700;color:#0f172a;display:flex;align-items:center;justify-content:center;line-height:1;transition:background 0.15s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='#fff'">−</button>
+          <span style="min-width:20px;text-align:center;font-size:14px;font-weight:700;color:#0f172a;">${qty}</span>
+          <button onclick="window.__cart.increment('${svc}')" style="width:28px;height:28px;border-radius:50%;border:1.5px solid #e2e8f0;background:#fff;cursor:pointer;font-size:16px;font-weight:700;color:#0f172a;display:flex;align-items:center;justify-content:center;line-height:1;transition:background 0.15s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='#fff'">+</button>
+        </div>
+        <button onclick="window.__cart.remove('${svc}')" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:20px;line-height:1;padding:2px;flex-shrink:0;transition:color 0.2s;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#94a3b8'">×</button>
+      </div>`;
+    }).join('');
     if (footer) footer.style.display = 'block';
     const total = getTotal();
     if (totalEl) totalEl.textContent = total > 0 ? `$${total.toLocaleString('en-US')}` : '—';
@@ -166,7 +203,15 @@
     });
   }
 
-  window.__cart = { add: addToCart, remove: removeFromCart, open: openCart, close: closeCart, proceed: proceedToOrder };
+  window.__cart = {
+    add: addToCart,
+    remove: removeFromCart,
+    increment: incrementQty,
+    decrement: decrementQty,
+    open: openCart,
+    close: closeCart,
+    proceed: proceedToOrder
+  };
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => { injectUI(); interceptPricingClicks(); });
