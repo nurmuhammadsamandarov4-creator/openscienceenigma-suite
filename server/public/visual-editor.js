@@ -674,6 +674,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // ─── 6b. BLOCK ALL LINK NAVIGATION IN EDIT MODE ─────────────
+    // Use capture phase to intercept before cart.js and other handlers
+    document.addEventListener('click', function(e) {
+        // Allow clicks inside toolbar and sidebar
+        if (e.target.closest('#ose-editor-toolbar, #ose-sidebar, .ose-edit-overlay-btn')) return;
+        const a = e.target.closest('a');
+        if (!a) return;
+        // Block navigation
+        e.preventDefault();
+        e.stopImmediatePropagation();
+    }, true);
+
     // ─── 7. MAKE ELEMENTS EDITABLE ──────────────────────────────
     function makeElementsEditable() {
         document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -732,6 +744,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!container || container.querySelector('.ose-edit-overlay-btn')) return;
             container.classList.add('ose-section-host');
             const btn = document.createElement('button');
+            btn.type = 'button';
             btn.className = 'ose-edit-overlay-btn';
             btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> ${sec.label}`;
             btn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); openSidebar(sec.key, sec.label, sec.desc); });
