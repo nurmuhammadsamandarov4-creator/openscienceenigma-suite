@@ -706,6 +706,8 @@ async function loadFaqSection() {
 }
 
 
+window.addEventListener('ose:lang', () => { renderTestimonials(); renderPricing(); renderFeatures(); renderFaq(); });
+
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => loadTeamSection());
   document.addEventListener('DOMContentLoaded', () => loadVideoSection());
@@ -713,7 +715,6 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => loadPricingSection());
   document.addEventListener('DOMContentLoaded', () => loadFeaturesSection());
   document.addEventListener('DOMContentLoaded', () => loadFaqSection());
-  window.addEventListener('ose:lang', () => { renderTestimonials(); renderPricing(); renderFeatures(); renderFaq(); });
 } else {
   loadTeamSection();
   loadVideoSection();
@@ -721,7 +722,6 @@ if (document.readyState === 'loading') {
   loadPricingSection();
   loadFeaturesSection();
   loadFaqSection();
-  window.addEventListener('ose:lang', () => { renderTestimonials(); renderPricing(); renderFeatures(); renderFaq(); });
 }
 
 
