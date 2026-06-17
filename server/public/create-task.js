@@ -361,7 +361,7 @@ loadServices().then(() => {
   }
 });
 
-// ── Cart Mode: override summary panel with cart items & prices ──
+// ── Cart Mode: hide service selection, show cart items in summary ──
 function parsePriceToCents(str) {
   const n = parseFloat(String(str || '').replace(/[^0-9.]/g, ''));
   return isNaN(n) ? 0 : Math.round(n * 100);
@@ -372,36 +372,59 @@ function applyCartMode() {
   try { cart = JSON.parse(localStorage.getItem('ose_cart') || '[]'); } catch {}
   if (!cart.length) return;
 
-  // Pre-select first service from cart
-  const firstCode = (cart[0].service || '').toUpperCase();
-  if (firstCode) selectServiceCard(firstCode);
+  // Hide service selection block (cards + custom amount)
+  const serviceBlock = document.getElementById('serviceCards')?.closest('.block');
+  if (serviceBlock) serviceBlock.style.display = 'none';
 
-  // Build summary rows for each cart item
+  // Show cart items panel above description
   let totalCents = 0;
-  const rowsHtml = cart.map(item => {
+  const itemsHtml = cart.map(item => {
     const lineCents = parsePriceToCents(item.price) * (item.qty || 1);
     totalCents += lineCents;
     const qty = item.qty || 1;
-    const qtyLabel = qty > 1 ? ` <span style="color:var(--muted);font-weight:500;">×${qty}</span>` : '';
+    const qtyBadge = qty > 1
+      ? `<span style="background:#eff6ff;color:#2563eb;font-size:11px;font-weight:700;padding:2px 7px;border-radius:20px;margin-left:6px;">×${qty}</span>`
+      : '';
     const lineStr = '$' + (lineCents / 100).toFixed(0);
-    return `<div class="summary-row">
-      <span class="summary-label">${escapeHtml(item.name)}${qtyLabel}</span>
-      <span class="summary-value">${lineStr}</span>
+    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
+      <span style="font-size:14px;font-weight:600;color:var(--text);">${escapeHtml(item.name)}${qtyBadge}</span>
+      <span style="font-size:14px;font-weight:700;color:#2563eb;">${lineStr}</span>
     </div>`;
   }).join('');
 
-  // Replace Service / Price rows with cart rows
-  const planRow = planNameEl && planNameEl.closest('.summary-row');
-  const priceRow = originalPriceEl && originalPriceEl.closest('.summary-row');
-  const divider = document.querySelector('.summary-divider');
+  const cartPanel = document.createElement('div');
+  cartPanel.className = 'block';
+  cartPanel.innerHTML = `
+    <p class="block-title" style="margin-bottom:12px;">Selected services</p>
+    <div>${itemsHtml}</div>
+    <div style="display:flex;justify-content:space-between;padding:12px 0;margin-top:4px;">
+      <span style="font-size:15px;font-weight:700;color:var(--text);">Total</span>
+      <span style="font-size:16px;font-weight:800;color:var(--text);">$${(totalCents/100).toFixed(0)}</span>
+    </div>`;
 
+  const descBlock = document.getElementById('desc')?.closest('.block');
+  if (descBlock) descBlock.before(cartPanel);
+
+  // Override summary panel on the right
+  const rowsHtml = cart.map(item => {
+    const lineCents = parsePriceToCents(item.price) * (item.qty || 1);
+    const qty = item.qty || 1;
+    const qtyLabel = qty > 1 ? ` ×${qty}` : '';
+    return `<div class="summary-row">
+      <span class="summary-label">${escapeHtml(item.name)}${qtyLabel}</span>
+      <span class="summary-value">$${(lineCents/100).toFixed(0)}</span>
+    </div>`;
+  }).join('');
+
+  const planRow = planNameEl?.closest('.summary-row');
+  const priceRow = originalPriceEl?.closest('.summary-row');
   if (planRow) planRow.outerHTML = rowsHtml;
   if (priceRow) priceRow.remove();
   if (discountRowEl) discountRowEl.style.display = 'none';
+  if (totalPriceEl) totalPriceEl.textContent = '$' + (totalCents / 100).toFixed(0);
 
-  // Update total
-  const totalStr = '$' + (totalCents / 100).toFixed(0);
-  if (totalPriceEl) totalPriceEl.textContent = totalStr;
+  // Hide "Selected service: $X" note from API
+  if (serviceNote) serviceNote.style.display = 'none';
 
   // Store for submit handler
   window.__cartMode = { totalCents, cart };
