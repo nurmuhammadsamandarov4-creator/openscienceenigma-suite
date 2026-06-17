@@ -738,12 +738,12 @@ if (document.readyState === 'loading') {
       #ose-ai-widget {
         position: fixed;
         bottom: 30px;
-        right: 30px;
+        left: 30px;
         z-index: 999999;
         font-family: 'Plus Jakarta Sans', sans-serif;
         display: flex;
         flex-direction: column;
-        align-items: flex-end;
+        align-items: flex-start;
         pointer-events: none;
       }
       /* Contact panel */
@@ -760,7 +760,7 @@ if (document.readyState === 'loading') {
         transform: translateY(16px) scale(0.96);
         pointer-events: none;
         transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
-        transform-origin: bottom right;
+        transform-origin: bottom left;
       }
       .ose-contact-panel.is-open {
         opacity: 1;
@@ -808,7 +808,7 @@ if (document.readyState === 'loading') {
       .ose-contact-label { font-size: 11px; color: #94a3b8; font-weight: 500; }
       .ose-contact-value { font-size: 13px; color: #0f172a; font-weight: 600; margin-top: 1px; }
       @media (max-width: 600px) {
-        #ose-ai-widget { bottom: 20px; right: 16px; }
+        #ose-ai-widget { bottom: 20px; left: 16px; }
         .ose-contact-panel { width: calc(100vw - 48px); }
       }
 
