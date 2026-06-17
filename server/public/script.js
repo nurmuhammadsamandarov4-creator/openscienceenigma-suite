@@ -746,6 +746,71 @@ if (document.readyState === 'loading') {
         align-items: flex-end;
         pointer-events: none;
       }
+      /* Contact panel */
+      .ose-contact-panel {
+        width: 300px;
+        max-width: calc(100vw - 40px);
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        border: 1px solid rgba(0,0,0,0.07);
+        margin-bottom: 16px;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(16px) scale(0.96);
+        pointer-events: none;
+        transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+        transform-origin: bottom right;
+      }
+      .ose-contact-panel.is-open {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+      }
+      .ose-contact-header {
+        background: linear-gradient(135deg, #f97316, #ea580c);
+        padding: 18px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .ose-contact-header-left { display: flex; align-items: center; gap: 10px; }
+      .ose-contact-header h3 { color: #fff; font-size: 15px; font-weight: 700; margin: 0; }
+      .ose-contact-header p { color: rgba(255,255,255,0.85); font-size: 12px; margin: 2px 0 0; }
+      .ose-contact-close {
+        background: rgba(255,255,255,0.2); border: none; color: #fff;
+        border-radius: 50%; width: 28px; height: 28px;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; font-size: 18px; line-height: 1;
+        transition: background 0.2s; pointer-events: auto;
+      }
+      .ose-contact-close:hover { background: rgba(255,255,255,0.35); }
+      .ose-contact-body { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+      .ose-contact-item {
+        display: flex; align-items: center; gap: 12px;
+        padding: 12px 14px;
+        background: #f8fafc;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+      .ose-contact-item:hover { background: #fff7ed; border-color: #f97316; }
+      .ose-contact-icon {
+        width: 36px; height: 36px; border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0;
+      }
+      .ose-contact-icon.phone { background: #dcfce7; }
+      .ose-contact-icon.phone svg { color: #16a34a; }
+      .ose-contact-icon.email { background: #dbeafe; }
+      .ose-contact-icon.email svg { color: #2563eb; }
+      .ose-contact-label { font-size: 11px; color: #94a3b8; font-weight: 500; }
+      .ose-contact-value { font-size: 13px; color: #0f172a; font-weight: 600; margin-top: 1px; }
+      @media (max-width: 600px) {
+        #ose-ai-widget { bottom: 20px; right: 16px; }
+        .ose-contact-panel { width: calc(100vw - 48px); }
+      }
 
       /* Chat Toggle Button */
       .ose-ai-btn {
@@ -984,40 +1049,50 @@ if (document.readyState === 'loading') {
 
   const widgetHtml = `
     <div id="ose-ai-widget">
-      <div id="ose-ai-window" class="ose-ai-window">
-        <div class="ose-ai-header">
-          <div class="ose-ai-header-left">
-            <div class="ose-ai-avatar">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+      <div class="ose-contact-panel" id="ose-contact-panel">
+        <div class="ose-contact-header">
+          <div class="ose-contact-header-left">
+            <svg width="20" height="20" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.39 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6.29 6.29l.98-.98a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <div>
+              <h3>Customer Support</h3>
+              <p>We're here to help you</p>
+            </div>
+          </div>
+          <button class="ose-contact-close" id="ose-contact-close">×</button>
+        </div>
+        <div class="ose-contact-body">
+          <a href="tel:+998907456866" class="ose-contact-item">
+            <div class="ose-contact-icon phone">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.39 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6.29 6.29l.98-.98a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
             </div>
             <div>
-              <h3 class="ose-ai-title">AI Support Assistant</h3>
-              <div class="ose-ai-status">
-                <div class="ose-ai-dot"></div> Online
-              </div>
+              <div class="ose-contact-label">Phone</div>
+              <div class="ose-contact-value">+998 90 745 68 66</div>
             </div>
-          </div>
-          <button id="ose-ai-close" class="ose-ai-close">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-          </button>
-        </div>
-        <div id="ose-ai-messages" class="ose-ai-messages">
-          <div class="ose-msg-row ai">
-            <div class="ose-msg-bubble">Hello! Welcome to OpenScienceEnigma. How can I help you today?</div>
-          </div>
-        </div>
-        <div class="ose-ai-input-area">
-          <form id="ose-ai-form" class="ose-ai-form">
-            <input type="text" id="ose-ai-input" class="ose-ai-input" placeholder="Type your message..." autocomplete="off">
-            <button type="submit" id="ose-ai-submit" class="ose-ai-submit">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-            </button>
-          </form>
+          </a>
+          <a href="tel:+998991011754" class="ose-contact-item">
+            <div class="ose-contact-icon phone">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.39 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6.29 6.29l.98-.98a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <div>
+              <div class="ose-contact-label">Phone</div>
+              <div class="ose-contact-value">+998 99 101 17 54</div>
+            </div>
+          </a>
+          <a href="mailto:eshyev1995@gmail.com" class="ose-contact-item">
+            <div class="ose-contact-icon email">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </div>
+            <div>
+              <div class="ose-contact-label">Email</div>
+              <div class="ose-contact-value">eshyev1995@gmail.com</div>
+            </div>
+          </a>
         </div>
       </div>
       <button id="ose-ai-toggle" class="ose-ai-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-        <span>AI Support</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.39 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6.29 6.29l.98-.98a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <span>Customer Support</span>
       </button>
     </div>
   `;
@@ -1025,82 +1100,15 @@ if (document.readyState === 'loading') {
   document.body.insertAdjacentHTML('beforeend', styleHtml + widgetHtml);
 
   const toggleBtn = document.getElementById('ose-ai-toggle');
-  const chatWindow = document.getElementById('ose-ai-window');
-  const closeBtn = document.getElementById('ose-ai-close');
-  const form = document.getElementById('ose-ai-form');
-  const input = document.getElementById('ose-ai-input');
-  const messages = document.getElementById('ose-ai-messages');
-  const submitBtn = document.getElementById('ose-ai-submit');
+  const panel = document.getElementById('ose-contact-panel');
+  const closeBtn = document.getElementById('ose-contact-close');
 
-  function toggle() {
-    chatWindow.classList.toggle('is-open');
-    if (chatWindow.classList.contains('is-open')) input.focus();
-  }
-
+  function toggle() { panel.classList.toggle('is-open'); }
   toggleBtn.addEventListener('click', toggle);
   closeBtn.addEventListener('click', toggle);
-
-  function addMessage(text, isUser = false) {
-    const row = document.createElement('div');
-    row.className = 'ose-msg-row ' + (isUser ? 'user' : 'ai');
-    row.innerHTML = `<div class="ose-msg-bubble">${escapeHtml(text)}</div>`;
-    messages.appendChild(row);
-    messages.scrollTop = messages.scrollHeight;
-  }
-
-  function addTyping() {
-    const id = 'typ-' + Date.now();
-    const row = document.createElement('div');
-    row.id = id;
-    row.className = 'ose-msg-row ai';
-    row.innerHTML = `
-      <div class="ose-msg-bubble">
-        <div class="ose-typing">
-          <div class="ose-typing-dot"></div>
-          <div class="ose-typing-dot"></div>
-          <div class="ose-typing-dot"></div>
-        </div>
-      </div>
-    `;
-    messages.appendChild(row);
-    messages.scrollTop = messages.scrollHeight;
-    return id;
-  }
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const text = input.value.trim();
-    if (!text) return;
-
-    addMessage(text, true);
-    input.value = '';
-    submitBtn.disabled = true;
-
-    const typId = addTyping();
-
-    try {
-      const res = await fetch('/api/ai-chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: text })
-      });
-      const data = await res.json();
-      document.getElementById(typId)?.remove();
-      if (data.error) addMessage(data.error);
-      else addMessage(data.answer || 'Something went wrong.');
-    } catch (err) {
-      document.getElementById(typId)?.remove();
-      addMessage('Network error. Try again.');
-    } finally {
-      submitBtn.disabled = false;
-      input.focus();
+  document.addEventListener('click', (e) => {
+    if (panel.classList.contains('is-open') && !panel.contains(e.target) && e.target !== toggleBtn && !toggleBtn.contains(e.target)) {
+      panel.classList.remove('is-open');
     }
   });
-
-  // Escape HTML helper if not exists
-  function escapeHtml(str) {
-    return String(str || '').replace(/[&<>"']/g, m => ({
-      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-    })[m]);
-  }
 })();
