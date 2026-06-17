@@ -389,14 +389,13 @@ function renderPricing() {
               cardHtml = `
 <div class="relative p-6 pb-8 rounded-xl border border-gray-200 bg-white shadow-sm flex flex-col" style="flex: 1 1 300px; min-width: 300px; max-width: 384px; display: flex; flex-direction: column;">
   <h3 class="text-2xl font-bold text-gray-900 mt-2 mb-4">${safe(p.name)}</h3>
-  <p class="text-gray-600 text-sm mb-8 leading-relaxed">${safe(p.description)}</p>
-  
-  <div class="mt-auto">
-      <a class="block w-full text-center py-3 rounded-full text-blue-600 bg-white border border-blue-600 font-medium hover:bg-blue-50 transition mb-6" href="${safe(href)}" ${cartAttrs}><span>${safe(p.ctaLabel)}</span></a>
-      <div class="space-y-4">
-        ${feats.map((f) => `<div class="flex items-start gap-3">${checkSvgBlue}<p class="text-gray-700 text-sm leading-snug"><span>${safe(f)}</span></p></div>`).join('')}
-      </div>
+  <p class="text-gray-600 text-sm mb-6 leading-relaxed">${safe(p.description)}</p>
+  <div style="flex:1; margin-bottom:1.5rem;">
+    <div class="space-y-4">
+      ${feats.map((f) => `<div class="flex items-start gap-3">${checkSvgBlue}<p class="text-gray-700 text-sm leading-snug"><span>${safe(f)}</span></p></div>`).join('')}
+    </div>
   </div>
+  <a class="block w-full text-center py-3 rounded-full text-blue-600 bg-white border border-blue-600 font-medium hover:bg-blue-50 transition" href="${safe(href)}" ${cartAttrs}><span>${safe(p.ctaLabel)}</span></a>
 </div>`;
           } else if (idx === 1) {
               // Premium Editing (Featured with blue pill badge)
@@ -406,16 +405,15 @@ function renderPricing() {
       ✦ MOST POPULAR ✦
   </div>
   <h3 class="text-2xl font-bold text-gray-900 mt-2 mb-4">${safe(p.name)}</h3>
-  <p class="text-gray-600 text-sm mb-8 leading-relaxed">${safe(p.description)}</p>
-  
-  <div class="mt-auto">
-      <a class="block w-full text-center py-3 rounded-full text-white bg-blue-700 font-medium hover:bg-blue-800 transition" href="${safe(href)}" style="background-color: #1d4ed8;" ${cartAttrs}><span>${safe(p.ctaLabel)}</span></a>
-      <div class="text-center mt-3 mb-6">
-          <a href="#" class="text-blue-600 font-medium text-sm hover:underline">View Sample</a>
-      </div>
-      <div class="space-y-4">
-        ${feats.map((f) => `<div class="flex items-start gap-3">${checkSvgBlue}<p class="text-gray-700 text-sm leading-snug"><span>${safe(f)}</span></p></div>`).join('')}
-      </div>
+  <p class="text-gray-600 text-sm mb-6 leading-relaxed">${safe(p.description)}</p>
+  <div style="flex:1; margin-bottom:1.5rem;">
+    <div class="space-y-4">
+      ${feats.map((f) => `<div class="flex items-start gap-3">${checkSvgBlue}<p class="text-gray-700 text-sm leading-snug"><span>${safe(f)}</span></p></div>`).join('')}
+    </div>
+  </div>
+  <a class="block w-full text-center py-3 rounded-full text-white bg-blue-700 font-medium hover:bg-blue-800 transition" href="${safe(href)}" style="background-color: #1d4ed8;" ${cartAttrs}><span>${safe(p.ctaLabel)}</span></a>
+  <div class="text-center mt-3">
+      <a href="#" class="text-blue-600 font-medium text-sm hover:underline">View Sample</a>
   </div>
 </div>`;
           } else {
@@ -423,14 +421,13 @@ function renderPricing() {
               cardHtml = `
 <div class="relative p-6 pb-8 rounded-xl border border-gray-200 bg-white shadow-sm flex flex-col" style="flex: 1 1 300px; min-width: 300px; max-width: 384px; display: flex; flex-direction: column;">
   <h3 class="text-2xl font-bold text-gray-900 mt-2 mb-4">${safe(p.name)}</h3>
-  <p class="text-gray-600 text-sm mb-8 leading-relaxed">${safe(p.description)}</p>
-  
-  <div class="mt-auto">
-      <a class="block w-full text-center py-3 rounded-full text-blue-600 bg-white border border-blue-600 font-medium hover:bg-blue-50 transition mb-6" href="${safe(href)}" ${cartAttrs}><span>${safe(p.ctaLabel)}</span></a>
-      <div class="space-y-4">
-        ${feats.map((f) => `<div class="flex items-start gap-3">${checkSvgBlue}<p class="text-gray-700 text-sm leading-snug"><span>${safe(f)}</span></p></div>`).join('')}
-      </div>
+  <p class="text-gray-600 text-sm mb-6 leading-relaxed">${safe(p.description)}</p>
+  <div style="flex:1; margin-bottom:1.5rem;">
+    <div class="space-y-4">
+      ${feats.map((f) => `<div class="flex items-start gap-3">${checkSvgBlue}<p class="text-gray-700 text-sm leading-snug"><span>${safe(f)}</span></p></div>`).join('')}
+    </div>
   </div>
+  <a class="block w-full text-center py-3 rounded-full text-blue-600 bg-white border border-blue-600 font-medium hover:bg-blue-50 transition" href="${safe(href)}" ${cartAttrs}><span>${safe(p.ctaLabel)}</span></a>
 </div>`;
           }
       } else {
