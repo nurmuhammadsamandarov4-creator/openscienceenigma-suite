@@ -32,11 +32,19 @@ yarn-error.log*
 *.zip
 Archive.zip
 
-# Screenshots & Local media backups (except specific assets)
+# Screenshots & Local media backups (except public site assets)
 *.png
 *.jpg
 *.jpeg
 *.gif
 *.webp
-!server/public/images/
-!server/public/assets/
+!server/public/images/**
+!server/public/images/*.jpg
+!server/public/images/*.jpeg
+!server/public/images/*.png
+!server/public/images/error/**
+!server/public/images/shape/**
+!server/public/assets/**
+!server/public/assets/*.png
+!server/public/assets/*.jpg
+!server/public/assets/*.ico
