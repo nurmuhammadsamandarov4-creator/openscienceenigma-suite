@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: openscienceenigma
+    env: node
+    region: oregon
+    buildCommand: npm --prefix server install && npm run build:admin && npm --prefix server run build
+    startCommand: npm --prefix server start
+    plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
