@@ -3,7 +3,7 @@ services:
     name: openscienceenigma
     env: node
     region: oregon
-    buildCommand: npm --prefix server install && npm run build:admin && npm --prefix server run build
+    buildCommand: npm --prefix server install && npm run build:admin
     startCommand: npm --prefix server start
     plan: free
     envVars:
