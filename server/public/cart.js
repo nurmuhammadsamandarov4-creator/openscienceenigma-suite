@@ -18,8 +18,8 @@
 
   function addToCart(item) {
     const cart = getCart();
-    const exists = cart.find(c => c.service === item.service);
-    if (!exists) { cart.push(item); saveCart(cart); }
+    cart.push(item);
+    saveCart(cart);
     renderCartBadge();
     showToast(item.name);
     openCart();
