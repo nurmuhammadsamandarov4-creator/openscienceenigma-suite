@@ -169,19 +169,28 @@
     div.innerHTML = html;
     document.body.appendChild(div);
 
-    // Cart icon in navbar
-    const authWrap = document.getElementById('authLangWrap');
-    if (authWrap) {
-      const btn = document.createElement('button');
-      btn.id = 'cart-nav-btn';
-      btn.onclick = openCart;
-      btn.title = 'Savatcha';
-      btn.style.cssText = 'position:relative;background:none;border:none;cursor:pointer;padding:6px 8px;display:flex;align-items:center;color:#0f172a;';
-      btn.innerHTML = `
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-        <span id="cart-badge" style="display:none;position:absolute;top:0;right:0;background:#ef4444;color:#fff;font-size:10px;font-weight:700;min-width:16px;height:16px;border-radius:8px;padding:0 3px;align-items:center;justify-content:center;line-height:1;"></span>`;
-      authWrap.insertBefore(btn, authWrap.firstChild);
-    }
+    // Fixed floating cart button — bottom-right corner
+    const floatBtn = document.createElement('button');
+    floatBtn.id = 'cart-float-btn';
+    floatBtn.onclick = openCart;
+    floatBtn.title = 'Savatcha';
+    floatBtn.style.cssText = [
+      'position:fixed', 'bottom:30px', 'right:30px', 'z-index:99997',
+      'background:linear-gradient(135deg,#2563eb,#1d4ed8)',
+      'color:#fff', 'border:none', 'border-radius:999px',
+      'padding:14px 22px', 'display:flex', 'align-items:center', 'gap:10px',
+      'font-size:15px', 'font-weight:700', 'cursor:pointer',
+      'box-shadow:0 10px 25px rgba(37,99,235,0.4)',
+      'font-family:\'Plus Jakarta Sans\',sans-serif',
+      'transition:transform 0.25s,box-shadow 0.25s',
+    ].join(';');
+    floatBtn.innerHTML = `
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span>Savatcha</span>
+      <span id="cart-badge" style="display:none;background:#ef4444;color:#fff;font-size:11px;font-weight:800;min-width:18px;height:18px;border-radius:9px;padding:0 4px;align-items:center;justify-content:center;line-height:1;"></span>`;
+    floatBtn.onmouseover = () => { floatBtn.style.transform = 'translateY(-3px)'; floatBtn.style.boxShadow = '0 15px 35px rgba(37,99,235,0.5)'; };
+    floatBtn.onmouseout  = () => { floatBtn.style.transform = ''; floatBtn.style.boxShadow = '0 10px 25px rgba(37,99,235,0.4)'; };
+    document.body.appendChild(floatBtn);
 
     renderCartBadge();
     renderCart();
