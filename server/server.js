@@ -714,23 +714,81 @@ if (!hasFeatures) {
 const hasHero = db.prepare("SELECT 1 FROM site_content WHERE key = 'hero' LIMIT 1").get();
 if (!hasHero) {
   upsertSiteContent('hero', {
-    en: {
-      badge: "60K+ Happy users worldwide • 4.9",
-      title: "Build, Launch & Scale with AI agents.",
-      subtitle: "Design, automate and deploy intelligent AI agents to power your products, workflows and business growth.",
-      ctaPrimaryLabel: "Get Started",
-      ctaPrimaryHref: "#",
-      ctaSecondaryLabel: "Watch Demo",
-      ctaSecondaryHref: "https://example.com/demo",
+    uz: {
+      badge: "10K+ Mamnun tadqiqotchilar va olimlar • 4.9 Reyting",
+      title: "Professional statistika va ma'lumotlar tahlili xizmatlari.",
+      subtitle: "Ma'lumotlarni qayta ishlash, statistik modellashtirish, gipotezalarni tekshirish va maqolalarni nashrga tayyorlashda ekspert yordami.",
+      ctaPrimaryLabel: "Boshlash", ctaPrimaryHref: "/public/create-task.html",
+      ctaSecondaryLabel: "Demoni ko'rish", ctaSecondaryHref: "#",
       stats: [
-        { value: "3x", label: "Faster AI agent development" },
-        { value: "60%", label: "Reduction in manual workflows" },
-        { value: "99.9%", label: "Reliable agent execution uptime" }
+        { value: "5x", label: "Statistik testlar aniqligi" },
+        { value: "80%", label: "Maxfiylik va ma'lumotlar himoyasi" },
+        { value: "3x", label: "Tezroq nashr etish muddati" }
       ]
     },
-    ru: { badge: "", title: "", subtitle: "", ctaPrimaryLabel: "", ctaPrimaryHref: "#", ctaSecondaryLabel: "", ctaSecondaryHref: "", stats: [] },
-    uz: { badge: "", title: "", subtitle: "", ctaPrimaryLabel: "", ctaPrimaryHref: "#", ctaSecondaryLabel: "", ctaSecondaryHref: "", stats: [] }
+    ru: {
+      badge: "10K+ Довольных исследователей и учёных • Рейтинг 4.9",
+      title: "Профессиональные услуги статистики и анализа данных.",
+      subtitle: "Экспертная помощь в обработке данных, статистическом моделировании, проверке гипотез и подготовке рукописей к публикации.",
+      ctaPrimaryLabel: "Начать", ctaPrimaryHref: "/public/create-task.html",
+      ctaSecondaryLabel: "Смотреть демо", ctaSecondaryHref: "#",
+      stats: [
+        { value: "5x", label: "Точность статистических тестов" },
+        { value: "80%", label: "Конфиденциальность и защита данных" },
+        { value: "3x", label: "Быстрая подготовка к публикации" }
+      ]
+    },
+    en: {
+      badge: "10K+ Happy researchers and scientists • 4.9 Rating",
+      title: "Expert Statistical and Data Analysis Services.",
+      subtitle: "Get professional help with data processing, statistical modeling, hypothesis testing, and manuscript preparation.",
+      ctaPrimaryLabel: "Get Started", ctaPrimaryHref: "/public/create-task.html",
+      ctaSecondaryLabel: "Watch Demo", ctaSecondaryHref: "#",
+      stats: [
+        { value: "5x", label: "Accuracy in statistical tests" },
+        { value: "80%", label: "Confidentiality & data protection" },
+        { value: "3x", label: "Faster submission turnaround" }
+      ]
+    }
   });
+}
+
+// Migration: ensure hero has correct multilingual content (fixes cases where en/ru were saved as empty or UZ text)
+{
+  const heroData = getSiteContent('hero', {});
+  let needsUpdate = false;
+  const uzTitle = heroData.uz && heroData.uz.title ? heroData.uz.title : '';
+  const enTitle = heroData.en && heroData.en.title ? heroData.en.title : '';
+  const ruTitle = heroData.ru && heroData.ru.title ? heroData.ru.title : '';
+
+  const enDefaults = {
+    badge: "10K+ Happy researchers and scientists • 4.9 Rating",
+    title: "Expert Statistical and Data Analysis Services.",
+    subtitle: "Get professional help with data processing, statistical modeling, hypothesis testing, and manuscript preparation.",
+    ctaPrimaryLabel: "Get Started", ctaPrimaryHref: "/public/create-task.html",
+    ctaSecondaryLabel: "Watch Demo", ctaSecondaryHref: "#",
+    stats: [
+      { value: "5x", label: "Accuracy in statistical tests" },
+      { value: "80%", label: "Confidentiality & data protection" },
+      { value: "3x", label: "Faster submission turnaround" }
+    ]
+  };
+  const ruDefaults = {
+    badge: "10K+ Довольных исследователей и учёных • Рейтинг 4.9",
+    title: "Профессиональные услуги статистики и анализа данных.",
+    subtitle: "Экспертная помощь в обработке данных, статистическом моделировании, проверке гипотез и подготовке рукописей к публикации.",
+    ctaPrimaryLabel: "Начать", ctaPrimaryHref: "/public/create-task.html",
+    ctaSecondaryLabel: "Смотреть демо", ctaSecondaryHref: "#",
+    stats: [
+      { value: "5x", label: "Точность статистических тестов" },
+      { value: "80%", label: "Конфиденциальность и защита данных" },
+      { value: "3x", label: "Быстрая подготовка к публикации" }
+    ]
+  };
+
+  if (!enTitle || enTitle === uzTitle) { heroData.en = enDefaults; needsUpdate = true; }
+  if (!ruTitle || ruTitle === uzTitle) { heroData.ru = ruDefaults; needsUpdate = true; }
+  if (needsUpdate) upsertSiteContent('hero', heroData);
 }
 
     // FAQ: section texts + items (UZ/RU/EN) editable like Core Features
