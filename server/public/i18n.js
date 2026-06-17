@@ -72,6 +72,15 @@
       // Team
       team_title: "Jamoamiz",
       team_desc: "AI asosidagi mahsulotlar kelajagini yaratayotgan quruvchilar, dizaynerlar va muhandislar jamoasi.",
+      board_soft_science: "Ijtimoiy fanlar kengashi",
+      board_hard_science: "Tabiiy fanlar kengashi",
+
+      // Testimonials
+      testimonials_see_more: "Ko'proq ko'rish",
+
+      // Footer
+      footer_tagline: "Qo'shimcha yordam yoki savollar uchun biz bilan bog'laning",
+      footer_social: "Ijtimoiy tarmoqlar",
 
       // Video
       video_title: "Video",
@@ -378,6 +387,11 @@
       // Team
       team_title: "Наша команда",
       team_desc: "Команда разработчиков, дизайнеров и инженеров, создающих будущее AI‑продуктов.",
+      board_soft_science: "Совет по социальным наукам",
+      board_hard_science: "Совет по естественным наукам",
+      testimonials_see_more: "Смотреть больше",
+      footer_tagline: "Для получения дополнительной помощи или вопросов свяжитесь с нами",
+      footer_social: "Социальные сети",
 
       // Видео
       video_title: "Видео",
@@ -672,6 +686,11 @@
       // Team
       team_title: "Meet Our Team",
       team_desc: "A passionate team of builders, designers, and engineers shaping the future of AI-powered products.",
+      board_soft_science: "Board of Soft Science",
+      board_hard_science: "Board of Hard Science",
+      testimonials_see_more: "See more",
+      footer_tagline: "For further assistance or additional inquiries, feel free to contact us",
+      footer_social: "Social",
 
       // Video
       video_title: "Video",
