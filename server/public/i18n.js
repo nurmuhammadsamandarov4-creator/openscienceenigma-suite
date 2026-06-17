@@ -29,7 +29,8 @@
       hero_title: "Professional statistika va ma'lumotlar tahlili xizmatlari.",
       hero_desc: "Ma'lumotlarni qayta ishlash, statistik modellashtirish, gipotezalarni tekshirish va maqolalarni nashrga tayyorlashda ekspert yordami.",
       cta_get_started: "Boshlash",
-      cta_watch_demo: "Demoni ko‘rish",
+      cta_watch_demo: "Demoni ko’rish",
+      cta_button: "Zakaz berish",
 
       // Stats
       stat_fast_dev: "Statistik testlar aniqligi",
@@ -335,6 +336,7 @@
       hero_desc: "Экспертная помощь в обработке данных, статистическом моделировании, проверке гипотез и подготовке рукописей к публикации.",
       cta_get_started: "Начать",
       cta_watch_demo: "Смотреть демо",
+      cta_button: "Оформить заказ",
 
       // Stats
       stat_fast_dev: "Точность статистических тестов",
@@ -628,6 +630,7 @@
       hero_desc: "Get professional help with data processing, statistical modeling, hypothesis testing, and manuscript preparation.",
       cta_get_started: "Get Started",
       cta_watch_demo: "Watch Demo",
+      cta_button: "Place an Order",
 
       // Stats
       stat_fast_dev: "Accuracy in statistical tests",
