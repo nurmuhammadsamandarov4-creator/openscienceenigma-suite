@@ -1712,28 +1712,34 @@ if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
     clientSecret: GOOGLE_CLIENT_SECRET,
     callbackURL:  `${RENDER_URL}/auth/google/callback`,
   }, (accessToken, refreshToken, profile, done) => {
-    const email    = profile.emails?.[0]?.value || '';
-    const name     = profile.displayName || email;
-    const googleId = profile.id;
+    try {
+      const email    = profile.emails?.[0]?.value || '';
+      const name     = profile.displayName || email;
+      const googleId = String(profile.id);
 
-    // Find or create user
-    let user = db.prepare("SELECT * FROM users WHERE google_id = ?").get(googleId);
-    if (!user && email) user = db.prepare("SELECT * FROM users WHERE email = ?").get(email);
+      console.log('[Google OAuth] email:', email, 'googleId:', googleId);
 
-    if (user) {
-      // Link google_id if not already set
-      if (!user.google_id) {
-        db.prepare("UPDATE users SET google_id = ? WHERE id = ?").run(googleId, user.id);
+      // Find or create user
+      let user = db.prepare("SELECT * FROM users WHERE google_id = ?").get(googleId);
+      if (!user && email) user = db.prepare("SELECT * FROM users WHERE email = ?").get(email);
+
+      if (user) {
+        if (!user.google_id) {
+          db.prepare("UPDATE users SET google_id = ? WHERE id = ?").run(googleId, user.id);
+        }
+      } else {
+        const referral_code = generateReferralCode();
+        db.prepare("INSERT INTO users (name, email, google_id, password_hash, referral_code) VALUES (?, ?, ?, ?, ?)")
+          .run(name, email, googleId, '', referral_code);
+        user = db.prepare("SELECT * FROM users WHERE google_id = ?").get(googleId);
       }
-    } else {
-      // Create new user (no password)
-      const referral_code = generateReferralCode();
-      db.prepare("INSERT INTO users (name, email, google_id, password_hash, referral_code) VALUES (?, ?, ?, '', ?)")
-        .run(name, email, googleId, referral_code);
-      user = db.prepare("SELECT * FROM users WHERE google_id = ?").get(googleId);
-    }
 
-    return done(null, { id: user.id, name: user.name, email: user.email });
+      if (!user) return done(new Error('User not found after insert'));
+      return done(null, { id: user.id, name: user.name, email: user.email });
+    } catch (err) {
+      console.error('[Google OAuth] DB error:', err.message, err.stack);
+      return done(err);
+    }
   }));
 
   app.get('/auth/google',
