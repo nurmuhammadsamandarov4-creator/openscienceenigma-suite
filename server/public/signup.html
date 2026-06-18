@@ -43,6 +43,7 @@
         </div>
 
         <p id="su_msg"></p>
+        <p class="mobile-switch">Akkauntingiz bormi? <a id="mobileToLogin">Kirish</a></p>
       </form>
     </div>
 
@@ -71,6 +72,7 @@
         <button id="loginBtnSubmit" type="button" class="button" data-i18n="si_btn">SIGN IN</button>
 
         <p id="si_msg"></p>
+        <p class="mobile-switch">Akkauntingiz yo'qmi? <a id="mobileToSignup">Ro'yxatdan o'tish</a></p>
       </form>
     </div>
 
@@ -119,6 +121,21 @@
     };
 
     switchBtns.forEach(btn => btn.addEventListener("click", changeForm));
+
+    // Mobile toggle
+    const mobileToLogin  = document.getElementById('mobileToLogin');
+    const mobileToSignup = document.getElementById('mobileToSignup');
+    const aCont = document.querySelector('.a-container');
+    const bCont = document.querySelector('.b-container');
+
+    if (mobileToLogin) mobileToLogin.addEventListener('click', () => {
+      aCont.classList.add('mobile-hidden');
+      bCont.classList.add('mobile-active');
+    });
+    if (mobileToSignup) mobileToSignup.addEventListener('click', () => {
+      aCont.classList.remove('mobile-hidden');
+      bCont.classList.remove('mobile-active');
+    });
   </script>
 
 </body>

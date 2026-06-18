@@ -53,10 +53,78 @@ body {
   overflow: hidden;
 }
 
-@media (max-width: 1200px) { .main { transform: scale(.75); } }
-@media (max-width: 900px)  { .main { transform: scale(.6);  } }
-@media (max-width: 700px)  { .main { transform: scale(.5);  } }
-@media (max-width: 500px)  { .main { transform: scale(.4);  } }
+@media (max-width: 1200px) { .main { transform: scale(.85); } }
+
+/* ── Mobile layout ── */
+@media (max-width: 760px) {
+  body {
+    align-items: stretch;
+    padding: 0;
+  }
+
+  .main {
+    width: 100%;
+    min-width: unset;
+    height: auto;
+    min-height: 100dvh;
+    border-radius: 0;
+    padding: 0;
+    transform: none !important;
+    box-shadow: none;
+    position: relative;
+    display: block;
+  }
+
+  /* Hide sliding panel entirely */
+  .switch { display: none !important; }
+
+  /* Reset both containers to normal flow */
+  .container {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100dvh;
+    padding: 60px 28px 48px;
+    transform: none !important;
+    opacity: 1 !important;
+    transition: none !important;
+    z-index: auto !important;
+    display: flex;
+  }
+
+  /* Sign-in hidden by default on mobile, sign-up shown */
+  .b-container { display: none !important; }
+  .b-container.mobile-active { display: flex !important; }
+  .a-container.mobile-hidden { display: none !important; }
+
+  .form_title { font-size: 26px; line-height: 1.5; margin-bottom: 12px; }
+
+  .form__google,
+  .form__divider,
+  .form__input { width: 100%; max-width: 300px; }
+
+  .button { width: 200px; margin-top: 20px; }
+
+  /* Mobile switch link */
+  .mobile-switch {
+    display: block !important;
+    margin-top: 20px;
+    font-size: 12px;
+    color: var(--gray);
+    text-align: center;
+  }
+
+  .mobile-switch a {
+    color: var(--purple);
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+  }
+}
+
+.mobile-switch { display: none; }
 
 /* ── Form containers ── */
 .container {
