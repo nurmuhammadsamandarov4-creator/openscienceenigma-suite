@@ -1,115 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-  <link rel="stylesheet" href="auth.css?v=20260618c">
-  <title>Open Science Enigma — Sign In</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="auth.css?v=20260618e">
+  <title>Open Science Enigma</title>
   <script src="/public/i18n.js?v=20260615_v6"></script>
   <script src="/public/lang-ui.js?v=20260615_v6"></script>
-
 </head>
-
 <body>
-  <div class="container" id="container">
-    <!-- SIGN UP -->
-    <div class="form-container sign-up">
-      <form id="signupForm">
-        <h1>Create Account</h1>
 
-        <div class="social-icons" style="display:none">
-          <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
-          <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
-          <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
-          <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
-        </div>
+  <div class="main">
 
-        <span data-i18n="su_register_with_email">Register with email</span>
+    <!-- ── Sign Up ── -->
+    <div class="container a-container" id="a-container">
+      <form id="signupForm" class="form">
+        <h2 class="form_title">Create Account</h2>
 
-        <a href="/auth/google" class="google-btn">
-          <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        <a href="/auth/google" class="form__google">
+          <svg width="18" height="18" viewBox="0 0 48 48">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
           Google bilan kirish
         </a>
-        <div class="google-divider"><span>yoki</span></div>
 
-        <input id="su_name" type="text" data-i18n-placeholder="su_name_ph" placeholder="Name" required>
-        <input id="su_email" type="email" data-i18n-placeholder="su_email_ph" placeholder="Email" required>
-        <input id="su_password" type="password" data-i18n-placeholder="su_password_ph" placeholder="Password (min 6)" minlength="6" required>
+        <div class="form__divider"><span>yoki</span></div>
+        <span class="form__span" data-i18n="su_register_with_email">or use email for registration</span>
 
-        <button id="sendCodeBtn" type="button" data-i18n="su_send_code">Sign Up</button>
+        <input id="su_name"     class="form__input" type="text"     data-i18n-placeholder="su_name_ph"     placeholder="Name">
+        <input id="su_email"    class="form__input" type="email"    data-i18n-placeholder="su_email_ph"    placeholder="Email">
+        <input id="su_password" class="form__input" type="password" data-i18n-placeholder="su_password_ph" placeholder="Password (min 6)" minlength="6">
 
-        <!-- Verification UI removed (direct sign-up). Kept as hidden placeholders to avoid breaking old JS references in cached browsers. -->
-        <div id="codeBlock" style="width:100%; display:none;">
-          <input id="su_code" type="text" inputmode="numeric" maxlength="6" data-i18n-placeholder="su_code_ph" placeholder="Enter 6-digit code">
-          <button id="verifyBtn" type="button" data-i18n="su_verify_signup">Verify & Sign Up</button>
+        <button id="sendCodeBtn" type="button" class="button" data-i18n="su_send_code">SIGN UP</button>
+
+        <div id="codeBlock" style="display:none;">
+          <input id="su_code" class="form__input" type="text" inputmode="numeric" maxlength="6" data-i18n-placeholder="su_code_ph" placeholder="6-digit code">
+          <button id="verifyBtn" type="button" class="button" data-i18n="su_verify_signup">VERIFY</button>
         </div>
 
         <p id="su_msg"></p>
-        <p class="mobile-switch">Already have an account? <a id="mobileToLogin">Sign In</a></p>
       </form>
     </div>
 
-    <!-- SIGN IN -->
-    <div class="form-container sign-in">
-      <form id="loginForm">
-        <h1 data-i18n="si_title" data-i18n="si_btn">Sign In</h1>
+    <!-- ── Sign In ── -->
+    <div class="container b-container" id="b-container">
+      <form id="loginForm" class="form">
+        <h2 class="form_title" data-i18n="si_title">Sign In</h2>
 
-        <div class="social-icons" style="display:none">
-          <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
-          <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
-          <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
-          <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
-        </div>
-
-        <span data-i18n="si_use_email_pw">Use your email & password</span>
-
-        <a href="/auth/google" class="google-btn">
-          <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        <a href="/auth/google" class="form__google">
+          <svg width="18" height="18" viewBox="0 0 48 48">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
           Google bilan kirish
         </a>
-        <div class="google-divider"><span>yoki</span></div>
 
-        <input id="si_email" type="email" data-i18n-placeholder="su_email_ph" placeholder="Email" required>
-        <input id="si_password" type="password" data-i18n-placeholder="si_password_ph" placeholder="Password" required>
+        <div class="form__divider"><span>yoki</span></div>
+        <span class="form__span" data-i18n="si_use_email_pw">or use your email account</span>
 
-        <a href="#" onclick="return false;" data-i18n="si_forgot">(demo) Forgot password?</a>
-        <button id="loginBtnSubmit" type="button">Sign In</button>
+        <input id="si_email"    class="form__input" type="email"    data-i18n-placeholder="su_email_ph"    placeholder="Email">
+        <input id="si_password" class="form__input" type="password" data-i18n-placeholder="si_password_ph" placeholder="Password">
+
+        <a class="form__link" href="#" onclick="return false;" data-i18n="si_forgot">Forgot your password?</a>
+        <button id="loginBtnSubmit" type="button" class="button" data-i18n="si_btn">SIGN IN</button>
 
         <p id="si_msg"></p>
-        <p class="mobile-switch">Don't have an account? <a id="mobileToSignup">Sign Up</a></p>
       </form>
     </div>
 
-    <!-- TOGGLE -->
-    <div class="toggle-container">
-      <div class="toggle">
-        <div class="toggle-panel toggle-left">
-          <div class="brand-mark">🔬</div>
-          <h1 data-i18n="toggle_welcome_back">Welcome Back!</h1>
-          <p data-i18n="toggle_login_desc">Login to see your dashboard &amp; referrals</p>
-          <button class="hidden" id="login" data-i18n="toggle_btn_login">Sign In</button>
-        </div>
-        <div class="toggle-panel toggle-right">
-          <div class="brand-mark">✨</div>
-          <h1 data-i18n="toggle_hello_friend">Hello, Friend!</h1>
-          <p data-i18n="toggle_signup_desc">Sign up, get your referral link, invite friends</p>
-          <button class="hidden" id="register" data-i18n="toggle_btn_signup">Sign Up</button>
-        </div>
+    <!-- ── Switch Panel ── -->
+    <div class="switch" id="switch-cnt">
+      <div class="switch__circle"></div>
+      <div class="switch__circle switch__circle--t"></div>
+
+      <div class="switch__container" id="switch-c1">
+        <h2 class="switch__title" data-i18n="toggle_welcome_back">Welcome Back!</h2>
+        <p class="switch__description" data-i18n="toggle_login_desc">Login to see your dashboard &amp; referrals</p>
+        <button class="button switch-btn" data-i18n="toggle_btn_login">SIGN IN</button>
+      </div>
+
+      <div class="switch__container is-hidden" id="switch-c2">
+        <h2 class="switch__title" data-i18n="toggle_hello_friend">Hello, Friend!</h2>
+        <p class="switch__description" data-i18n="toggle_signup_desc">Sign up, get your referral link, invite friends</p>
+        <button class="button switch-btn" data-i18n="toggle_btn_signup">SIGN UP</button>
       </div>
     </div>
+
   </div>
 
-  <script src="auth.js"></script>
-  <script src="/auth-ui.js"></script>
+  <script src="auth.js?v=20260618e"></script>
   <script>
-    const mobileToLogin  = document.getElementById('mobileToLogin');
-    const mobileToSignup = document.getElementById('mobileToSignup');
-    const cont = document.getElementById('container');
-    if (mobileToLogin)  mobileToLogin.addEventListener('click',  () => cont.classList.remove('active'));
-    if (mobileToSignup) mobileToSignup.addEventListener('click', () => cont.classList.add('active'));
-  </script>
-</body>
+    // Panel animation (CodePen by Ricardo Oliva Alonso)
+    const switchCtn    = document.querySelector("#switch-cnt");
+    const switchC1     = document.querySelector("#switch-c1");
+    const switchC2     = document.querySelector("#switch-c2");
+    const switchCircle = document.querySelectorAll(".switch__circle");
+    const switchBtns   = document.querySelectorAll(".switch-btn");
+    const aContainer   = document.querySelector("#a-container");
+    const bContainer   = document.querySelector("#b-container");
 
+    const changeForm = () => {
+      switchCtn.classList.add("is-gx");
+      setTimeout(() => switchCtn.classList.remove("is-gx"), 1500);
+      switchCtn.classList.toggle("is-txr");
+      switchCircle[0].classList.toggle("is-txr");
+      switchCircle[1].classList.toggle("is-txr");
+      switchC1.classList.toggle("is-hidden");
+      switchC2.classList.toggle("is-hidden");
+      aContainer.classList.toggle("is-txl");
+      bContainer.classList.toggle("is-txl");
+      bContainer.classList.toggle("is-z200");
+    };
+
+    switchBtns.forEach(btn => btn.addEventListener("click", changeForm));
+  </script>
+
+</body>
 </html>
