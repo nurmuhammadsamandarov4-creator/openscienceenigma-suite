@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-  <link rel="stylesheet" href="auth.css">
-  <title>Buildify</title>
+  <link rel="stylesheet" href="auth.css?v=20260618c">
+  <title>Open Science Enigma — Sign In</title>
   <script src="/public/i18n.js?v=20260615_v6"></script>
   <script src="/public/lang-ui.js?v=20260615_v6"></script>
 
@@ -40,7 +40,8 @@
           <button id="verifyBtn" type="button" data-i18n="su_verify_signup">Verify & Sign Up</button>
         </div>
 
-        <p id="su_msg" style="margin-top:10px; font-size:13px;"></p>
+        <p id="su_msg"></p>
+        <p class="mobile-switch">Already have an account? <a id="mobileToLogin">Sign In</a></p>
       </form>
     </div>
 
@@ -64,7 +65,8 @@
         <a href="#" onclick="return false;" data-i18n="si_forgot">(demo) Forgot password?</a>
         <button id="loginBtnSubmit" type="button">Sign In</button>
 
-        <p id="si_msg" style="margin-top:10px; font-size:13px;"></p>
+        <p id="si_msg"></p>
+        <p class="mobile-switch">Don't have an account? <a id="mobileToSignup">Sign Up</a></p>
       </form>
     </div>
 
@@ -72,11 +74,13 @@
     <div class="toggle-container">
       <div class="toggle">
         <div class="toggle-panel toggle-left">
+          <div class="brand-mark">🔬</div>
           <h1 data-i18n="toggle_welcome_back">Welcome Back!</h1>
-          <p data-i18n="toggle_login_desc">Login to see your dashboard & referrals</p>
+          <p data-i18n="toggle_login_desc">Login to see your dashboard &amp; referrals</p>
           <button class="hidden" id="login" data-i18n="toggle_btn_login">Sign In</button>
         </div>
         <div class="toggle-panel toggle-right">
+          <div class="brand-mark">✨</div>
           <h1 data-i18n="toggle_hello_friend">Hello, Friend!</h1>
           <p data-i18n="toggle_signup_desc">Sign up, get your referral link, invite friends</p>
           <button class="hidden" id="register" data-i18n="toggle_btn_signup">Sign Up</button>
@@ -87,6 +91,13 @@
 
   <script src="auth.js"></script>
   <script src="/auth-ui.js"></script>
+  <script>
+    const mobileToLogin  = document.getElementById('mobileToLogin');
+    const mobileToSignup = document.getElementById('mobileToSignup');
+    const cont = document.getElementById('container');
+    if (mobileToLogin)  mobileToLogin.addEventListener('click',  () => cont.classList.remove('active'));
+    if (mobileToSignup) mobileToSignup.addEventListener('click', () => cont.classList.add('active'));
+  </script>
 </body>
 
 </html>

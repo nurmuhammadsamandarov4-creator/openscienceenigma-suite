@@ -115,6 +115,23 @@ html, body {
   }
 }
 
+/* ── Team static grid (main team section, 3 cols) ────────────── */
+.team-static-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@media (max-width: 640px) {
+  .team-static-grid {
+    grid-template-columns: 1fr;
+    max-width: 300px;
+  }
+}
+
 /* ── 5. Team marquee ─────────────────────────────────────────── */
 @media (max-width: 480px) {
   .ose-electric-card {
