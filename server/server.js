@@ -1727,10 +1727,10 @@ if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
       }
     } else {
       // Create new user (no password)
-      const id = nanoid();
-      db.prepare("INSERT INTO users (id, name, email, google_id, password_hash, role) VALUES (?, ?, ?, ?, '', 'user')")
-        .run(id, name, email, googleId);
-      user = db.prepare("SELECT * FROM users WHERE id = ?").get(id);
+      const referral_code = generateReferralCode();
+      db.prepare("INSERT INTO users (name, email, google_id, password_hash, referral_code) VALUES (?, ?, ?, '', ?)")
+        .run(name, email, googleId, referral_code);
+      user = db.prepare("SELECT * FROM users WHERE google_id = ?").get(googleId);
     }
 
     return done(null, { id: user.id, name: user.name, email: user.email });
