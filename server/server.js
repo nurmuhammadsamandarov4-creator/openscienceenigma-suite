@@ -1150,6 +1150,36 @@ function getReferralEarnings(userId) {
 
 // -------------------- Mailer --------------------
 function getMailer() {
+  // Prefer Brevo HTTP API (works on Render free tier; SMTP port 587 is blocked)
+  const brevoApiKey = process.env.BREVO_API_KEY;
+  const fromEmail = (process.env.FROM_EMAIL || "").trim() || "nurmuhammadsamandarov7747@gmail.com";
+
+  if (brevoApiKey) {
+    console.log("📧 Email mode: brevo-api");
+    return {
+      mode: "brevo-api",
+      send: async ({ to, subject, text }) => {
+        const body = JSON.stringify({
+          sender: { name: "Open Science Enigma", email: fromEmail },
+          to: [{ email: to }],
+          subject,
+          textContent: text
+        });
+        const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+          method: "POST",
+          headers: { "api-key": brevoApiKey, "Content-Type": "application/json" },
+          body
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          console.error("📧 Brevo API error:", JSON.stringify(json));
+          throw new Error(json.message || "Brevo API error");
+        }
+        console.log(`📧 Email sent to ${to} via Brevo API`);
+      }
+    };
+  }
+
   const host = process.env.SMTP_HOST;
   const port = Number(process.env.SMTP_PORT || 587);
   const secure = String(process.env.SMTP_SECURE || "false") === "true";
@@ -1169,25 +1199,15 @@ function getMailer() {
     };
   }
 
-  const transporter = nodemailer.createTransport({
-    host,
-    port,
-    secure,
-    auth: { user, pass }
-  });
-
-  // Verify connection on startup
+  const transporter = nodemailer.createTransport({ host, port, secure, auth: { user, pass } });
   transporter.verify().catch(err => console.error("SMTP verify error:", err.message));
 
   return {
     mode: "smtp",
     send: async ({ to, subject, text }) => {
-      // FROM_EMAIL must be a verified sender in Brevo; fall back to SMTP_USER
-      const fromEnv = (process.env.FROM_EMAIL || "").trim();
-      const from = fromEnv || user;
       try {
-        await transporter.sendMail({ from, to, subject, text });
-        console.log(`📧 Email sent to ${to} from ${from}`);
+        await transporter.sendMail({ from: fromEmail, to, subject, text });
+        console.log(`📧 Email sent to ${to} via SMTP`);
       } catch (err) {
         console.error(`📧 SMTP sendMail error: ${err.message}`);
         throw err;
