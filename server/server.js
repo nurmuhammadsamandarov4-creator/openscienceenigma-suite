@@ -1176,11 +1176,22 @@ function getMailer() {
     auth: { user, pass }
   });
 
+  // Verify connection on startup
+  transporter.verify().catch(err => console.error("SMTP verify error:", err.message));
+
   return {
     mode: "smtp",
     send: async ({ to, subject, text }) => {
-      const from = process.env.FROM_EMAIL || user;
-      await transporter.sendMail({ from, to, subject, text });
+      // FROM_EMAIL must be a verified sender in Brevo; fall back to SMTP_USER
+      const fromEnv = (process.env.FROM_EMAIL || "").trim();
+      const from = fromEnv || user;
+      try {
+        await transporter.sendMail({ from, to, subject, text });
+        console.log(`📧 Email sent to ${to} from ${from}`);
+      } catch (err) {
+        console.error(`📧 SMTP sendMail error: ${err.message}`);
+        throw err;
+      }
     }
   };
 }
