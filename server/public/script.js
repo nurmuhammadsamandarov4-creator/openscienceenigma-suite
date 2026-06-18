@@ -373,7 +373,8 @@ function renderPricing() {
     cardsWrap.innerHTML = plans.map((p, idx) => {
       const feats = Array.isArray(p.features) ? p.features : [];
       let href = p.ctaHref ? String(p.ctaHref).trim() : '#';
-      const cartAttrs = `data-cart-item="1" data-cart-name="${safe(p.name)}" data-cart-price="${safe(getPrice(p))}" data-cart-service="${safe((p.ctaHref||'').split('service=')[1]||p.key||'')}"`;
+      const serviceId = p.key || (p.ctaHref||'').split('service=')[1] || '';
+      const cartAttrs = `data-cart-item="1" data-cart-name="${safe(p.name)}" data-cart-price="${safe(getPrice(p))}" data-cart-service="${safe(serviceId)}"`;
 
       const checkSvgBlue = `
 <svg aria-hidden="true" class="lucide lucide-check flex-shrink-0" style="width:16px; height:16px; color:#2563eb;" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
