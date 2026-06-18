@@ -96,6 +96,8 @@ addColumnIfMissing("users", "x_url", "TEXT");
 addColumnIfMissing("users", "linkedin", "TEXT");
 addColumnIfMissing("users", "instagram", "TEXT");
 
+addColumnIfMissing("users", "role", "TEXT NOT NULL DEFAULT 'user'");
+
 // Admin role flag (so admins can be managed from dashboard)
 addColumnIfMissing("users", "is_admin", "INTEGER NOT NULL DEFAULT 0");
 
