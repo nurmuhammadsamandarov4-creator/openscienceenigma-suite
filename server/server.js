@@ -37,6 +37,9 @@ const Stripe = require("stripe");
 const http = require("http");
 const https = require("https");
 const { Server: SocketIOServer } = require("socket.io");
+const session = require("express-session");
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -83,6 +86,7 @@ addColumnIfMissing("users", "wallet_balance_cents", "INTEGER NOT NULL DEFAULT 0"
 
 // User profile fields (TailAdmin User Profile)
 addColumnIfMissing("users", "avatar_url", "TEXT");
+addColumnIfMissing("users", "google_id", "TEXT");
 addColumnIfMissing("users", "job_title", "TEXT");
 addColumnIfMissing("users", "phone", "TEXT");
 addColumnIfMissing("users", "location", "TEXT");
@@ -1682,6 +1686,70 @@ app.use(
   })
 );
 app.use(cookieParser());
+
+// ---- Google OAuth setup ----
+const GOOGLE_CLIENT_ID     = process.env.GOOGLE_CLIENT_ID     || '';
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';
+const SESSION_SECRET       = process.env.SESSION_SECRET        || 'ose-session-secret-change-me';
+
+app.use(session({
+  secret: SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: 10 * 60 * 1000 } // 10 min — only used for OAuth handshake
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((user, done) => done(null, user));
+
+if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
+  const RENDER_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${process.env.PORT || 3000}`;
+  passport.use(new GoogleStrategy({
+    clientID:     GOOGLE_CLIENT_ID,
+    clientSecret: GOOGLE_CLIENT_SECRET,
+    callbackURL:  `${RENDER_URL}/auth/google/callback`,
+  }, (accessToken, refreshToken, profile, done) => {
+    const email    = profile.emails?.[0]?.value || '';
+    const name     = profile.displayName || email;
+    const googleId = profile.id;
+
+    // Find or create user
+    let user = db.prepare("SELECT * FROM users WHERE google_id = ?").get(googleId);
+    if (!user && email) user = db.prepare("SELECT * FROM users WHERE email = ?").get(email);
+
+    if (user) {
+      // Link google_id if not already set
+      if (!user.google_id) {
+        db.prepare("UPDATE users SET google_id = ? WHERE id = ?").run(googleId, user.id);
+      }
+    } else {
+      // Create new user (no password)
+      const id = nanoid();
+      db.prepare("INSERT INTO users (id, name, email, google_id, password_hash, role) VALUES (?, ?, ?, ?, '', 'user')")
+        .run(id, name, email, googleId);
+      user = db.prepare("SELECT * FROM users WHERE id = ?").get(id);
+    }
+
+    return done(null, { id: user.id, name: user.name, email: user.email });
+  }));
+
+  app.get('/auth/google',
+    passport.authenticate('google', { scope: ['profile', 'email'] })
+  );
+
+  app.get('/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: '/public/signup.html?error=google' }),
+    (req, res) => {
+      // Redirect to front-end with user_id in query so JS can save to localStorage
+      res.redirect(`/?google_login=${encodeURIComponent(req.user.id)}`);
+    }
+  );
+
+  console.log('🔑 Google OAuth enabled');
+} else {
+  console.log('ℹ️  Google OAuth disabled (GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET not set)');
+}
 
 // ---- Visual Editor Middleware ----
 app.get(['/', '/index.html'], (req, res, next) => {

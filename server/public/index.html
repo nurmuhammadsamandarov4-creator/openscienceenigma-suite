@@ -864,4 +864,16 @@
       });
     })();
   </script>
+  <script>
+    // Save user_id from Google OAuth redirect
+    (function(){
+      const p = new URLSearchParams(window.location.search);
+      const gid = p.get('google_login');
+      if (gid) {
+        localStorage.setItem('user_id', gid);
+        history.replaceState({}, '', '/');
+        window.location.reload();
+      }
+    })();
+  </script>
 </body></html>
