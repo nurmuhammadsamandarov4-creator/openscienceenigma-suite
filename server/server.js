@@ -716,7 +716,7 @@ if (!hasHero) {
   upsertSiteContent('hero', {
     uz: {
       badge: "10K+ Mamnun tadqiqotchilar va olimlar • 4.9 Reyting",
-      title: "Professional statistika va ma'lumotlar tahlili xizmatlari.",
+      title: "Professional tahrirlash va ma'lumotlar tahlili xizmatlari.",
       subtitle: "Ma'lumotlarni qayta ishlash, statistik modellashtirish, gipotezalarni tekshirish va maqolalarni nashrga tayyorlashda ekspert yordami.",
       ctaPrimaryLabel: "Boshlash", ctaPrimaryHref: "/public/create-task.html",
       ctaSecondaryLabel: "Demoni ko'rish", ctaSecondaryHref: "#",
@@ -728,7 +728,7 @@ if (!hasHero) {
     },
     ru: {
       badge: "10K+ Довольных исследователей и учёных • Рейтинг 4.9",
-      title: "Профессиональные услуги статистики и анализа данных.",
+      title: "Профессиональное редактирование и анализ данных.",
       subtitle: "Экспертная помощь в обработке данных, статистическом моделировании, проверке гипотез и подготовке рукописей к публикации.",
       ctaPrimaryLabel: "Начать", ctaPrimaryHref: "/public/create-task.html",
       ctaSecondaryLabel: "Смотреть демо", ctaSecondaryHref: "#",
@@ -740,7 +740,7 @@ if (!hasHero) {
     },
     en: {
       badge: "10K+ Happy researchers and scientists • 4.9 Rating",
-      title: "Expert Statistical and Data Analysis Services.",
+      title: "Professional Editing and Data Analysis Services.",
       subtitle: "Get professional help with data processing, statistical modeling, hypothesis testing, and manuscript preparation.",
       ctaPrimaryLabel: "Get Started", ctaPrimaryHref: "/public/create-task.html",
       ctaSecondaryLabel: "Watch Demo", ctaSecondaryHref: "#",
@@ -763,7 +763,7 @@ if (!hasHero) {
 
   const enDefaults = {
     badge: "10K+ Happy researchers and scientists • 4.9 Rating",
-    title: "Expert Statistical and Data Analysis Services.",
+    title: "Professional Editing and Data Analysis Services.",
     subtitle: "Get professional help with data processing, statistical modeling, hypothesis testing, and manuscript preparation.",
     ctaPrimaryLabel: "Get Started", ctaPrimaryHref: "/public/create-task.html",
     ctaSecondaryLabel: "Watch Demo", ctaSecondaryHref: "#",
@@ -775,7 +775,7 @@ if (!hasHero) {
   };
   const ruDefaults = {
     badge: "10K+ Довольных исследователей и учёных • Рейтинг 4.9",
-    title: "Профессиональные услуги статистики и анализа данных.",
+    title: "Профессиональное редактирование и анализ данных.",
     subtitle: "Экспертная помощь в обработке данных, статистическом моделировании, проверке гипотез и подготовке рукописей к публикации.",
     ctaPrimaryLabel: "Начать", ctaPrimaryHref: "/public/create-task.html",
     ctaSecondaryLabel: "Смотреть демо", ctaSecondaryHref: "#",
@@ -786,8 +786,10 @@ if (!hasHero) {
     ]
   };
 
-  if (!enTitle || enTitle === uzTitle) { heroData.en = enDefaults; needsUpdate = true; }
-  if (!ruTitle || ruTitle === uzTitle) { heroData.ru = ruDefaults; needsUpdate = true; }
+  const oldTitles = ["Expert Statistical and Data Analysis Services.", "Профессиональные услуги статистики и анализа данных."];
+  if (!enTitle || enTitle === uzTitle || oldTitles.includes(enTitle)) { heroData.en = enDefaults; needsUpdate = true; }
+  if (!ruTitle || ruTitle === uzTitle || oldTitles.includes(ruTitle)) { heroData.ru = ruDefaults; needsUpdate = true; }
+  if (!heroData.uz?.title?.includes('tahrirlash')) { heroData.uz = { ...heroData.uz, title: "Professional tahrirlash va ma'lumotlar tahlili xizmatlari." }; needsUpdate = true; }
   if (needsUpdate) upsertSiteContent('hero', heroData);
 }
 
