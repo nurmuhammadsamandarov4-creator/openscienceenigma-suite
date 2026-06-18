@@ -858,8 +858,9 @@
       if (!menu) return;
       menu.querySelectorAll('a').forEach(function (a) {
         a.addEventListener('click', function () {
-          menu.classList.remove('h-92');
+          menu.classList.remove('h-screen');
           menu.classList.add('h-0');
+          document.body.style.overflow = '';
         });
       });
     })();

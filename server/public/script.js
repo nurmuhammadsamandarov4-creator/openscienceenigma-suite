@@ -5,12 +5,14 @@ const mobileMenu = document.getElementById('mobileMenu');
 
 openMenu.addEventListener('click', () => {
     mobileMenu.classList.remove('h-0');
-    mobileMenu.classList.add('h-92');
+    mobileMenu.classList.add('h-screen');
+    document.body.style.overflow = 'hidden';
 });
 
 closeMenu.addEventListener('click', () => {
-    mobileMenu.classList.remove('h-92');
+    mobileMenu.classList.remove('h-screen');
     mobileMenu.classList.add('h-0');
+    document.body.style.overflow = '';
 });
 
 // Dynamic website content: Team section
