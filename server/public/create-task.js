@@ -306,7 +306,7 @@ async function loadServices() {
               <div class="service-card-select-indicator"></div>
             </div>
             <div class="service-card-price">
-              ${priceDisplay} ${originalDisplay} <span>/ order</span>
+              ${priceDisplay} ${originalDisplay} <span>${(window.t && window.t("per_order")) || "/ order"}</span>
             </div>
           </div>
           <ul class="service-card-features">
