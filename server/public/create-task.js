@@ -45,12 +45,14 @@ const discountAmountEl = document.getElementById("summaryDiscountAmount");
 const totalPriceEl = document.getElementById("summaryTotalPrice");
 const errorBanner = document.getElementById("errorBanner");
 
-// Dynamic Plan Bullet Mapping
+// Service feature bullet points
 const serviceFeatures = {
-  SVC100: ["plan_free_f1", "plan_free_f2", "plan_free_f3"],
-  SVC200: ["plan_starter_f1", "plan_starter_f2", "plan_starter_f3"],
-  SVC300: ["plan_pro_f1", "plan_pro_f2", "plan_pro_f3"],
-  SVC400: ["plan_enterprise_f1", "plan_enterprise_f2", "plan_enterprise_f3"]
+  SVC100: ["Statistical Review of methods and tests for appropriateness", "Expert feedback on methods, results, and statistical analysis in research with actionable recommendations", "Statistical Review certificate confirming adherence to statistical reporting best practices"],
+  SVC200: ["Complex quantitative data analysis (multivariate analysis, ANOVA, ANACOVA) using SPSS, R, STATA", "Identification of key results to establish significance", "Drawing of inferences and presenting relevant results in tables/graphs", "Interpretation of results in light of research questions"],
+  SVC300: ["Research Design and Methods", "Systematic Review and Data Collection", "Data Analysis", "Manuscript Finalisation", "Research Publication"],
+  SVC400: ["Language editing and proofreading", "Grammar, spelling, and punctuation correction", "Clarity and readability improvement"],
+  SVC500: ["Full manuscript editing", "Structural and logical flow improvements", "Journal formatting and style guide compliance", "Language polishing for academic tone"],
+  SVC600: ["Comprehensive editing + statistical review", "Custom turnaround time", "Unlimited revision rounds", "Dedicated editor and statistician support"],
 };
 
 // Drag and drop attachment event handlers
@@ -224,7 +226,7 @@ if (clearCustomAmountBtn) {
 async function loadServices() {
   if (!serviceSelect) return;
 
-  const allowed = new Set(["SVC100", "SVC200", "SVC300", "SVC400"]);
+  const allowed = new Set(["SVC100", "SVC200", "SVC300", "SVC400", "SVC500", "SVC600"]);
   const u = new URL(location.href);
   const pre = (u.searchParams.get("service") || u.searchParams.get("svc") || "").trim().toUpperCase();
 
@@ -235,8 +237,9 @@ async function loadServices() {
     const j = await r.json().catch(() => ({}));
     const list = Array.isArray(j.services) ? j.services : [];
     
+    const order = ["SVC100","SVC200","SVC300","SVC400","SVC500","SVC600"];
     loadedServicesList = list.filter(s => allowed.has(String(s.code || "").toUpperCase()))
-                             .sort((a,b)=>Number(a.price_cents)-Number(b.price_cents));
+                             .sort((a,b) => order.indexOf(a.code) - order.indexOf(b.code));
 
     serviceSelect.innerHTML = "";
     
@@ -262,6 +265,7 @@ async function loadServices() {
         const card = document.createElement("div");
         card.className = "service-card";
         card.dataset.code = s.code;
+        card.dataset.group = ["SVC100","SVC200","SVC300"].includes(s.code) ? "data-analysis" : "editing";
         card.style.animation = "fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both";
         card.style.animationDelay = (idx * 0.08) + "s";
 
@@ -304,27 +308,29 @@ async function loadServices() {
       }
     });
 
+    // Tab switching
+    function switchTab(tabName) {
+      document.querySelectorAll('.service-tab').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tabName);
+      });
+      document.querySelectorAll('.service-card').forEach(card => {
+        card.style.display = card.dataset.group === tabName ? '' : 'none';
+      });
+      const firstVisible = document.querySelector(`.service-card[data-group="${tabName}"]`);
+      if (firstVisible) selectServiceCard(firstVisible.dataset.code);
+    }
+
+    document.querySelectorAll('.service-tab').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+    });
+
     // Default Selection
-    let defaultCode = "SVC200"; // Default to Starter
-    if (pre && [...serviceSelect.options].some(o => o.value === pre)) {
-      defaultCode = pre;
-    } else if (serviceSelect.options.length) {
-      defaultCode = serviceSelect.options[0].value;
+    let defaultTab = "data-analysis";
+    if (pre) {
+      defaultTab = ["SVC400","SVC500","SVC600"].includes(pre) ? "editing" : "data-analysis";
     }
+    switchTab(defaultTab);
 
-    selectServiceCard(defaultCode);
-
-    // Initial note setup
-    const sel = loadedServicesList.find(s => s.code === defaultCode);
-    if (serviceNote && sel) {
-      const display = (sel.display_price_cents != null ? sel.display_price_cents : sel.price_cents);
-      const original = (sel.original_price_cents != null ? sel.original_price_cents : sel.price_cents);
-      const disc = !!sel.discount_applied && Number(display) < Number(original);
-      serviceNote.textContent = disc
-        ? `Tanlangan servis: ${fmtUSD(display)} (Referral -${Math.round(Number(sel.discount_rate||0)*100)}% faqat 1-chi zakaz; asl: ${fmtUSD(original)})`
-        : (window.t ? window.t("selected_service_tpl", { amount: fmtUSD(display) }) : `Tanlangan servis: ${fmtUSD(display)}`);
-      serviceNote.style.display = "block";
-    }
   } catch (e) {
     if (serviceNote) {
       serviceNote.textContent = "Services load error: " + String(e?.message || e);

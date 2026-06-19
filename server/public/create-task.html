@@ -673,6 +673,31 @@
       .service-cards-grid { grid-template-columns: 1fr 1fr; }
     }
 
+    /* ── Service tabs ── */
+    .service-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .service-tab {
+      padding: 7px 18px;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      font-family: var(--font);
+      font-size: .82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .service-tab:hover { border-color: var(--brand); color: var(--brand); }
+    .service-tab.active {
+      border-color: var(--brand);
+      color: var(--brand);
+      background: var(--brand-lt);
+    }
+
     /* hidden select kept for JS compatibility */
     #serviceSelect { display: none; }
     #files { display: none; }
@@ -727,6 +752,11 @@
       <!-- Service selection -->
       <div class="block">
         <p class="block-title" id="chooseServiceTitle">Choose a service</p>
+
+        <div class="service-tabs">
+          <button class="service-tab active" data-tab="data-analysis">Data Analysis</button>
+          <button class="service-tab" data-tab="editing">Editing</button>
+        </div>
 
         <div id="serviceCards" class="service-cards-grid"></div>
 

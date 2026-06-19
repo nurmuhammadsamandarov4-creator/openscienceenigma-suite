@@ -103,17 +103,14 @@ CREATE TABLE IF NOT EXISTS services (
 
 -- Default services
 INSERT OR IGNORE INTO services (code, name, price_cents, commission_rate) VALUES
-  -- Pricing plans used on the public website
-  ('SVC100', 'Free', 100, 0.05),
-  ('SVC200', 'Starter', 1900, 0.05),
-  ('SVC300', 'Pro', 4900, 0.05),
-  ('SVC400', 'Enterprise', 14900, 0.05),
-  ('SVC500', 'Service $500', 50000, 0.05),
-  ('SVC600', 'Service $600', 60000, 0.05),
-  ('SVC700', 'Service $700', 70000, 0.05),
-  ('SVC800', 'Service $800', 80000, 0.05),
-  ('SVC900', 'Service $900', 90000, 0.05),
-  ('SVC1000', 'Service $1000', 100000, 0.05);
+  -- Data Analysis
+  ('SVC100', 'Rapid Statistical Review',          20000, 0.05),
+  ('SVC200', 'Inferential Statistical Analysis',  70000, 0.05),
+  ('SVC300', 'Custom Statistical Support',            0, 0.05),
+  -- Editing
+  ('SVC400', 'Premium Editing Plus',              10000, 0.05),
+  ('SVC500', 'Premium Editing',                   15000, 0.05),
+  ('SVC600', 'Advanced Editing',                  20000, 0.05);
 
 -- Purchases (when a user buys/uses a service)
 CREATE TABLE IF NOT EXISTS purchases (

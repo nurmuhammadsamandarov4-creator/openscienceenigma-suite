@@ -1058,17 +1058,14 @@ function ensureDefaultServices() {
     `);
 
     const defaults = [
-      { code: 'SVC100', name: 'Free',       price_cents: 100,   commission_rate: 0.05 },
-      { code: 'SVC200', name: 'Starter',    price_cents: 1900,  commission_rate: 0.05 },
-      { code: 'SVC300', name: 'Pro',        price_cents: 4900,  commission_rate: 0.05 },
-      { code: 'SVC400', name: 'Enterprise', price_cents: 14900, commission_rate: 0.05 },
-      // Keep additional generic services available for admins if needed
-      { code: 'SVC500',  name: 'Service $500',  price_cents: 50000,  commission_rate: 0.05 },
-      { code: 'SVC600',  name: 'Service $600',  price_cents: 60000,  commission_rate: 0.05 },
-      { code: 'SVC700',  name: 'Service $700',  price_cents: 70000,  commission_rate: 0.05 },
-      { code: 'SVC800',  name: 'Service $800',  price_cents: 80000,  commission_rate: 0.05 },
-      { code: 'SVC900',  name: 'Service $900',  price_cents: 90000,  commission_rate: 0.05 },
-      { code: 'SVC1000', name: 'Service $1000', price_cents: 100000, commission_rate: 0.05 },
+      // Data Analysis
+      { code: 'SVC100', name: 'Rapid Statistical Review',         price_cents: 20000, commission_rate: 0.05 },
+      { code: 'SVC200', name: 'Inferential Statistical Analysis', price_cents: 70000, commission_rate: 0.05 },
+      { code: 'SVC300', name: 'Custom Statistical Support',       price_cents: 0,     commission_rate: 0.05 },
+      // Editing
+      { code: 'SVC400', name: 'Premium Editing Plus',             price_cents: 10000, commission_rate: 0.05 },
+      { code: 'SVC500', name: 'Premium Editing',                  price_cents: 15000, commission_rate: 0.05 },
+      { code: 'SVC600', name: 'Advanced Editing',                 price_cents: 20000, commission_rate: 0.05 },
     ];
 
     for (const s of defaults) upsert.run(s);
