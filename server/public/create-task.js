@@ -164,6 +164,21 @@ function selectServiceCard(code) {
     serviceSelect.dispatchEvent(new Event("change"));
   }
 
+  // Only SVC300 (Custom Statistical Support) allows custom amount entry
+  const wrapper = document.getElementById("customAmountWrapper");
+  if (customAmountInput) {
+    if (code === "SVC300") {
+      customAmountInput.disabled = false;
+      if (wrapper) wrapper.style.opacity = "1";
+      if (wrapper) wrapper.style.pointerEvents = "auto";
+    } else {
+      customAmountInput.disabled = true;
+      customAmountInput.value = "";
+      if (wrapper) wrapper.style.opacity = "0.35";
+      if (wrapper) wrapper.style.pointerEvents = "none";
+    }
+  }
+
   updateOrderSummary(code);
 }
 
