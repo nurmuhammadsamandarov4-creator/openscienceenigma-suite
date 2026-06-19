@@ -3995,6 +3995,34 @@ io.on("connection", (socket) => {
   });
 });
 
+// ── Section Visibility (on/off toggles) ──────────────────────────────────────
+const SECTION_DEFAULTS = {
+  hero: true, stats: true, features: true, faq: true,
+  team: true, 'soft-board': true, 'hard-board': true,
+  video: true, pricing: true, testimonials: true, footer: true
+};
+
+app.get('/api/site/sections', (req, res) => {
+  const saved = getSiteContent('sections_visibility', {});
+  res.json({ ...SECTION_DEFAULTS, ...saved });
+});
+
+app.put('/api/site/sections', (req, res) => {
+  const adminId = Number(req.body?.admin_id || req.body?.adminId || 0);
+  const a = requireAdminIfProd(adminId);
+  if (!a.ok) return res.status(a.status).json({ error: a.error });
+
+  const incoming = req.body?.sections || {};
+  const merged = { ...SECTION_DEFAULTS };
+  for (const key of Object.keys(SECTION_DEFAULTS)) {
+    if (typeof incoming[key] === 'boolean') merged[key] = incoming[key];
+  }
+  db.prepare("INSERT INTO site_content(key,json) VALUES('sections_visibility',?) ON CONFLICT(key) DO UPDATE SET json=excluded.json, updated_at=datetime('now')")
+    .run(JSON.stringify(merged));
+  res.json({ ok: true, sections: merged });
+});
+// ─────────────────────────────────────────────────────────────────────────────
+
 httpServer.listen(PORT, () => {
   console.log(`✅ Running: http://localhost:${PORT}`);
   console.log("📁 Uploads dir:", path.join(__dirname, "uploads"));

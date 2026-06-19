@@ -1145,3 +1145,18 @@ if (document.readyState === 'loading') {
     }
   });
 })();
+
+// Section visibility – hide sections turned OFF in admin panel
+(async function applySectionVisibility() {
+  try {
+    const res = await fetch('/api/site/sections');
+    if (!res.ok) return;
+    const visibility = await res.json();
+    document.querySelectorAll('[data-section]').forEach(el => {
+      const key = el.getAttribute('data-section');
+      if (visibility[key] === false) {
+        el.style.display = 'none';
+      }
+    });
+  } catch (e) {}
+})();

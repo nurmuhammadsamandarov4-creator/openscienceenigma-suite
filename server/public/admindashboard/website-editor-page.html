@@ -1,0 +1,1923 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Website Content Management System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: rgba(79, 70, 229, 0.1);
+      --success: #10b981;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    /* System Dark Theme Match */
+    @media (prefers-color-scheme: dark) {
+      body.auto-dark {
+        --bg: #0f172a;
+        --card-bg: #1e293b;
+        --text: #f8fafc;
+        --text-muted: #94a3b8;
+        --border: #334155;
+        --primary: #6366f1;
+        --primary-hover: #4f46e5;
+        --primary-light: rgba(99, 102, 241, 0.15);
+        --success: #34d399;
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.2);
+      }
+    }
+
+    body.dark-mode {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-light: rgba(99, 102, 241, 0.15);
+      --success: #34d399;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* Header & Navigation */
+    .header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .title-area h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .title-area p {
+      margin: 4px 0 0;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .theme-toggle {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      cursor: pointer;
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow);
+    }
+
+    /* Tabs Bar */
+    .tabs-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 12px 18px;
+      border-radius: var(--radius-sm);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+    }
+
+    .tab-btn:hover {
+      color: var(--text);
+      background: var(--border);
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -9px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 99px;
+    }
+
+    /* Content Area */
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cards & Form Elements */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .card-title-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .card-title-group h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .card-desc {
+      color: var(--text-muted);
+      font-size: 13px;
+      margin-top: -16px;
+      margin-bottom: 20px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-span-full {
+      grid-column: 1 / -1;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background: var(--card-bg);
+      border-color: var(--border);
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background: var(--border);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: var(--danger-hover);
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    /* Languages Selector */
+    .lang-selector {
+      display: inline-flex;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 4px;
+      gap: 4px;
+      margin-bottom: 20px;
+    }
+
+    .lang-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 6px 16px;
+      border-radius: 99px;
+    }
+
+    .lang-btn.active {
+      background: var(--card-bg);
+      color: var(--primary);
+      box-shadow: var(--shadow);
+    }
+
+    /* Grid Lists (For cards / subitems) */
+    .grid-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .list-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      position: relative;
+      background: var(--card-bg);
+    }
+
+    .list-card-img {
+      width: 64px;
+      height: 64px;
+      border-radius: var(--radius-sm);
+      object-fit: cover;
+      background: var(--bg);
+      flex-shrink: 0;
+    }
+
+    .list-card-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .list-card-title {
+      font-weight: 700;
+      font-size: 14px;
+      margin: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .list-card-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin: 2px 0 0;
+    }
+
+    .list-card-body {
+      font-size: 13px;
+      margin-top: 6px;
+      color: var(--text-muted);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .list-card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    /* Upload Area */
+    .upload-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .upload-preview {
+      width: 80px;
+      height: 80px;
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px dashed var(--border);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .upload-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .upload-control {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* Modal Styling */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 99999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      width: min(600px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      color: var(--text-muted);
+    }
+
+    .modal-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .modal-footer {
+      padding: 20px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    /* Toast Notification */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 999999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .toast {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--primary);
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 14px;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    .toast.success { border-left-color: var(--success); }
+    .toast.danger { border-left-color: var(--danger); }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* Embedded Iframes */
+    .iframe-container {
+      width: 100%;
+      height: calc(100vh - 200px);
+      min-height: 700px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .iframe-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: transparent;
+    }
+  /* ── Section toggle switches ── */
+  .section-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: var(--card-bg, #fff);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 10px;
+  }
+  .section-toggle-label { font-weight: 600; font-size: .95rem; }
+  .section-toggle-desc  { font-size: .78rem; color: #64748b; margin-top: 2px; }
+  .toggle-switch { position: relative; width: 46px; height: 26px; flex-shrink: 0; }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute; inset: 0;
+    background: #cbd5e1; border-radius: 999px;
+    cursor: pointer; transition: .25s;
+  }
+  .toggle-slider::before {
+    content: ''; position: absolute;
+    height: 20px; width: 20px;
+    left: 3px; top: 3px;
+    background: #fff; border-radius: 50%;
+    transition: .25s;
+  }
+  .toggle-switch input:checked + .toggle-slider { background: #3C50E0; }
+  .toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
+  </style>
+</head>
+<body class="dark-mode">
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-top">
+        <div class="title-area">
+          <h1>Website Content Editor</h1>
+          <p>Tahrirlamoqchi bo‘lgan bo‘limingizni tanlang. O‘zgarishlar darhol saqlanadi.</p>
+        </div>
+        <button class="theme-toggle" id="theme-toggle-btn" title="Mavzuni o‘zgartirish">🌓</button>
+      </div>
+
+      <!-- Tab Buttons -->
+      <div class="tabs-bar">
+        <button class="tab-btn active" data-tab="hero">✨ Hero Section</button>
+        <button class="tab-btn" data-tab="video">🎥 Video Settings</button>
+        <button class="tab-btn" data-tab="features">🚀 Core Features</button>
+        <button class="tab-btn" data-tab="pricing">💎 Pricing Plans</button>
+        <button class="tab-btn" data-tab="team">👥 Team Members</button>
+        <button class="tab-btn" data-tab="testimonials">💬 Testimonials</button>
+        <button class="tab-btn" data-tab="faq">❓ FAQ Questions</button>
+        <button class="tab-btn" data-tab="sections">👁️ Sections On/Off</button>
+      </div>
+    </div>
+
+    <!-- TAB 1: Hero Section (Embedded) -->
+    <div class="tab-content active" id="tab-hero">
+      <div class="iframe-container">
+        <iframe src="/admindashboard/hero-cms.html"></iframe>
+      </div>
+    </div>
+
+    <!-- TAB 2: Video Settings -->
+    <div class="tab-content" id="tab-video">
+      <div class="card">
+        <div class="card-title-group">
+          <h2>Landing Page Video</h2>
+          <button class="btn btn-primary" onclick="saveVideoSettings()">Save Video</button>
+        </div>
+        <p class="card-desc">Landing page-dagi asosiy videoni YouTube havola yoki maxsus video fayl orqali sozlang.</p>
+        
+        <div class="form-grid">
+          <div class="form-group form-span-full">
+            <label>Video Rejimi</label>
+            <select id="video-mode" onchange="toggleVideoFields()">
+              <option value="youtube">YouTube Video</option>
+              <option value="file">Yuklangan Video Fayl</option>
+            </select>
+          </div>
+
+          <div class="form-group form-span-full" id="youtube-group">
+            <label>YouTube Video Havolasi (Link)</label>
+            <input type="text" id="video-youtube-url" placeholder="https://www.youtube.com/watch?v=..." />
+          </div>
+
+          <div class="form-group form-span-full" id="file-group" style="display:none;">
+            <label>Video Fayl Yuklash (.mp4, .webm)</label>
+            <div class="upload-container">
+              <input type="text" id="video-file-url" placeholder="Video fayl havolasi..." readonly style="flex:1;" />
+              <button class="btn btn-secondary" onclick="document.getElementById('video-file-input').click()">Upload Video</button>
+              <input type="file" id="video-file-input" accept="video/*" style="display:none;" onchange="uploadVideoFile(event)" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: Core Features -->
+    <div class="tab-content" id="tab-features">
+      <div class="card">
+        <div class="card-title-group">
+          <h2>Core Features / Asosiy Imkoniyatlar</h2>
+          <button class="btn btn-primary" onclick="saveFeatures()">Save Features</button>
+        </div>
+        
+        <div class="lang-selector">
+          <button class="lang-btn active" data-lang="uz" onclick="changeLang('features', 'uz')">UZ</button>
+          <button class="lang-btn" data-lang="ru" onclick="changeLang('features', 'ru')">RU</button>
+          <button class="lang-btn" data-lang="en" onclick="changeLang('features', 'en')">EN</button>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Sarlavha (Title)</label>
+            <input type="text" id="features-title" placeholder="Asosiy imkoniyatlar..." />
+          </div>
+          <div class="form-group">
+            <label>Kichik Sarlavha (Subtitle)</label>
+            <input type="text" id="features-subtitle" placeholder="Biz taqdim etadigan afzalliklar..." />
+          </div>
+          
+          <div class="form-group form-span-full" style="border-top:1px solid var(--border); padding-top:20px; margin-top:10px;">
+            <h3>CTA (Call to Action) Qutisi</h3>
+          </div>
+          <div class="form-group form-span-full">
+            <label>CTA Matni</label>
+            <textarea id="features-cta-text" placeholder="Bizning aqlli AI agentlarimiz bilan ishingizni osonlashtiring..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>CTA Tugma Yozuvi</label>
+            <input type="text" id="features-cta-label" placeholder="Boshlash" />
+          </div>
+          <div class="form-group">
+            <label>CTA Tugma Havolasi (Href)</label>
+            <input type="text" id="features-cta-href" placeholder="#start" />
+          </div>
+        </div>
+
+        <div style="border-top:1px solid var(--border); padding-top:20px; margin-top:20px;">
+          <div class="card-title-group">
+            <h3>Imkoniyatlar Ro‘yxati</h3>
+            <button class="btn btn-secondary btn-sm" onclick="openFeatureModal(-1)">+ Add Feature</button>
+          </div>
+          <div class="grid-list" id="features-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: Pricing Plans -->
+    <div class="tab-content" id="tab-pricing">
+      <div class="card">
+        <div class="card-title-group">
+          <h2>Tarif Rejalari (Pricing)</h2>
+          <button class="btn btn-primary" onclick="savePricing()">Save Pricing</button>
+        </div>
+
+        <div class="lang-selector">
+          <button class="lang-btn active" data-lang="uz" onclick="changeLang('pricing', 'uz')">UZ</button>
+          <button class="lang-btn" data-lang="ru" onclick="changeLang('pricing', 'ru')">RU</button>
+          <button class="lang-btn" data-lang="en" onclick="changeLang('pricing', 'en')">EN</button>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Sarlavha</label>
+            <input type="text" id="pricing-title" placeholder="Tariflarimiz..." />
+          </div>
+          <div class="form-group">
+            <label>Kichik Sarlavha</label>
+            <input type="text" id="pricing-subtitle" placeholder="O‘zingizga mos rejani tanlang..." />
+          </div>
+          <div class="form-group">
+            <label>Oylik Yozuvi (Monthly Label)</label>
+            <input type="text" id="pricing-monthly" placeholder="Monthly" />
+          </div>
+          <div class="form-group">
+            <label>Yillik Yozuvi (Yearly Label)</label>
+            <input type="text" id="pricing-yearly" placeholder="Yearly" />
+          </div>
+          <div class="form-group form-span-full">
+            <label>Discount Badge Matni</label>
+            <input type="text" id="pricing-discount" placeholder="20% OFF" />
+          </div>
+        </div>
+
+        <div style="border-top:1px solid var(--border); padding-top:20px; margin-top:20px;">
+          <div class="card-title-group">
+            <h3>Rejalar (Plans)</h3>
+            <button class="btn btn-secondary btn-sm" onclick="openPlanModal(-1)">+ Add Plan</button>
+          </div>
+          <div class="grid-list" id="plans-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: Team Members -->
+    <div class="tab-content" id="tab-team">
+      <div class="card">
+        <div class="card-title-group">
+          <h2>Jamoa A‘zolari (Team & Boards)</h2>
+          <button class="btn btn-primary" onclick="saveTeam()">Save Team</button>
+        </div>
+        <p class="card-desc">Asosiy jamoa a‘zolari, Soft va Hard Science kengashi a‘zolarini boshqaring.</p>
+
+        <!-- Sub sections -->
+        <div style="margin-bottom:32px;">
+          <div class="card-title-group">
+            <h3>Asosiy Jamoa A‘zolari</h3>
+            <button class="btn btn-secondary btn-sm" onclick="openTeamMemberModal('members', -1)">+ Add Member</button>
+          </div>
+          <div class="grid-list" id="team-members-list"></div>
+        </div>
+
+        <div style="border-top:1px solid var(--border); padding-top:20px; margin-bottom:32px;">
+          <div class="card-title-group">
+            <h3>Board of Soft Science Team</h3>
+            <button class="btn btn-secondary btn-sm" onclick="openTeamMemberModal('soft', -1)">+ Add Soft Board Member</button>
+          </div>
+          <div class="grid-list" id="team-soft-list"></div>
+        </div>
+
+        <div style="border-top:1px solid var(--border); padding-top:20px;">
+          <div class="card-title-group">
+            <h3>Board of Hard Science Team</h3>
+            <button class="btn btn-secondary btn-sm" onclick="openTeamMemberModal('hard', -1)">+ Add Hard Board Member</button>
+          </div>
+          <div class="grid-list" id="team-hard-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 6: Testimonials -->
+    <div class="tab-content" id="tab-testimonials">
+      <div class="card">
+        <div class="card-title-group">
+          <h2>Mijozlar Fikrlari (Testimonials)</h2>
+          <button class="btn btn-primary" onclick="saveTestimonials()">Save Testimonials</button>
+        </div>
+
+        <div class="lang-selector">
+          <button class="lang-btn active" data-lang="uz" onclick="changeLang('testimonials', 'uz')">UZ</button>
+          <button class="lang-btn" data-lang="ru" onclick="changeLang('testimonials', 'ru')">RU</button>
+          <button class="lang-btn" data-lang="en" onclick="changeLang('testimonials', 'en')">EN</button>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Sarlavha</label>
+            <input type="text" id="testimonials-title" placeholder="Foydalanuvchilarimiz nima deydi..." />
+          </div>
+          <div class="form-group">
+            <label>Kichik Sarlavha</label>
+            <input type="text" id="testimonials-subtitle" placeholder="Mijozlarimiz fikrlari..." />
+          </div>
+        </div>
+
+        <div style="border-top:1px solid var(--border); padding-top:20px; margin-top:20px;">
+          <div class="card-title-group">
+            <h3>Fikrlar Ro‘yxati</h3>
+            <button class="btn btn-secondary btn-sm" onclick="openTestimonialModal(-1)">+ Add Testimonial</button>
+          </div>
+          <div class="grid-list" id="testimonials-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 7: FAQ (Embedded) -->
+    <div class="tab-content" id="tab-faq">
+      <div class="iframe-container">
+        <iframe src="/admindashboard/faq-cms.html"></iframe>
+      </div>
+    </div>
+
+    <!-- TAB 8: Sections On/Off -->
+    <div class="tab-content" id="tab-sections">
+      <div style="max-width:600px;margin:32px auto;padding:0 16px;">
+        <h2 style="font-size:1.25rem;font-weight:700;margin-bottom:6px;">Sahifa bo'limlari</h2>
+        <p style="color:#64748b;font-size:.875rem;margin-bottom:24px;">Har bir bo'limni yoqish yoki o'chirish. O'chirilgan bo'lim saytda ko'rinmaydi.</p>
+        <div id="sectionToggles" style="display:flex;flex-direction:column;gap:12px;"></div>
+        <button id="saveSectionsBtn" onclick="saveSections()" style="margin-top:24px;padding:10px 28px;background:#3C50E0;color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:600;cursor:pointer;">Saqlash</button>
+        <span id="sectionsSaveMsg" style="margin-left:12px;font-size:.85rem;color:#16a34a;display:none;">✅ Saqlandi</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- MODALS -->
+  <!-- Feature Modal -->
+  <div class="modal-overlay" id="feature-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="feature-modal-title">Feature qo‘shish</h3>
+        <button class="modal-close" onclick="closeModal('feature-modal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="feature-edit-index" value="-1" />
+        <div class="form-group">
+          <label>Nomi (Title)</label>
+          <input type="text" id="modal-feature-title" placeholder="Tezkor AI yordamchi..." />
+        </div>
+        <div class="form-group">
+          <label>Tavsifi (Description)</label>
+          <textarea id="modal-feature-desc" placeholder="Imkoniyat haqida qisqacha ma‘lumot..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('feature-modal')">Bekor qilish</button>
+        <button class="btn btn-primary" onclick="commitFeature()">Saqlash</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Plan Modal -->
+  <div class="modal-overlay" id="plan-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="plan-modal-title">Tarif qo‘shish</h3>
+        <button class="modal-close" onclick="closeModal('plan-modal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="plan-edit-index" value="-1" />
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Tarif Kaliti (Key - masalan pro, free)</label>
+            <input type="text" id="modal-plan-key" placeholder="pro" />
+          </div>
+          <div class="form-group">
+            <label>Tarif Nomi (Name)</label>
+            <input type="text" id="modal-plan-name" placeholder="Pro Plan" />
+          </div>
+          <div class="form-group form-span-full">
+            <label>Tavsifi (Description)</label>
+            <textarea id="modal-plan-desc" placeholder="Ushbu tarif kimlar uchun mos..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Oylik Narxi (Price Monthly)</label>
+            <input type="text" id="modal-plan-price-monthly" placeholder="$49" />
+          </div>
+          <div class="form-group">
+            <label>Yillik Narxi (Price Yearly)</label>
+            <input type="text" id="modal-plan-price-yearly" placeholder="$39/mo" />
+          </div>
+          <div class="form-group">
+            <label>Tugma Yozuvi (CTA Label)</label>
+            <input type="text" id="modal-plan-cta-label" placeholder="Hozir boshlash" />
+          </div>
+          <div class="form-group">
+            <label>Tugma Havolasi (CTA Href)</label>
+            <input type="text" id="modal-plan-cta-href" placeholder="#order" />
+          </div>
+          <div class="form-group form-span-full">
+            <label>Imkoniyatlar (Features - har bir qatorda bitta imkoniyat)</label>
+            <textarea id="modal-plan-features" placeholder="Imkoniyat 1&#10;Imkoniyat 2&#10;Imkoniyat 3"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('plan-modal')">Bekor qilish</button>
+        <button class="btn btn-primary" onclick="commitPlan()">Saqlash</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Team Member Modal -->
+  <div class="modal-overlay" id="team-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="team-modal-title">A‘zo qo‘shish</h3>
+        <button class="modal-close" onclick="closeModal('team-modal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="team-edit-section" value="members" />
+        <input type="hidden" id="team-edit-index" value="-1" />
+        
+        <div class="form-group">
+          <label>Profil Rasmi (Photo)</label>
+          <div class="upload-container">
+            <div class="upload-preview" id="team-image-preview">
+              <span style="font-size: 24px; color: var(--text-muted);">👤</span>
+            </div>
+            <div class="upload-control">
+              <input type="text" id="modal-team-image-url" placeholder="Rasm havolasi (yoki yuklang)..." />
+              <button class="btn btn-secondary btn-sm" onclick="document.getElementById('team-image-input').click()">Rasm Yuklash</button>
+              <input type="file" id="team-image-input" accept="image/*" style="display:none;" onchange="uploadTeamImage(event)" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Ismi (Name)</label>
+          <input type="text" id="modal-team-name" placeholder="Ali Valiyev" />
+        </div>
+        <div class="form-group">
+          <label>Lavozimi / Roli (Role)</label>
+          <input type="text" id="modal-team-role" placeholder="Senior AI Research Scientist" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('team-modal')">Bekor qilish</button>
+        <button class="btn btn-primary" onclick="commitTeamMember()">Saqlash</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Testimonial Modal -->
+  <div class="modal-overlay" id="testimonial-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="testimonial-modal-title">Fikr qo‘shish</h3>
+        <button class="modal-close" onclick="closeModal('testimonial-modal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="testimonial-edit-index" value="-1" />
+        
+        <div class="form-group">
+          <label>Foydalanuvchi Rasmi (Avatar)</label>
+          <div class="upload-container">
+            <div class="upload-preview" id="testimonial-image-preview">
+              <span style="font-size: 24px; color: var(--text-muted);">👤</span>
+            </div>
+            <div class="upload-control">
+              <input type="text" id="modal-testimonial-image-url" placeholder="Rasm havolasi..." />
+              <button class="btn btn-secondary btn-sm" onclick="document.getElementById('testimonial-image-input').click()">Rasm Yuklash</button>
+              <input type="file" id="testimonial-image-input" accept="image/*" style="display:none;" onchange="uploadTestimonialImage(event)" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Ismi (Name)</label>
+          <input type="text" id="modal-testimonial-name" placeholder="John Doe" />
+        </div>
+        <div class="form-group">
+          <label>Foydalanuvchi Nomi (Username / Kompaniya)</label>
+          <input type="text" id="modal-testimonial-username" placeholder="@johndoe_ai" />
+        </div>
+        <div class="form-group">
+          <label>Fikr Matni (Text)</label>
+          <textarea id="modal-testimonial-text" placeholder="Ushbu platforma bizning loyihalarni..." style="min-height:80px;"></textarea>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Reyting (Rating: 1-5)</label>
+            <select id="modal-testimonial-rating">
+              <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+              <option value="4">⭐⭐⭐⭐ (4)</option>
+              <option value="3">⭐⭐⭐ (3)</option>
+              <option value="2">⭐⭐ (2)</option>
+              <option value="1">⭐ (1)</option>
+            </select>
+          </div>
+          <div class="form-group" style="flex-direction:row; align-items:center; gap:8px; margin-top:26px;">
+            <input type="checkbox" id="modal-testimonial-highlight" style="width:20px; height:20px;" />
+            <label for="modal-testimonial-highlight" style="cursor:pointer;">Highlight qilish (Ajratib ko‘rsatish)</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('testimonial-modal')">Bekor qilish</button>
+        <button class="btn btn-primary" onclick="commitTestimonial()">Saqlash</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State management
+    const state = {
+      adminId: 0,
+      data: {
+        video: { mode: 'youtube', youtubeUrl: '', fileUrl: '' },
+        features: { uz: { title: '', subtitle: '', ctaText: '', ctaButtonLabel: '', ctaButtonHref: '', items: [] }, ru: {}, en: {} },
+        pricing: { uz: { title: '', subtitle: '', billingMonthly: '', billingYearly: '', discountBadge: '', plans: [] }, ru: {}, en: {} },
+        team: { members: [], softScienceBoard: [], hardScienceBoard: [] },
+        testimonials: { uz: { title: '', subtitle: '', items: [] }, ru: {}, en: {} }
+      },
+      langs: {
+        features: 'uz',
+        pricing: 'uz',
+        testimonials: 'uz'
+      }
+    };
+
+    // Initialize admin session
+    function getAdminId() {
+      const keys = ['admin_id', 'adminId', 'ose_admin_id', 'oseAdminId'];
+      for (const k of keys) {
+        const v = localStorage.getItem(k);
+        if (v && !isNaN(Number(v)) && Number(v) > 0) return Number(v);
+      }
+      try {
+        const userObj = localStorage.getItem('ose_admin_user');
+        if (userObj) {
+          const parsed = JSON.parse(userObj);
+          if (parsed && parsed.id) return Number(parsed.id);
+        }
+      } catch (e) {}
+      return 0;
+    }
+
+    state.adminId = getAdminId();
+
+    // Theme toggle helper
+    const btnTheme = document.getElementById('theme-toggle-btn');
+    btnTheme.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+    });
+
+    // Tab switcher
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+        btn.classList.add('active');
+        const tabName = btn.getAttribute('data-tab');
+        document.getElementById(`tab-${tabName}`).classList.add('active');
+      });
+    });
+
+    // Toast Alert
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        toast.style.transition = 'all 0.3s';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // Modal helpers
+    function openModal(id) {
+      document.getElementById(id).style.display = 'flex';
+    }
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    // Dynamic fields for video settings
+    function toggleVideoFields() {
+      const mode = document.getElementById('video-mode').value;
+      if (mode === 'youtube') {
+        document.getElementById('youtube-group').style.display = 'block';
+        document.getElementById('file-group').style.display = 'none';
+      } else {
+        document.getElementById('youtube-group').style.display = 'none';
+        document.getElementById('file-group').style.display = 'block';
+      }
+    }
+
+    // Load initial data
+    async function loadData() {
+      try {
+        const res = await fetch('/api/site-content', { cache: 'no-store' });
+        const json = await res.json().catch(() => ({}));
+        if (!json.ok) throw new Error('Data yuklashda xatolik yuz berdi');
+
+        // Populate local state
+        state.data.video = json.video || { mode: 'youtube', youtubeUrl: '', fileUrl: '' };
+        
+        // Populate features
+        for (const l of ['uz', 'ru', 'en']) {
+          state.data.features[l] = normalizeFeatures(json.features?.[l]);
+          state.data.pricing[l] = normalizePricing(json.pricing?.[l]);
+          state.data.testimonials[l] = normalizeTestimonials(json.testimonials?.[l]);
+        }
+
+        // Populate team
+        state.data.team.members = Array.isArray(json.team?.members) ? json.team.members : [];
+        state.data.team.softScienceBoard = Array.isArray(json.team?.softScienceBoard) ? json.team.softScienceBoard : [];
+        state.data.team.hardScienceBoard = Array.isArray(json.team?.hardScienceBoard) ? json.team.hardScienceBoard : [];
+
+        // Apply state to inputs
+        applyVideoState();
+        applyFeaturesState();
+        applyPricingState();
+        applyTeamState();
+        applyTestimonialsState();
+
+        showToast('Tahrirlash sahifasi yuklandi.');
+      } catch (err) {
+        showToast(err.message || 'Xatolik yuz berdi', 'danger');
+      }
+    }
+
+    // Safe Normalizers
+    function normalizeFeatures(f) {
+      return {
+        title: String(f?.title || ''),
+        subtitle: String(f?.subtitle || ''),
+        ctaText: String(f?.ctaText || ''),
+        ctaButtonLabel: String(f?.ctaButtonLabel || ''),
+        ctaButtonHref: String(f?.ctaButtonHref || ''),
+        items: Array.isArray(f?.items) ? f.items.map(i => ({ title: String(i?.title || ''), description: String(i?.description || '') })) : []
+      };
+    }
+
+    function normalizePricing(p) {
+      return {
+        title: String(p?.title || ''),
+        subtitle: String(p?.subtitle || ''),
+        billingMonthly: String(p?.billingMonthly || ''),
+        billingYearly: String(p?.billingYearly || ''),
+        discountBadge: String(p?.discountBadge || ''),
+        plans: Array.isArray(p?.plans) ? p.plans.map(pl => ({
+          key: String(pl?.key || ''),
+          name: String(pl?.name || ''),
+          description: String(pl?.description || ''),
+          priceMonthly: String(pl?.priceMonthly || ''),
+          priceYearly: String(pl?.priceYearly || ''),
+          ctaLabel: String(pl?.ctaLabel || ''),
+          ctaHref: String(pl?.ctaHref || ''),
+          features: Array.isArray(pl?.features) ? pl.features.map(String) : []
+        })) : []
+      };
+    }
+
+    // Normalize testimonials
+    function normalizeTestimonials(t) {
+      return {
+        title: String(t?.title || ''),
+        subtitle: String(t?.subtitle || ''),
+        items: Array.isArray(t?.items) ? t.items.map(i => ({
+          name: String(i?.name || ''),
+          username: String(i?.username || ''),
+          text: String(i?.text || ''),
+          rating: Number(i?.rating || 5),
+          avatarUrl: String(i?.avatarUrl || ''),
+          highlight: Boolean(i?.highlight)
+        })) : []
+      };
+    }
+
+    // Language switch helper
+    function changeLang(section, lang) {
+      // update active button UI
+      const container = document.querySelector(`#tab-${section} .lang-selector`);
+      container.querySelectorAll('.lang-btn').forEach(btn => {
+        if (btn.getAttribute('data-lang') === lang) btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+
+      state.langs[section] = lang;
+      
+      // re-apply inputs of this section
+      if (section === 'features') applyFeaturesState();
+      else if (section === 'pricing') applyPricingState();
+      else if (section === 'testimonials') applyTestimonialsState();
+    }
+
+    // Apply states to fields
+    function applyVideoState() {
+      document.getElementById('video-mode').value = state.data.video.mode || 'youtube';
+      document.getElementById('video-youtube-url').value = state.data.video.youtubeUrl || '';
+      document.getElementById('video-file-url').value = state.data.video.fileUrl || '';
+      toggleVideoFields();
+    }
+
+    function applyFeaturesState() {
+      const lang = state.langs.features;
+      const pack = state.data.features[lang];
+
+      document.getElementById('features-title').value = pack.title;
+      document.getElementById('features-subtitle').value = pack.subtitle;
+      document.getElementById('features-cta-text').value = pack.ctaText;
+      document.getElementById('features-cta-label').value = pack.ctaButtonLabel;
+      document.getElementById('features-cta-href').value = pack.ctaButtonHref;
+
+      renderFeaturesList();
+    }
+
+    function applyPricingState() {
+      const lang = state.langs.pricing;
+      const pack = state.data.pricing[lang];
+
+      document.getElementById('pricing-title').value = pack.title;
+      document.getElementById('pricing-subtitle').value = pack.subtitle;
+      document.getElementById('pricing-monthly').value = pack.billingMonthly;
+      document.getElementById('pricing-yearly').value = pack.billingYearly;
+      document.getElementById('pricing-discount').value = pack.discountBadge;
+
+      renderPlansList();
+    }
+
+    function applyTeamState() {
+      renderTeamList('members', 'team-members-list');
+      renderTeamList('soft', 'team-soft-list');
+      renderTeamList('hard', 'team-hard-list');
+    }
+
+    function applyTestimonialsState() {
+      const lang = state.langs.testimonials;
+      const pack = state.data.testimonials[lang];
+
+      document.getElementById('testimonials-title').value = pack.title;
+      document.getElementById('testimonials-subtitle').value = pack.subtitle;
+
+      renderTestimonialsList();
+    }
+
+    // Render features list
+    function renderFeaturesList() {
+      const container = document.getElementById('features-list');
+      container.innerHTML = '';
+      const lang = state.langs.features;
+      const items = state.data.features[lang].items;
+
+      if (items.length === 0) {
+        container.innerHTML = '<div style="color:var(--text-muted); font-size:13px; grid-column:1/-1;">Hech qanday imkoniyat qo‘shilmagan.</div>';
+        return;
+      }
+
+      items.forEach((item, idx) => {
+        const el = document.createElement('div');
+        el.className = 'list-card';
+        el.innerHTML = `
+          <div class="list-card-content">
+            <h4 class="list-card-title">${item.title || 'Untitled'}</h4>
+            <div class="list-card-body">${item.description || 'No description'}</div>
+            <div class="list-card-actions">
+              <button class="btn btn-secondary btn-sm" onclick="openFeatureModal(${idx})">Edit</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteFeature(${idx})">Delete</button>
+            </div>
+          </div>
+        `;
+        container.appendChild(el);
+      });
+    }
+
+    // Render plans list
+    function renderPlansList() {
+      const container = document.getElementById('plans-list');
+      container.innerHTML = '';
+      const lang = state.langs.pricing;
+      const plans = state.data.pricing[lang].plans;
+
+      if (plans.length === 0) {
+        container.innerHTML = '<div style="color:var(--text-muted); font-size:13px; grid-column:1/-1;">Hech qanday tarif rejalari qo‘shilmagan.</div>';
+        return;
+      }
+
+      plans.forEach((plan, idx) => {
+        const el = document.createElement('div');
+        el.className = 'list-card';
+        el.innerHTML = `
+          <div class="list-card-content">
+            <h4 class="list-card-title">${plan.name || 'Untitled'} <small style="color:var(--primary)">(${plan.key})</small></h4>
+            <div class="list-card-subtitle">${plan.priceMonthly || '—'} / month · ${plan.priceYearly || '—'} / year</div>
+            <div class="list-card-body">${plan.description || ''}</div>
+            <div style="font-size:11px; margin-top:6px; color:var(--text-muted);">Features: ${plan.features.length} items</div>
+            <div class="list-card-actions">
+              <button class="btn btn-secondary btn-sm" onclick="openPlanModal(${idx})">Edit</button>
+              <button class="btn btn-danger btn-sm" onclick="deletePlan(${idx})">Delete</button>
+            </div>
+          </div>
+        `;
+        container.appendChild(el);
+      });
+    }
+
+    // Render team list
+    function renderTeamList(section, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      let list = [];
+      if (section === 'members') list = state.data.team.members;
+      else if (section === 'soft') list = state.data.team.softScienceBoard;
+      else if (section === 'hard') list = state.data.team.hardScienceBoard;
+
+      if (list.length === 0) {
+        container.innerHTML = '<div style="color:var(--text-muted); font-size:13px; grid-column:1/-1;">Kategoriya bo‘sh.</div>';
+        return;
+      }
+
+      list.forEach((item, idx) => {
+        const el = document.createElement('div');
+        el.className = 'list-card';
+        const imgUrl = item.imageUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=150';
+        el.innerHTML = `
+          <img class="list-card-img" src="${imgUrl}" alt="${item.name}" />
+          <div class="list-card-content">
+            <h4 class="list-card-title">${item.name || 'Untitled'}</h4>
+            <div class="list-card-subtitle">${item.role || ''}</div>
+            <div class="list-card-actions">
+              <button class="btn btn-secondary btn-sm" onclick="openTeamMemberModal('${section}', ${idx})">Edit</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteTeamMember('${section}', ${idx})">Delete</button>
+            </div>
+          </div>
+        `;
+        container.appendChild(el);
+      });
+    }
+
+    // Render testimonials list
+    function renderTestimonialsList() {
+      const container = document.getElementById('testimonials-list');
+      container.innerHTML = '';
+      const lang = state.langs.testimonials;
+      const items = state.data.testimonials[lang].items;
+
+      if (items.length === 0) {
+        container.innerHTML = '<div style="color:var(--text-muted); font-size:13px; grid-column:1/-1;">Hech qanday fikrlar qo‘shilmagan.</div>';
+        return;
+      }
+
+      items.forEach((item, idx) => {
+        const el = document.createElement('div');
+        el.className = 'list-card';
+        const imgUrl = item.avatarUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=150';
+        el.innerHTML = `
+          <img class="list-card-img" src="${imgUrl}" alt="${item.name}" />
+          <div class="list-card-content">
+            <h4 class="list-card-title">${item.name || 'Anonymous'} <span style="font-size:11px; font-weight:normal; color:var(--text-muted)">${item.username || ''}</span></h4>
+            <div class="list-card-subtitle">Rating: ${'⭐'.repeat(item.rating)} ${item.highlight ? '· <span style="color:var(--success)">Highlighted</span>' : ''}</div>
+            <div class="list-card-body">${item.text || ''}</div>
+            <div class="list-card-actions">
+              <button class="btn btn-secondary btn-sm" onclick="openTestimonialModal(${idx})">Edit</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteTestimonial(${idx})">Delete</button>
+            </div>
+          </div>
+        `;
+        container.appendChild(el);
+      });
+    }
+
+    // MODAL OPERATIONS & SAVE LOCAL ACTIONS
+    function openFeatureModal(index) {
+      const lang = state.langs.features;
+      const form = state.data.features[lang];
+      document.getElementById('feature-edit-index').value = index;
+
+      if (index === -1) {
+        document.getElementById('feature-modal-title').textContent = 'Yangi Feature Qo‘shish';
+        document.getElementById('modal-feature-title').value = '';
+        document.getElementById('modal-feature-desc').value = '';
+      } else {
+        document.getElementById('feature-modal-title').textContent = 'Feature-ni Tahrirlash';
+        const item = form.items[index];
+        document.getElementById('modal-feature-title').value = item.title;
+        document.getElementById('modal-feature-desc').value = item.description;
+      }
+      openModal('feature-modal');
+    }
+
+    function commitFeature() {
+      const lang = state.langs.features;
+      const index = Number(document.getElementById('feature-edit-index').value);
+      const title = document.getElementById('modal-feature-title').value.trim();
+      const description = document.getElementById('modal-feature-desc').value.trim();
+
+      if (!title || !description) {
+        alert('Sarlavha va tavsif to‘ldirilishi majburiy.');
+        return;
+      }
+
+      if (index === -1) {
+        state.data.features[lang].items.push({ title, description });
+      } else {
+        state.data.features[lang].items[index] = { title, description };
+      }
+
+      closeModal('feature-modal');
+      renderFeaturesList();
+    }
+
+    function deleteFeature(index) {
+      if (confirm('Ushbu feature-ni o‘chirmoqchimisiz?')) {
+        const lang = state.langs.features;
+        state.data.features[lang].items.splice(index, 1);
+        renderFeaturesList();
+      }
+    }
+
+    function openPlanModal(index) {
+      const lang = state.langs.pricing;
+      const form = state.data.pricing[lang];
+      document.getElementById('plan-edit-index').value = index;
+
+      if (index === -1) {
+        document.getElementById('plan-modal-title').textContent = 'Yangi Tarif Qo‘shish';
+        document.getElementById('modal-plan-key').value = 'pro';
+        document.getElementById('modal-plan-name').value = '';
+        document.getElementById('modal-plan-desc').value = '';
+        document.getElementById('modal-plan-price-monthly').value = '';
+        document.getElementById('modal-plan-price-yearly').value = '';
+        document.getElementById('modal-plan-cta-label').value = 'Get Started';
+        document.getElementById('modal-plan-cta-href').value = '#';
+        document.getElementById('modal-plan-features').value = '';
+      } else {
+        document.getElementById('plan-modal-title').textContent = 'Tarifni Tahrirlash';
+        const plan = form.plans[index];
+        document.getElementById('modal-plan-key').value = plan.key;
+        document.getElementById('modal-plan-name').value = plan.name;
+        document.getElementById('modal-plan-desc').value = plan.description;
+        document.getElementById('modal-plan-price-monthly').value = plan.priceMonthly;
+        document.getElementById('modal-plan-price-yearly').value = plan.priceYearly;
+        document.getElementById('modal-plan-cta-label').value = plan.ctaLabel;
+        document.getElementById('modal-plan-cta-href').value = plan.ctaHref;
+        document.getElementById('modal-plan-features').value = plan.features.join('\n');
+      }
+      openModal('plan-modal');
+    }
+
+    function commitPlan() {
+      const lang = state.langs.pricing;
+      const index = Number(document.getElementById('plan-edit-index').value);
+      
+      const key = document.getElementById('modal-plan-key').value.trim();
+      const name = document.getElementById('modal-plan-name').value.trim();
+      const description = document.getElementById('modal-plan-desc').value.trim();
+      const priceMonthly = document.getElementById('modal-plan-price-monthly').value.trim();
+      const priceYearly = document.getElementById('modal-plan-price-yearly').value.trim();
+      const ctaLabel = document.getElementById('modal-plan-cta-label').value.trim();
+      const ctaHref = document.getElementById('modal-plan-cta-href').value.trim();
+      const features = document.getElementById('modal-plan-features').value.split('\n').map(x => x.trim()).filter(Boolean);
+
+      if (!key || !name) {
+        alert('Kalit va tarif nomi majburiy.');
+        return;
+      }
+
+      const planData = { key, name, description, priceMonthly, priceYearly, ctaLabel, ctaHref, features };
+
+      if (index === -1) {
+        state.data.pricing[lang].plans.push(planData);
+      } else {
+        state.data.pricing[lang].plans[index] = planData;
+      }
+
+      closeModal('plan-modal');
+      renderPlansList();
+    }
+
+    function deletePlan(index) {
+      if (confirm('Tarifni o‘chirmoqchimisiz?')) {
+        const lang = state.langs.pricing;
+        state.data.pricing[lang].plans.splice(index, 1);
+        renderPlansList();
+      }
+    }
+
+    function openTeamMemberModal(section, index) {
+      document.getElementById('team-edit-section').value = section;
+      document.getElementById('team-edit-index').value = index;
+
+      let list = [];
+      if (section === 'members') list = state.data.team.members;
+      else if (section === 'soft') list = state.data.team.softScienceBoard;
+      else if (section === 'hard') list = state.data.team.hardScienceBoard;
+
+      if (index === -1) {
+        document.getElementById('team-modal-title').textContent = 'Yangi A‘zo Qo‘shish';
+        document.getElementById('modal-team-name').value = '';
+        document.getElementById('modal-team-role').value = '';
+        document.getElementById('modal-team-image-url').value = '';
+        document.getElementById('team-image-preview').innerHTML = '<span style="font-size: 24px; color: var(--text-muted);">👤</span>';
+      } else {
+        document.getElementById('team-modal-title').textContent = 'A‘zoni Tahrirlash';
+        const item = list[index];
+        document.getElementById('modal-team-name').value = item.name;
+        document.getElementById('modal-team-role').value = item.role;
+        document.getElementById('modal-team-image-url').value = item.imageUrl || '';
+        if (item.imageUrl) {
+          document.getElementById('team-image-preview').innerHTML = `<img src="${item.imageUrl}" />`;
+        } else {
+          document.getElementById('team-image-preview').innerHTML = '<span style="font-size: 24px; color: var(--text-muted);">👤</span>';
+        }
+      }
+      openModal('team-modal');
+    }
+
+    function commitTeamMember() {
+      const section = document.getElementById('team-edit-section').value;
+      const index = Number(document.getElementById('team-edit-index').value);
+
+      const name = document.getElementById('modal-team-name').value.trim();
+      const role = document.getElementById('modal-team-role').value.trim();
+      const imageUrl = document.getElementById('modal-team-image-url').value.trim();
+
+      if (!name) {
+        alert('Ism to‘ldirilishi shart.');
+        return;
+      }
+
+      let list = [];
+      if (section === 'members') list = state.data.team.members;
+      else if (section === 'soft') list = state.data.team.softScienceBoard;
+      else if (section === 'hard') list = state.data.team.hardScienceBoard;
+
+      const memberData = { name, role, imageUrl };
+
+      if (index === -1) {
+        list.push(memberData);
+      } else {
+        list[index] = memberData;
+      }
+
+      closeModal('team-modal');
+      applyTeamState();
+    }
+
+    function deleteTeamMember(section, index) {
+      if (confirm('Ushbu jamoa a‘zosini o‘chirmoqchimisiz?')) {
+        let list = [];
+        if (section === 'members') list = state.data.team.members;
+        else if (section === 'soft') list = state.data.team.softScienceBoard;
+        else if (section === 'hard') list = state.data.team.hardScienceBoard;
+
+        list.splice(index, 1);
+        applyTeamState();
+      }
+    }
+
+    function openTestimonialModal(index) {
+      const lang = state.langs.testimonials;
+      const form = state.data.testimonials[lang];
+      document.getElementById('testimonial-edit-index').value = index;
+
+      if (index === -1) {
+        document.getElementById('testimonial-modal-title').textContent = 'Yangi Fikr Qo‘shish';
+        document.getElementById('modal-testimonial-name').value = '';
+        document.getElementById('modal-testimonial-username').value = '';
+        document.getElementById('modal-testimonial-text').value = '';
+        document.getElementById('modal-testimonial-rating').value = '5';
+        document.getElementById('modal-testimonial-highlight').checked = false;
+        document.getElementById('modal-testimonial-image-url').value = '';
+        document.getElementById('testimonial-image-preview').innerHTML = '<span style="font-size: 24px; color: var(--text-muted);">👤</span>';
+      } else {
+        document.getElementById('testimonial-modal-title').textContent = 'Fikrni Tahrirlash';
+        const item = form.items[index];
+        document.getElementById('modal-testimonial-name').value = item.name;
+        document.getElementById('modal-testimonial-username').value = item.username;
+        document.getElementById('modal-testimonial-text').value = item.text;
+        document.getElementById('modal-testimonial-rating').value = String(item.rating);
+        document.getElementById('modal-testimonial-highlight').checked = item.highlight;
+        document.getElementById('modal-testimonial-image-url').value = item.avatarUrl || '';
+        if (item.avatarUrl) {
+          document.getElementById('testimonial-image-preview').innerHTML = `<img src="${item.avatarUrl}" />`;
+        } else {
+          document.getElementById('testimonial-image-preview').innerHTML = '<span style="font-size: 24px; color: var(--text-muted);">👤</span>';
+        }
+      }
+      openModal('testimonial-modal');
+    }
+
+    function commitTestimonial() {
+      const lang = state.langs.testimonials;
+      const index = Number(document.getElementById('testimonial-edit-index').value);
+
+      const name = document.getElementById('modal-testimonial-name').value.trim();
+      const username = document.getElementById('modal-testimonial-username').value.trim();
+      const text = document.getElementById('modal-testimonial-text').value.trim();
+      const rating = Number(document.getElementById('modal-testimonial-rating').value);
+      const highlight = document.getElementById('modal-testimonial-highlight').checked;
+      const avatarUrl = document.getElementById('modal-testimonial-image-url').value.trim();
+
+      if (!name || !text) {
+        alert('Ism va fikr matni kiritilishi shart.');
+        return;
+      }
+
+      const testData = { name, username, text, rating, avatarUrl, highlight };
+
+      if (index === -1) {
+        state.data.testimonials[lang].items.push(testData);
+      } else {
+        state.data.testimonials[lang].items[index] = testData;
+      }
+
+      closeModal('testimonial-modal');
+      renderTestimonialsList();
+    }
+
+    // Delete testimonial
+    function deleteTestimonial(index) {
+      if (confirm('Ushbu fikrni o‘chirmoqchimisiz?')) {
+        const lang = state.langs.testimonials;
+        state.data.testimonials[lang].items.splice(index, 1);
+        renderTestimonialsList();
+      }
+    }
+
+    // UPLOADS FLOWS
+    async function uploadTeamImage(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        showToast('Rasm yuklanmoqda...');
+        const res = await fetch(`/api/site/upload?admin_id=${state.adminId}`, {
+          method: 'POST',
+          body: formData
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(json.error || 'Upload error');
+
+        document.getElementById('modal-team-image-url').value = json.url;
+        document.getElementById('team-image-preview').innerHTML = `<img src="${json.url}" />`;
+        showToast('Rasm muvaffaqiyatli yuklandi.');
+      } catch (err) {
+        showToast(err.message, 'danger');
+      }
+    }
+
+    async function uploadTestimonialImage(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        showToast('Rasm yuklanmoqda...');
+        const res = await fetch(`/api/site/upload?admin_id=${state.adminId}`, {
+          method: 'POST',
+          body: formData
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(json.error || 'Upload error');
+
+        document.getElementById('modal-testimonial-image-url').value = json.url;
+        document.getElementById('testimonial-image-preview').innerHTML = `<img src="${json.url}" />`;
+        showToast('Avatar muvaffaqiyatli yuklandi.');
+      } catch (err) {
+        showToast(err.message, 'danger');
+      }
+    }
+
+    async function uploadVideoFile(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        showToast('Video yuklanmoqda (bu bir necha daqiqa olishi mumkin)...');
+        const res = await fetch(`/api/site/video-upload?admin_id=${state.adminId}`, {
+          method: 'POST',
+          body: formData
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(json.error || 'Upload error');
+
+        document.getElementById('video-file-url').value = json.url;
+        showToast('Video muvaffaqiyatli yuklandi. Saqlashni unutmang.');
+      } catch (err) {
+        showToast(err.message, 'danger');
+      }
+    }
+
+    // BACKEND PERSISTENCE SAVES
+    async function saveVideoSettings() {
+      const mode = document.getElementById('video-mode').value;
+      const youtubeUrl = document.getElementById('video-youtube-url').value.trim();
+      const fileUrl = document.getElementById('video-file-url').value.trim();
+
+      try {
+        showToast('Video sozlamalari saqlanmoqda...');
+        const res = await fetch('/api/site/video', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            admin_id: state.adminId,
+            mode,
+            youtubeUrl,
+            fileUrl
+          })
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(json.error || 'Saqlashda xato');
+
+        state.data.video = json.video || { mode, youtubeUrl, fileUrl };
+        showToast('Video sozlamalari saqlandi.');
+      } catch (err) {
+        showToast(err.message, 'danger');
+      }
+    }
+
+    async function saveFeatures() {
+      const lang = state.langs.features;
+      const pack = state.data.features[lang];
+
+      pack.title = document.getElementById('features-title').value.trim();
+      pack.subtitle = document.getElementById('features-subtitle').value.trim();
+      pack.ctaText = document.getElementById('features-cta-text').value.trim();
+      pack.ctaButtonLabel = document.getElementById('features-cta-label').value.trim();
+      pack.ctaButtonHref = document.getElementById('features-cta-href').value.trim();
+
+      try {
+        showToast('Imkoniyatlar saqlanmoqda...');
+        const res = await fetch('/api/site/features', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            admin_id: state.adminId,
+            features: state.data.features
+          })
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(json.error || 'Saqlashda xato');
+
+        showToast('Imkoniyatlar muvaffaqiyatli saqlandi.');
+      } catch (err) {
+        showToast(err.message, 'danger');
+      }
+    }
+
+    async function savePricing() {
+      const lang = state.langs.pricing;
+      const pack = state.data.pricing[lang];
+
+      pack.title = document.getElementById('pricing-title').value.trim();
+      pack.subtitle = document.getElementById('pricing-subtitle').value.trim();
+      pack.billingMonthly = document.getElementById('pricing-monthly').value.trim();
+      pack.billingYearly = document.getElementById('pricing-yearly').value.trim();
+      pack.discountBadge = document.getElementById('pricing-discount').value.trim();
+
+      try {
+        showToast('Tarif rejalari saqlanmoqda...');
+        const res = await fetch('/api/site/pricing', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            admin_id: state.adminId,
+            pricing: state.data.pricing
+          })
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(json.error || 'Saqlashda xato');
+
+        showToast('Tariflar muvaffaqiyatli saqlandi.');
+      } catch (err) {
+        showToast(err.message, 'danger');
+      }
+    }
+
+    async function saveTeam() {
+      try {
+        showToast('Jamoa a‘zolari saqlanmoqda...');
+        const res = await fetch('/api/site/team', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            admin_id: state.adminId,
+            members: state.data.team.members,
+            softScienceBoard: state.data.team.softScienceBoard,
+            hardScienceBoard: state.data.team.hardScienceBoard
+          })
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(json.error || 'Saqlashda xato');
+
+        showToast('Jamoa a‘zolari muvaffaqiyatli saqlandi.');
+      } catch (err) {
+        showToast(err.message, 'danger');
+      }
+    }
+
+    async function saveTestimonials() {
+      const lang = state.langs.testimonials;
+      const pack = state.data.testimonials[lang];
+
+      pack.title = document.getElementById('testimonials-title').value.trim();
+      pack.subtitle = document.getElementById('testimonials-subtitle').value.trim();
+
+      try {
+        showToast('Testimonials saqlanmoqda...');
+        const res = await fetch('/api/site/testimonials', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            admin_id: state.adminId,
+            testimonials: state.data.testimonials
+          })
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(json.error || 'Saqlashda xato');
+
+        showToast('Mijozlar fikrlari muvaffaqiyatli saqlandi.');
+      } catch (err) {
+        showToast(err.message, 'danger');
+      }
+    }
+
+    // Run loader on startup
+    loadData();
+
+    // ── Sections On/Off ──────────────────────────────────────────────────────
+    const SECTION_LABELS = {
+      hero:         { label: '✨ Hero Section',          desc: 'Asosiy sarlavha va CTA tugmasi' },
+      stats:        { label: '📊 Stats Bar',             desc: 'Statistika raqamlari qatori' },
+      features:     { label: '🚀 Core Features',         desc: 'Asosiy imkoniyatlar bo\'limi' },
+      faq:          { label: '❓ FAQ',                   desc: 'Ko\'p beriladigan savollar' },
+      team:         { label: '👥 Team Members',          desc: 'Jamoa a\'zolari' },
+      'soft-board': { label: '🧬 Soft Science Board',    desc: 'Ijtimoiy fanlar kengashi' },
+      'hard-board': { label: '🔬 Hard Science Board',    desc: 'Tabiiy fanlar kengashi' },
+      video:        { label: '🎥 Video Section',         desc: 'Video qo\'yilgan bo\'lim' },
+      pricing:      { label: '💎 Pricing Plans',         desc: 'Narxlar va paketlar' },
+      testimonials: { label: '💬 Testimonials',          desc: 'Mijozlar sharhlari' },
+      footer:       { label: '🦶 Footer',                desc: 'Sahifaning quyi qismi' },
+    };
+
+    let sectionState = {};
+
+    async function loadSections() {
+      try {
+        const res = await fetch('/api/site/sections');
+        sectionState = await res.json();
+        renderSectionToggles();
+      } catch(e) { console.error('sections load error', e); }
+    }
+
+    function renderSectionToggles() {
+      const container = document.getElementById('sectionToggles');
+      if (!container) return;
+      container.innerHTML = '';
+      for (const [key, meta] of Object.entries(SECTION_LABELS)) {
+        const isOn = sectionState[key] !== false;
+        const row = document.createElement('div');
+        row.className = 'section-toggle-row';
+        row.innerHTML = `
+          <div>
+            <div class="section-toggle-label">${meta.label}</div>
+            <div class="section-toggle-desc">${meta.desc}</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" data-key="${key}" ${isOn ? 'checked' : ''}>
+            <span class="toggle-slider"></span>
+          </label>`;
+        container.appendChild(row);
+      }
+    }
+
+    async function saveSections() {
+      const checkboxes = document.querySelectorAll('#sectionToggles input[data-key]');
+      const sections = {};
+      checkboxes.forEach(cb => { sections[cb.dataset.key] = cb.checked; });
+
+      const adminId = localStorage.getItem('ose_admin_user')
+        ? JSON.parse(localStorage.getItem('ose_admin_user')).id
+        : (localStorage.getItem('admin_id') || 0);
+
+      try {
+        const res = await fetch('/api/site/sections', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ adminId, sections })
+        });
+        const j = await res.json();
+        if (j.ok) {
+          sectionState = j.sections;
+          const msg = document.getElementById('sectionsSaveMsg');
+          msg.style.display = 'inline';
+          setTimeout(() => { msg.style.display = 'none'; }, 2500);
+        } else {
+          alert('Xatolik: ' + (j.error || 'noma\'lum'));
+        }
+      } catch(e) { alert('Server xatosi: ' + e.message); }
+    }
+
+    // Load sections when tab opened
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      if (btn.dataset.tab === 'sections') {
+        btn.addEventListener('click', () => { if (!Object.keys(sectionState).length) loadSections(); });
+      }
+    });
+  </script>
+</body>
+</html>
