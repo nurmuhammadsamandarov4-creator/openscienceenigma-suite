@@ -202,6 +202,11 @@
       submit_order: "Zakaz berish",
       back_dashboard: "← Dashboard",
       error_desc_required: "Iltimos, zakaz haqida batafsil yozing.",
+      integrity_title: "Akademik halollik bayonoti: tahrirlash va ma'lumotlar tahlili xizmatlari",
+      integrity_p1: "Akademik tahrirlash va ma'lumotlar tahlili xizmatlarimiz COPE (Nashriyot etikasi qo'mitasi) kabi organllarning qat'iy akademik halollik standartlariga rioya qilgan holda tadqiqotchilarga yuqori sifatli qo'lyozmalarni tayyorlashda yordam berish uchun mo'ljallangan.",
+      integrity_p2: "Tahrirlash ishimiz jurnal talablariga muvofiq til, aniqlik, tuzilma va formatlashga qaratilgan. Biz qo'lyozmaning intellektual mazmunini, dalillarini yoki xulosalarini yaratmaymiz, qayta yozmaymiz yoki tubdan o'zgartirmaymiz. Ma'lumotlar tahlili bo'yicha yordamimiz faqat mijoz tomonidan taqdim etilgan ma'lumotlar va parametrlarga asoslanadi; biz ma'lumotlarni yoki natijalarni to'qib chiqarmaymiz, soxtalashtirarmaymiz yoki manipulyatsiya qilmaymiz.",
+      integrity_p3: "Biz ghostwriting xizmatlari ko'rsatmaymiz. Biz boshqa shaxsning haqiqiy intellektual hissasisiz uning nomidan topshirish uchun mo'ljallangan qo'lyozmalar yoki bo'limlar tayyorlamaymiz va ishimiz uchun muallif sifatida tan olinishni qabul qilmaymiz yoki nazarda tutmaymiz. Mijozlar o'z maqsadli jurnali yoki muassasasi talab qilganidek, ko'rsatilgan tahririy yoki tahliliy yordam haqida ma'lumot berishlari tavsiya etiladi.",
+      integrity_p4: "Bizning rolimiz faqat yordamchi: mualliflar o'z tadqiqotlari, g'oyalari va muallif huquqlari ustidan to'liq egalikni saqlab qoladi va bizning xizmatlarimiz hech qachon nomlangan mualliflarning ilmiy hissasining o'rnini bosa olmaydi.",
       error_file_required: "Iltimos, kamida bitta fayl yuklang!",
 
       // Single order page
@@ -509,6 +514,11 @@
       submit_order: "Отправить заказ",
       back_dashboard: "← Dashboard",
       error_desc_required: "Пожалуйста, опишите задание подробно.",
+      integrity_title: "Заявление об академической честности в услугах редактирования и анализа данных",
+      integrity_p1: "Наши услуги академического редактирования и анализа данных предназначены для поддержки исследователей в подготовке высококачественных рукописей при соблюдении строгих стандартов академической честности в соответствии с руководящими принципами таких органов, как COPE (Комитет по этике публикаций).",
+      integrity_p2: "Наша редакторская работа сосредоточена на языке, ясности, структуре и форматировании в соответствии с требованиями журнала. Мы не создаём, не переписываем и не меняем существенно интеллектуальное содержание, аргументы или выводы рукописи. Наша поддержка в области анализа данных основана исключительно на данных и параметрах, предоставленных клиентом; мы не фабрикуем, не фальсифицируем и не манипулируем данными или результатами.",
+      integrity_p3: "Мы не предлагаем услуги написания текстов на заказ. Мы не будем создавать рукописи или разделы, предназначенные для подачи под именем другого человека без его подлинного интеллектуального вклада, и мы не принимаем и не подразумеваем авторство нашей работы. Клиентам рекомендуется раскрывать любую полученную редакционную или аналитическую помощь, как того требует их целевой журнал или учреждение.",
+      integrity_p4: "Наша роль строго вспомогательная: авторы сохраняют полное право собственности на свои исследования, идеи и авторство, и наши услуги никогда не заменяют научный вклад названных авторов.",
       error_file_required: "Пожалуйста, прикрепите хотя бы один файл!",
 
       order_title: "Заказ",
@@ -808,6 +818,11 @@
       submit_order: "Submit order",
       back_dashboard: "← Dashboard",
       error_desc_required: "Please describe the task details.",
+      integrity_title: "Statement on Academic Integrity in Editing and Data Analytics Services",
+      integrity_p1: "Our academic editing and data analytics services are designed to support researchers in preparing high-quality manuscripts while upholding rigorous standards of academic integrity, consistent with guidelines from bodies such as COPE (Committee on Publication Ethics).",
+      integrity_p2: "Our editing work focuses on language, clarity, structure, and formatting in line with journal requirements. We do not create, rewrite, or substantively alter a manuscript's intellectual content, arguments, or conclusions. Our data analytics support is based entirely on data and parameters provided by the client; we do not fabricate, falsify, or manipulate data or results.",
+      integrity_p3: "We do not offer ghostwriting services. We will not produce manuscripts or sections intended for submission under another person's name without that person's genuine intellectual contribution, and we do not accept or imply authorship credit for our work. Clients are encouraged to disclose any editorial or analytical assistance received, as required by their target journal or institution.",
+      integrity_p4: "Our role is strictly supportive: authors retain full ownership of their research, ideas, and authorship, and our services are never a substitute for the scholarly contribution of the named authors.",
       error_file_required: "Please attach at least one file!",
 
       order_title: "Order",
