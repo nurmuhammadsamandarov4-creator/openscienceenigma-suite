@@ -60,41 +60,35 @@ async function loadTeamSection() {
       }
     };
 
-    // Fill main team — static 3-column grid: [Vacant, Founder, Vacant]
+    // Filter out vacant/placeholder members
+    const isVacant = (m) => /^vacant$/i.test(String(m.name || '').trim());
+    const realMembers = members.filter(m => m && !isVacant(m));
+
     const renderCard = (m) => {
-      if (!m) return '';
-      const name    = escapeHtml(String(m.name || ''));
-      const role    = escapeHtml(String(m.role || ''));
-      const desc    = escapeHtml(String(m.description || ''));
-      const img     = escapeHtml(String(m.imageUrl || ''));
+      const name = escapeHtml(String(m.name || ''));
+      const role = escapeHtml(String(m.role || ''));
+      const desc = escapeHtml(String(m.description || ''));
+      const img  = escapeHtml(String(m.imageUrl || ''));
       return `
-<div class="ose-electric-card">
-  <div class="ose-electric-inner group relative overflow-hidden">
-    <img src="${img}" alt="${name}" class="team-img transition-transform duration-500 group-hover:scale-110" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=600'" />
-    <h3 class="team-name">${name || 'Untitled'}</h3>
-    <p class="team-role">${role}</p>
-    ${desc ? `<div class="absolute inset-0 bg-black/80 flex items-center justify-center p-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm text-center overflow-y-auto backdrop-blur-sm" style="z-index:10;"><p class="leading-relaxed" style="font-size:13px;text-shadow:0 1px 2px rgba(0,0,0,0.5);">${desc}</p></div>` : ''}
+<div style="display:flex;flex-direction:column;align-items:center;background:#fff;border:1px solid #e2e8f0;border-radius:20px;overflow:hidden;width:260px;transition:transform 0.3s,box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 40px rgba(0,0,0,0.10)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+  <div style="width:100%;height:280px;overflow:hidden;position:relative;">
+    <img src="${img}" alt="${name}" style="width:100%;height:100%;object-fit:cover;object-position:top;transition:transform 0.5s;" onerror="this.onerror=null;this.src=''" />
+  </div>
+  <div style="padding:20px 24px 24px;text-align:center;width:100%;">
+    <h3 style="font-size:18px;font-weight:700;color:#0f172a;margin:0 0 4px;">${name}</h3>
+    <p style="font-size:13px;font-weight:500;color:#64748b;margin:0 0 ${desc ? '12px' : '0'};">${role}</p>
+    ${desc ? `<p style="font-size:13px;color:#94a3b8;line-height:1.6;margin:0;">${desc}</p>` : ''}
   </div>
 </div>`;
     };
 
-    if (members.length) {
-      const isFounder = (m) => /founder/i.test(m.name || '') || /founder/i.test(m.role || '');
-      const founderIdx = members.findIndex(isFounder);
-      let ordered;
-      if (founderIdx !== -1) {
-        const founder = members[founderIdx];
-        const others  = members.filter((_, i) => i !== founderIdx);
-        ordered = [others[0] || founder, founder, others[1] || founder];
-      } else {
-        ordered = members.slice(0, 3);
-        while (ordered.length < 3) ordered.push(ordered[0]);
-      }
-      grid.innerHTML = ordered.map(renderCard).join('');
-    }
     const mainSection = grid.closest('section');
-    if (mainSection) {
-      mainSection.style.display = members.length ? '' : 'none';
+    if (realMembers.length) {
+      grid.style.cssText = 'display:flex;flex-wrap:wrap;gap:24px;justify-content:center;';
+      grid.innerHTML = realMembers.map(renderCard).join('');
+      if (mainSection) mainSection.style.display = '';
+    } else {
+      if (mainSection) mainSection.style.display = 'none';
     }
 
     // Boards (optional)
