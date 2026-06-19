@@ -192,9 +192,6 @@ async function loadVideoSection() {
 
 
 
-// Dynamic website content: Testimonials section (3 languages)
-let __testimonialsData = null;
-
 function escapeHtml(str) {
   return String(str || '')
     .replace(/&/g, '&amp;')
@@ -210,103 +207,6 @@ function getCurrentLang() {
   } catch (e) {}
   const l = (localStorage.getItem('ose_lang') || '').toLowerCase();
   return (l === 'uz' || l === 'ru' || l === 'en') ? l : 'uz';
-}
-
-function starSvg(fill = '#FB923C') {
-  // fill defaults to orange; for highlighted (orange) cards we pass white to match the original design
-  return `
-    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M10.2792 1.65876C10.5567 1.0556 11.4433 1.0556 11.7208 1.65876L13.7063 5.97412C13.8173 6.21551 14.0457 6.38135 14.3089 6.41285L19.0104 6.97542C19.6673 7.05407 19.931 7.86591 19.4452 8.3171L15.9701 11.544C15.7756 11.7247 15.6884 11.9987 15.7401 12.2624L16.6625 16.9704C16.7914 17.6283 16.0741 18.1494 15.4974 17.8249L11.3693 15.5006C11.1382 15.3705 10.8618 15.3705 10.6307 15.5006L6.5026 17.8249C5.92594 18.1494 5.20857 17.6283 5.33755 16.9704L6.25986 12.2624C6.31155 11.9987 6.22439 11.7247 6.02994 11.544L2.55482 8.3171C2.06903 7.86591 2.33274 7.05407 2.98964 6.97542L7.69113 6.41285C7.9543 6.38135 8.1827 6.21551 8.29375 5.97412L10.2792 1.65876Z" fill="${fill}"/>
-    </svg>`;
-}
-
-function renderTestimonials() {
-  const host = document.getElementById('testimonialsCards');
-  if (!host || !__testimonialsData) return;
-
-  // Ensure layout is consistent even if some Tailwind utility classes are missing in precompiled CSS.
-  host.style.display = 'flex';
-  host.style.flexWrap = 'wrap';
-  host.style.gap = '32px';
-  host.style.alignItems = 'center';
-  host.style.justifyContent = 'center';
-
-  const lang = getCurrentLang();
-  const pack = (__testimonialsData && (__testimonialsData[lang] || __testimonialsData.uz || __testimonialsData.en || {})) || {};
-
-  const titleEl = document.getElementById('testimonialsTitle');
-  const subEl = document.getElementById('testimonialsSubtitle');
-
-  if (titleEl && pack.title) titleEl.textContent = pack.title;
-  if (subEl && pack.subtitle) subEl.textContent = pack.subtitle;
-
-  const items = Array.isArray(pack.items) ? pack.items : [];
-  const section = host.closest('section');
-  if (!items.length) {
-    host.innerHTML = '';
-    if (section) section.style.display = 'none';
-    return;
-  }
-  if (section) section.style.display = '';
-
-  host.innerHTML = items
-    .slice(0, 6)
-    .map((it) => {
-      const name = escapeHtml(it?.name);
-      const username = escapeHtml(it?.username);
-      const text = escapeHtml(it?.text);
-      const avatarUrl = escapeHtml(it?.avatarUrl);
-      const rating = Math.max(1, Math.min(5, Number(it?.rating || 5)));
-      const highlight = !!it?.highlight;
-
-      // IMPORTANT: this section is rendered dynamically, so relying on Tailwind classes can break if
-      // the precompiled CSS doesn't include them. Use inline styles for the critical layout so the
-      // cards always match the original design (3 cards per row, small avatars).
-
-      const bgColor = highlight ? '#F97316' : '#FFFFFF';
-      const cardText = highlight ? '#FFFFFF' : '#18181B';
-      const bodyText = highlight ? 'rgba(255,255,255,0.92)' : '#52525B';
-      const userText = highlight ? 'rgba(255,255,255,0.85)' : '#71717A';
-
-      const starFill = highlight ? '#FFFFFF' : '#FB923C';
-      const stars = Array.from({ length: rating }).map(() => starSvg(starFill)).join('');
-
-      return `
-        <div
-          class="ose-testimonial-card"
-          style="width:320px;max-width:100%;padding:24px;border-radius:16px;box-shadow:0 1px 2px rgba(0,0,0,0.08);background:${bgColor};color:${cardText};"
-        >
-          <div style="display:flex;align-items:center;gap:4px;">${stars}</div>
-          <p style="margin-top:16px;line-height:1.75;color:${bodyText};font-size:16px;">${text}</p>
-          <div style="display:flex;align-items:center;gap:12px;margin-top:18px;">
-            <img
-              src="${avatarUrl}"
-              alt="${name}"
-              loading="lazy"
-              style="width:40px;height:40px;border-radius:9999px;object-fit:cover;flex:0 0 auto;"
-            />
-            <div style="line-height:1.1;">
-              <div style="font-weight:600;font-size:16px;">${name}</div>
-              <div style="margin-top:4px;font-size:14px;color:${userText};">${username}</div>
-            </div>
-          </div>
-        </div>
-      `;
-    })
-    .join('');
-}
-
-async function loadTestimonialsSection() {
-  const host = document.getElementById('testimonialsCards');
-  if (!host) return;
-  try {
-    const res = await fetch('/api/site/testimonials', { cache: 'no-store' });
-    const json = await res.json().catch(() => ({}));
-    __testimonialsData = json?.testimonials || null;
-    renderTestimonials();
-  } catch (e) {
-    // ignore
-  }
 }
 
 
@@ -739,19 +639,17 @@ async function loadFaqSection() {
 }
 
 
-window.addEventListener('ose:lang', () => { renderTestimonials(); renderPricing(); renderFeatures(); renderFaq(); });
+window.addEventListener('ose:lang', () => { renderPricing(); renderFeatures(); renderFaq(); });
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => loadTeamSection());
   document.addEventListener('DOMContentLoaded', () => loadVideoSection());
-  document.addEventListener('DOMContentLoaded', () => loadTestimonialsSection());
   document.addEventListener('DOMContentLoaded', () => loadPricingSection());
   document.addEventListener('DOMContentLoaded', () => loadFeaturesSection());
   document.addEventListener('DOMContentLoaded', () => loadFaqSection());
 } else {
   loadTeamSection();
   loadVideoSection();
-  loadTestimonialsSection();
   loadPricingSection();
   loadFeaturesSection();
   loadFaqSection();
