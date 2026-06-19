@@ -694,6 +694,39 @@
       body { overflow-x: hidden; }
     }
 
+    /* ── Academic Integrity Banner ── */
+    .integrity-banner {
+      background: #f0f7ff;
+      border-left: 4px solid #2563eb;
+      padding: 24px 32px;
+      margin: 0;
+    }
+    .integrity-banner-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .integrity-icon {
+      font-size: 24px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .integrity-content h3.integrity-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1e3a5f;
+      margin: 0 0 10px 0;
+    }
+    .integrity-content p {
+      font-size: 13px;
+      color: #374151;
+      line-height: 1.65;
+      margin: 0 0 8px 0;
+    }
+    .integrity-content p:last-child { margin-bottom: 0; }
+
     /* ── Service tabs ── */
     .service-tabs {
       display: flex;
@@ -761,6 +794,20 @@
       </div>
     </div>
   </header>
+
+  <!-- Academic Integrity Statement -->
+  <div class="integrity-banner">
+    <div class="integrity-banner-inner">
+      <div class="integrity-icon">📋</div>
+      <div class="integrity-content">
+        <h3 class="integrity-title">Statement on Academic Integrity in Editing and Data Analytics Services</h3>
+        <p>Our academic editing and data analytics services are designed to support researchers in preparing high-quality manuscripts while upholding rigorous standards of academic integrity, consistent with guidelines from bodies such as COPE (Committee on Publication Ethics).</p>
+        <p>Our editing work focuses on language, clarity, structure, and formatting in line with journal requirements. We do not create, rewrite, or substantively alter a manuscript's intellectual content, arguments, or conclusions. Our data analytics support is based entirely on data and parameters provided by the client; we do not fabricate, falsify, or manipulate data or results.</p>
+        <p>We do not offer ghostwriting services. We will not produce manuscripts or sections intended for submission under another person's name without that person's genuine intellectual contribution, and we do not accept or imply authorship credit for our work. Clients are encouraged to disclose any editorial or analytical assistance received, as required by their target journal or institution.</p>
+        <p>Our role is strictly supportive: authors retain full ownership of their research, ideas, and authorship, and our services are never a substitute for the scholarly contribution of the named authors.</p>
+      </div>
+    </div>
+  </div>
 
   <main class="page">
 
