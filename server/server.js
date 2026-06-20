@@ -217,171 +217,22 @@ function getSiteContent(key, fallbackObj) {
 
 // Always upsert team seed so real member data stays current across deploys
 function seedSiteContentIfMissing() {
+  const vacantMember = () => ({ name: 'Vacant', role: '', imageUrl: '' });
   upsertSiteContent('team', {
-      members: [
-        {
-          name: 'Oybek Eshbayev',
-          role: 'CEO & Founder',
-          imageUrl: ''
-        }
-      ],
-
-      softScienceBoard: [
-        {
-          name: 'Aisha Karimova',
-          role: 'Board Chair (Soft Science)',
-          imageUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=687&auto=format&fit=crop'
-        },
-        {
-          name: 'Daniel Kim',
-          role: 'Policy & Ethics Lead',
-          imageUrl: 'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?q=80&w=687&auto=format&fit=crop'
-        },
-        {
-          name: 'Maria Gonzalez',
-          role: 'Education & Outreach',
-          imageUrl: 'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=687&auto=format&fit=crop'
-        },
-        {
-          name: 'Ahmed Noor',
-          role: 'Social Impact Analyst',
-          imageUrl: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=687&auto=format&fit=crop'
-        },
-        {
-          name: 'Sophia Chen',
-          role: 'Behavioral Researcher',
-          imageUrl: 'https://images.unsplash.com/photo-1550525811-e5869dd03032?q=80&w=687&auto=format&fit=crop'
-        }
-      ],
-      hardScienceBoard: [
-        {
-          name: 'Dr. Ethan Walker',
-          role: 'Board Chair (Hard Science)',
-          imageUrl: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=687&auto=format&fit=crop'
-        },
-        {
-          name: 'Olivia Martinez',
-          role: 'Product & Systems',
-          imageUrl: 'https://images.unsplash.com/flagged/photo-1573740144655-bbb6e88fb18a?q=80&w=735&auto=format&fit=crop'
-        },
-        {
-          name: 'Michael Brown',
-          role: 'Engineering Advisor',
-          imageUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=600'
-        },
-        {
-          name: 'Nora Patel',
-          role: 'Data Science Lead',
-          imageUrl: 'https://images.unsplash.com/photo-1546961329-78bef0414d7c?q=80&w=687&auto=format&fit=crop'
-        },
-        {
-          name: 'Donald Jackman',
-          role: 'Founder & CEO',
-          imageUrl: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=600'
-        }
-      ]
-    });
-
-  // Safe extension: ensure Board arrays exist in the existing team JSON (do not overwrite members)
-  try {
-    const team = getSiteContent('team', { members: [] }) || { members: [] };
-    let changed = false;
-    if (!Array.isArray(team.softScienceBoard)) {
-      team.softScienceBoard = [
-        {
-          name: 'Aisha Karimova',
-          role: 'Board Chair (Soft Science)',
-          imageUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=687&auto=format&fit=crop'
-        },
-        {
-          name: 'Daniel Kim',
-          role: 'Policy & Ethics Lead',
-          imageUrl: 'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?q=80&w=687&auto=format&fit=crop'
-        },
-        {
-          name: 'Maria Gonzalez',
-          role: 'Education & Outreach',
-          imageUrl: 'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=687&auto=format&fit=crop'
-        },
-        {
-          name: 'Ahmed Noor',
-          role: 'Social Impact Analyst',
-          imageUrl: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=687&auto=format&fit=crop'
-        },
-        {
-          name: 'Sophia Chen',
-          role: 'Behavioral Researcher',
-          imageUrl: 'https://images.unsplash.com/photo-1550525811-e5869dd03032?q=80&w=687&auto=format&fit=crop'
-        }
-      ];
-      changed = true;
-    }
-    if (!Array.isArray(team.hardScienceBoard)) {
-      team.hardScienceBoard = [
-        {
-          name: 'Dr. Ethan Walker',
-          role: 'Board Chair (Hard Science)',
-          imageUrl: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=687&auto=format&fit=crop'
-        },
-        {
-          name: 'Olivia Martinez',
-          role: 'Product & Systems',
-          imageUrl: 'https://images.unsplash.com/flagged/photo-1573740144655-bbb6e88fb18a?q=80&w=735&auto=format&fit=crop'
-        },
-        {
-          name: 'Michael Brown',
-          role: 'Engineering Advisor',
-          imageUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=600'
-        },
-        {
-          name: 'Nora Patel',
-          role: 'Data Science Lead',
-          imageUrl: 'https://images.unsplash.com/photo-1546961329-78bef0414d7c?q=80&w=687&auto=format&fit=crop'
-        },
-        {
-          name: 'Donald Jackman',
-          role: 'Founder & CEO',
-          imageUrl: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=600'
-        }
-      ];
-      changed = true;
-    }
-    if (changed) upsertSiteContent('team', team);
-  } catch (e) {
-    // ignore
-  }
-
-
-  // Ensure team includes softScienceBoard/hardScienceBoard keys (safe extension; never overwrite existing members)
-  try {
-    const currentTeam = getSiteContent('team', { members: [] }) || { members: [] };
-    let changed = false;
-    if (!Array.isArray(currentTeam.softScienceBoard)) {
-      currentTeam.softScienceBoard = [
-        { name: 'Amina Rahman', role: 'Behavioral Scientist', imageUrl: 'https://images.unsplash.com/photo-1546961329-78bef0414d7c?q=80&w=687&auto=format&fit=crop' },
-        { name: 'Liam Patel', role: 'Social Research Lead', imageUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=600' },
-        { name: 'Noah Kim', role: 'Policy Analyst', imageUrl: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=600' },
-        { name: 'Sophia Chen', role: 'UX & Human Factors', imageUrl: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=687&auto=format&fit=crop' },
-        { name: 'Emma Garcia', role: 'Education Specialist', imageUrl: 'https://images.unsplash.com/flagged/photo-1573740144655-bbb6e88fb18a?q=80&w=735&auto=format&fit=crop' }
-      ];
-      changed = true;
-    }
-    if (!Array.isArray(currentTeam.hardScienceBoard)) {
-      currentTeam.hardScienceBoard = [
-        { name: 'Ethan Walker', role: 'AI Systems Engineer', imageUrl: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=687&auto=format&fit=crop' },
-        { name: 'Maya Singh', role: 'Data Scientist', imageUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=687&auto=format&fit=crop' },
-        { name: 'Oliver Johnson', role: 'Robotics Engineer', imageUrl: 'https://images.unsplash.com/photo-1552058544-f2b08422138a?q=80&w=687&auto=format&fit=crop' },
-        { name: 'Isabella Rossi', role: 'Materials Scientist', imageUrl: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=687&auto=format&fit=crop' },
-        { name: 'Daniel Brown', role: 'Systems Architect', imageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=687&auto=format&fit=crop' }
-      ];
-      changed = true;
-    }
-    if (changed) {
-      upsertSiteContent('team', currentTeam);
-    }
-  } catch (e) {
-    // ignore
-  }
+    members: [
+      {
+        name: 'Oybek Eshbayev',
+        role: 'CEO & Founder',
+        imageUrl: '/assets/oybek.jpg'
+      }
+    ],
+    softScienceBoard: [
+      vacantMember(), vacantMember(), vacantMember(), vacantMember(), vacantMember()
+    ],
+    hardScienceBoard: [
+      vacantMember(), vacantMember(), vacantMember(), vacantMember(), vacantMember()
+    ]
+  });
   const hasI18n = db.prepare("SELECT 1 FROM site_content WHERE key = 'i18n_overrides' LIMIT 1").get();
   if (!hasI18n) {
     upsertSiteContent('i18n_overrides', { uz: {}, ru: {}, en: {} });
