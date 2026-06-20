@@ -217,7 +217,7 @@ function getSiteContent(key, fallbackObj) {
 
 // Always upsert team seed so real member data stays current across deploys
 function seedSiteContentIfMissing() {
-  const vacantMember = () => ({ name: 'Vacant', role: '', imageUrl: '' });
+  const vacantMember = () => ({ name: 'Vacant', role: '', imageUrl: '/assets/vacant.jpg' });
   upsertSiteContent('team', {
     members: [
       {
