@@ -14,30 +14,29 @@
 
     /* ── Tokens ── */
     :root {
-      --brand:       #3C50E0;
-      --brand-dk:    #2d3fc0;
-      --brand-lt:    rgba(60,80,224,.10);
-      --brand-glow:  rgba(60,80,224,.22);
-      --success:     #16a34a;
-      --danger:      #dc2626;
-      --bg:          #f4f6fb;
-      --surface:     #ffffff;
-      --border:      #e4e8f0;
-      --text:        #0f172a;
-      --muted:       #64748b;
-      --font:        'Plus Jakarta Sans', -apple-system, sans-serif;
-      --radius:      14px;
-      --radius-sm:   9px;
-      --shadow-sm:   0 1px 4px rgba(15,23,42,.06);
-      --shadow-md:   0 4px 24px rgba(15,23,42,.08);
-      --shadow-lg:   0 12px 40px rgba(15,23,42,.12);
-      --transition:  0.25s cubic-bezier(.16,1,.3,1);
+      --brand:      #4F46E5;
+      --brand-dk:   #3730a3;
+      --brand-lt:   rgba(79,70,229,.10);
+      --brand-glow: rgba(79,70,229,.30);
+      --success:    #16a34a;
+      --danger:     #dc2626;
+      --bg:         #f3f4f8;
+      --surface:    #ffffff;
+      --border:     #e2e5ef;
+      --text:       #0f172a;
+      --muted:      #64748b;
+      --font:       'Plus Jakarta Sans', -apple-system, sans-serif;
+      --radius:     18px;
+      --radius-sm:  10px;
+      --shadow-sm:  0 1px 4px rgba(15,23,42,.05);
+      --shadow-md:  0 6px 28px rgba(79,70,229,.10);
+      --shadow-lg:  0 16px 48px rgba(79,70,229,.15);
+      --transition: 0.25s cubic-bezier(.16,1,.3,1);
     }
 
     html, body {
       height: 100%;
       font-family: var(--font);
-      background: var(--bg);
       color: var(--text);
       line-height: 1.5;
     }
@@ -46,6 +45,11 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      background: #eef0f8;
+      background-image:
+        radial-gradient(ellipse 80% 60% at 15% 10%, rgba(99,102,241,.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 85% 80%, rgba(139,92,246,.10) 0%, transparent 60%);
+      background-attachment: fixed;
     }
 
     /* ── Top bar ── */
@@ -53,15 +57,16 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(255,255,255,.9);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,.7);
+      box-shadow: 0 1px 0 rgba(79,70,229,.08), 0 2px 16px rgba(15,23,42,.06);
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 32px;
-      height: 60px;
+      height: 62px;
       gap: 16px;
     }
 
@@ -71,27 +76,29 @@
       gap: 10px;
       text-decoration: none;
       color: var(--text);
-      font-weight: 700;
+      font-weight: 800;
       font-size: .95rem;
-      letter-spacing: -.02em;
+      letter-spacing: -.03em;
     }
 
     .topbar-brand-dot {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
-      background: var(--brand);
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--brand) 0%, #7c3aed 100%);
       display: flex;
       align-items: center;
       justify-content: center;
+      box-shadow: 0 3px 10px rgba(79,70,229,.4);
     }
 
     .topbar-brand-dot svg { color: #fff; }
 
     .topbar-title {
-      font-size: .95rem;
+      font-size: .9rem;
       font-weight: 600;
       color: var(--muted);
+      letter-spacing: -.01em;
     }
 
     .topbar-back {
@@ -99,22 +106,24 @@
       align-items: center;
       gap: 6px;
       color: var(--muted);
-      font-size: .85rem;
+      font-size: .82rem;
       font-weight: 600;
       text-decoration: none;
-      padding: 6px 14px;
+      padding: 7px 14px;
       border-radius: 999px;
       border: 1px solid var(--border);
-      background: var(--surface);
+      background: rgba(255,255,255,.8);
       transition: var(--transition);
+      backdrop-filter: blur(8px);
     }
     .topbar-back:hover {
       border-color: var(--brand);
       color: var(--brand);
-      box-shadow: var(--shadow-sm);
+      background: var(--brand-lt);
+      box-shadow: 0 2px 10px var(--brand-lt);
     }
     .topbar-back svg { transition: transform var(--transition); }
-    .topbar-back:hover svg { transform: translateX(-3px); }
+    .topbar-back:hover svg { transform: translateX(-2px); }
 
     .topbar-right {
       display: flex;
@@ -126,12 +135,11 @@
     .page {
       flex: 1;
       display: grid;
-      grid-template-columns: 1fr 360px;
-      gap: 0;
-      max-width: 1280px;
+      grid-template-columns: 1fr 370px;
+      max-width: 1240px;
       width: 100%;
       margin: 0 auto;
-      padding: 32px 24px 48px;
+      padding: 32px 28px 56px;
       align-items: start;
       gap: 24px;
     }
@@ -140,25 +148,32 @@
     .form-col {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 18px;
     }
 
     /* ── Section block ── */
     .block {
-      background: var(--surface);
-      border: 1px solid var(--border);
+      background: rgba(255,255,255,.82);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,.9);
       border-radius: var(--radius);
-      padding: 24px;
-      box-shadow: var(--shadow-sm);
+      padding: 28px;
+      box-shadow: 0 4px 24px rgba(79,70,229,.07), 0 1px 0 rgba(255,255,255,.9) inset;
+      transition: box-shadow var(--transition);
+    }
+    .block:hover {
+      box-shadow: 0 8px 32px rgba(79,70,229,.10), 0 1px 0 rgba(255,255,255,.9) inset;
     }
 
     .block-title {
-      font-size: .7rem;
+      font-size: .68rem;
       font-weight: 800;
-      letter-spacing: .08em;
+      letter-spacing: .10em;
       text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 16px;
+      color: var(--brand);
+      margin-bottom: 18px;
+      opacity: .8;
     }
 
     /* ── Error banner ── */
@@ -177,8 +192,8 @@
     /* ── Service cards ── */
     .service-cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      gap: 14px;
       transition: opacity var(--transition), filter var(--transition);
     }
 
@@ -190,38 +205,56 @@
 
     .service-card {
       position: relative;
-      border: 2px solid var(--border);
-      border-radius: var(--radius);
-      padding: 14px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 18px 16px 16px;
       cursor: pointer;
-      background: var(--surface);
+      background: rgba(255,255,255,.95);
       display: flex;
       flex-direction: column;
       gap: 10px;
-      transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+      transition: all var(--transition);
       opacity: 0;
       animation: fadeUp .45s cubic-bezier(.16,1,.3,1) forwards;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366f1, #8b5cf6);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform var(--transition);
+      border-radius: 0;
     }
 
     .service-card:hover {
-      border-color: rgba(60,80,224,.4);
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-md);
+      border-color: rgba(99,102,241,.35);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 36px rgba(79,70,229,.14);
     }
 
+    .service-card:hover::before { transform: scaleX(1); }
+
     .service-card.active {
-      border-color: var(--brand);
-      background: linear-gradient(145deg, #f5f7ff, #ffffff);
-      box-shadow: 0 0 0 4px var(--brand-lt), var(--shadow-md);
+      border-color: transparent;
+      background: linear-gradient(160deg, #f0f0ff 0%, #fafaff 100%);
+      box-shadow: 0 0 0 2px var(--brand), 0 8px 32px rgba(79,70,229,.18);
+      transform: translateY(-4px);
     }
+
+    .service-card.active::before { transform: scaleX(1); }
 
     .service-card-badge {
       position: absolute;
       top: 10px;
       right: 10px;
-      background: var(--brand);
+      background: linear-gradient(135deg, var(--brand), #7c3aed);
       color: #fff;
-      font-size: .65rem;
+      font-size: .62rem;
       font-weight: 800;
       padding: 2px 8px;
       border-radius: 999px;
@@ -236,7 +269,7 @@
     }
 
     .service-card-title {
-      font-size: .9rem;
+      font-size: .875rem;
       font-weight: 700;
       color: var(--text);
       line-height: 1.3;
@@ -244,20 +277,22 @@
 
     .service-card-select-indicator {
       flex-shrink: 0;
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
       border: 2px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all .2s ease;
-      margin-top: 2px;
+      margin-top: 1px;
+      background: #f8f9ff;
     }
 
     .service-card.active .service-card-select-indicator {
       border-color: var(--brand);
       background: var(--brand);
+      box-shadow: 0 0 0 3px rgba(79,70,229,.2);
     }
 
     .service-card-select-indicator::after {
@@ -273,49 +308,56 @@
     .service-card.active .service-card-select-indicator::after { transform: scale(1); }
 
     .service-card-price {
-      font-size: 1.3rem;
+      font-size: 1.45rem;
       font-weight: 800;
       color: var(--text);
       display: flex;
       align-items: baseline;
       gap: 4px;
+      letter-spacing: -.03em;
     }
 
+    .service-card.active .service-card-price { color: var(--brand); }
+
     .service-card-price span {
-      font-size: .8rem;
+      font-size: .78rem;
       font-weight: 500;
       color: var(--muted);
+      letter-spacing: 0;
     }
 
     .service-card-original-price {
-      font-size: .8rem;
+      font-size: .78rem;
       color: var(--muted);
       text-decoration: line-through;
     }
 
     .service-card-features {
       list-style: none;
-      font-size: .72rem;
+      font-size: .71rem;
       color: var(--muted);
-      border-top: 1px dashed var(--border);
+      border-top: 1px solid rgba(99,102,241,.12);
       padding-top: 10px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 5px;
     }
 
     .service-card-features li {
       display: flex;
       align-items: flex-start;
-      gap: 5px;
+      gap: 6px;
     }
 
     .service-card-features li::before {
       content: '✓';
       color: var(--brand);
-      font-weight: 700;
+      font-weight: 800;
       flex-shrink: 0;
+      font-size: .8rem;
     }
+
+    .service-card.active .service-card-features li::before { color: #7c3aed; }
 
     /* ── Custom amount ── */
     .custom-amount-row {
@@ -336,9 +378,9 @@
       top: 50%;
       transform: translateY(-50%);
       color: var(--muted);
-      font-weight: 600;
+      font-weight: 700;
       pointer-events: none;
-      font-size: .95rem;
+      font-size: .9rem;
     }
 
     /* ── Inputs ── */
@@ -347,7 +389,7 @@
       font-family: var(--font);
       font-size: .9rem;
       color: var(--text);
-      background: #f8fafc;
+      background: rgba(241,242,250,.7);
       border: 1.5px solid var(--border);
       border-radius: var(--radius-sm);
       outline: none;
@@ -355,78 +397,79 @@
     }
 
     .input {
-      height: 44px;
+      height: 46px;
       padding: 0 14px 0 32px;
     }
 
     .textarea {
-      height: 100px;
-      padding: 12px 14px;
+      height: 110px;
+      padding: 13px 14px;
       resize: vertical;
       line-height: 1.6;
     }
 
-    .input::placeholder, .textarea::placeholder { color: #a0aec0; }
+    .input::placeholder, .textarea::placeholder { color: #b0bac9; }
 
     .input:focus, .textarea:focus {
       border-color: var(--brand);
       background: var(--surface);
-      box-shadow: 0 0 0 3px var(--brand-lt);
+      box-shadow: 0 0 0 4px rgba(79,70,229,.10);
     }
 
     .btn-clear {
-      height: 44px;
-      padding: 0 14px;
+      height: 46px;
+      padding: 0 16px;
       border-radius: var(--radius-sm);
       border: 1.5px solid var(--border);
       background: var(--surface);
       color: var(--muted);
       font-family: var(--font);
-      font-size: .85rem;
+      font-size: .84rem;
       font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
       transition: var(--transition);
     }
-    .btn-clear:hover { border-color: var(--brand); color: var(--brand); }
+    .btn-clear:hover { border-color: var(--brand); color: var(--brand); background: var(--brand-lt); }
 
     /* ── Field label ── */
     .field-label {
       display: block;
-      font-size: .7rem;
-      font-weight: 700;
-      letter-spacing: .06em;
+      font-size: .67rem;
+      font-weight: 800;
+      letter-spacing: .08em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 8px;
+      margin-bottom: 9px;
     }
 
     /* ── Dropzone ── */
     .dropzone {
-      border: 2px dashed var(--border);
+      border: 2px dashed rgba(99,102,241,.3);
       border-radius: var(--radius);
-      padding: 24px 20px;
+      padding: 28px 20px;
       text-align: center;
       cursor: pointer;
-      background: #f8fafc;
+      background: rgba(248,249,255,.8);
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 6px;
-      transition: border-color var(--transition), background var(--transition);
+      transition: all var(--transition);
     }
 
     .dropzone:hover, .dropzone.dragover {
       border-color: var(--brand);
-      background: #f0f2ff;
+      background: rgba(79,70,229,.05);
+      box-shadow: 0 0 0 4px var(--brand-lt);
     }
 
-    .dropzone-icon { width: 38px; height: 38px; color: var(--muted); transition: color var(--transition); }
-    .dropzone:hover .dropzone-icon, .dropzone.dragover .dropzone-icon { color: var(--brand); }
+    .dropzone-icon { width: 40px; height: 40px; color: rgba(99,102,241,.5); transition: all var(--transition); }
+    .dropzone:hover .dropzone-icon, .dropzone.dragover .dropzone-icon { color: var(--brand); transform: scale(1.1); }
 
     .dropzone-text { font-size: .9rem; font-weight: 600; color: var(--text); }
     .dropzone-text .hl { color: var(--brand); text-decoration: underline; }
-    .dropzone-sub { font-size: .78rem; color: var(--muted); }
+    .dropzone-sub { font-size: .76rem; color: var(--muted); }
 
     /* ── File list ── */
     .file-list {
@@ -437,15 +480,15 @@
       max-height: 200px;
       overflow-y: auto;
       scrollbar-width: thin;
-      scrollbar-color: #d1d5db transparent;
+      scrollbar-color: #c7d2fe transparent;
     }
 
     .file-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: #f8fafc;
-      border: 1px solid var(--border);
+      background: rgba(248,249,255,.9);
+      border: 1px solid rgba(99,102,241,.15);
       border-radius: var(--radius-sm);
       padding: 9px 14px;
       font-size: .85rem;
@@ -478,71 +521,99 @@
     /* ── Right column — Summary ── */
     .summary-col {
       position: sticky;
-      top: 76px;
+      top: 78px;
     }
 
     .summary-card {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-md);
+      border-radius: 22px;
+      box-shadow: 0 12px 48px rgba(79,70,229,.18), 0 2px 8px rgba(79,70,229,.08);
       overflow: hidden;
+      border: 1px solid rgba(255,255,255,.9);
     }
 
     .summary-header {
-      background: var(--brand);
-      padding: 18px 20px 14px;
+      background: linear-gradient(135deg, #312e81 0%, #4F46E5 55%, #7c3aed 100%);
+      padding: 24px 24px 20px;
       color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .summary-header::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 130px; height: 130px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.07);
+    }
+
+    .summary-header::after {
+      content: '';
+      position: absolute;
+      bottom: -20px; left: 20px;
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.05);
     }
 
     .summary-header-label {
-      font-size: .68rem;
+      font-size: .65rem;
       font-weight: 700;
-      letter-spacing: .08em;
+      letter-spacing: .12em;
       text-transform: uppercase;
-      opacity: .75;
-      margin-bottom: 4px;
+      opacity: .7;
+      margin-bottom: 6px;
+      position: relative;
     }
 
     .summary-header-title {
-      font-size: 1.15rem;
+      font-size: 1.25rem;
       font-weight: 800;
-      letter-spacing: -.02em;
+      letter-spacing: -.03em;
+      position: relative;
     }
 
     .summary-body {
-      padding: 20px;
+      padding: 22px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 13px;
     }
 
     .summary-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: .88rem;
+      font-size: .875rem;
     }
 
     .summary-label { color: var(--muted); font-weight: 500; }
+    .summary-value { color: var(--text); font-weight: 700; }
 
-    .summary-value { color: var(--text); font-weight: 600; }
-
-    .summary-divider { height: 1px; background: var(--border); }
+    .summary-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
 
     .summary-total-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background: rgba(79,70,229,.05);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin: 0 -4px;
     }
 
-    .summary-total-label { font-weight: 700; font-size: .95rem; }
+    .summary-total-label { font-weight: 800; font-size: .9rem; color: var(--text); }
 
     .summary-total-value {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       font-weight: 800;
       color: var(--brand);
-      letter-spacing: -.03em;
+      letter-spacing: -.04em;
     }
 
     .discount-row { color: var(--success); }
@@ -551,14 +622,13 @@
     /* Service note */
     #serviceNote {
       display: none;
-      background: rgba(60,80,224,.06);
+      background: rgba(79,70,229,.07);
       border-left: 3px solid var(--brand);
       border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
       padding: 10px 14px;
-      font-size: .82rem;
+      font-size: .81rem;
       font-weight: 500;
-      color: #2d3fc0;
-      margin-top: 4px;
+      color: #3730a3;
     }
 
     /* ── Submit button ── */
@@ -568,35 +638,44 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      background: linear-gradient(135deg, var(--brand) 0%, #5b6ef5 100%);
+      background: linear-gradient(135deg, #4F46E5 0%, #7c3aed 100%);
       color: #fff;
       border: none;
       border-radius: 999px;
-      padding: 15px 24px;
+      padding: 16px 24px;
       font-family: var(--font);
       font-size: .95rem;
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 8px 24px -4px var(--brand-glow);
+      box-shadow: 0 8px 28px -4px var(--brand-glow);
       transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
       letter-spacing: -.01em;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-submit::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.15) 0%, transparent 60%);
+      border-radius: inherit;
     }
 
     .btn-submit:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 32px -4px var(--brand-glow);
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 16px 40px -4px var(--brand-glow);
     }
 
-    .btn-submit:active:not(:disabled) { transform: translateY(0); }
+    .btn-submit:active:not(:disabled) { transform: translateY(0) scale(1); }
 
     .btn-submit:disabled {
-      opacity: .55;
+      opacity: .5;
       cursor: not-allowed;
       transform: none;
       box-shadow: none;
     }
 
-    /* Spinner inside button */
     .btn-spinner {
       width: 16px;
       height: 16px;
@@ -613,7 +692,7 @@
     /* ── Feedback ── */
     #msg {
       text-align: center;
-      font-size: .84rem;
+      font-size: .83rem;
       font-weight: 500;
       color: var(--muted);
       min-height: 20px;
@@ -626,25 +705,26 @@
       align-items: center;
       justify-content: center;
       gap: 16px;
-      padding: 14px 20px;
+      padding: 14px 22px;
+      background: linear-gradient(180deg, #fafbff, #f4f5fc);
       border-top: 1px solid var(--border);
-      background: #fafbff;
     }
 
     .trust-badge {
       display: flex;
       align-items: center;
       gap: 5px;
-      font-size: .73rem;
-      font-weight: 600;
+      font-size: .71rem;
+      font-weight: 700;
       color: var(--muted);
+      letter-spacing: .01em;
     }
 
     .trust-badge svg { width: 14px; height: 14px; color: var(--brand); }
 
     /* ── Animations ── */
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(14px); }
+      from { opacity: 0; transform: translateY(16px); }
       to   { opacity: 1; transform: translateY(0); }
     }
     @keyframes scaleIn {
@@ -662,106 +742,146 @@
         padding: 16px 16px 40px;
       }
       .form-col, .summary-col { min-width: 0; }
-      .summary-col {
-        position: static;
-        order: -1;
-      }
+      .summary-col { position: static; order: -1; }
     }
 
     @media (max-width: 560px) {
-      /* Topbar */
       .topbar { padding: 0 12px; gap: 6px; }
       .topbar-title { display: none; }
       .topbar-right { gap: 6px; }
       .topbar-back { padding: 5px 10px; font-size: .78rem; gap: 4px; }
       .topbar-back svg { display: none; }
-
-      /* Summary card */
-      .summary-value {
-        max-width: 160px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      .summary-total-value { font-size: 1.25rem; }
-      .summary-header { padding: 14px 16px 12px; }
+      .summary-value { max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .summary-total-value { font-size: 1.3rem; }
+      .summary-header { padding: 18px 18px 16px; }
       .summary-body { padding: 16px; gap: 10px; }
-
-      /* Service cards: 1 column on mobile */
       .service-cards-grid { grid-template-columns: 1fr; }
-
-      /* Prevent horizontal scroll */
       body { overflow-x: hidden; }
     }
 
     /* ── Academic Integrity Banner ── */
     .integrity-banner {
-      background: #f0f7ff;
-      border-left: 4px solid #2563eb;
-      padding: 24px 32px;
-      margin: 0;
+      background: rgba(255,255,255,.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(99,102,241,.12);
+      padding: 18px 32px;
+      box-shadow: 0 2px 16px rgba(79,70,229,.06);
     }
     .integrity-banner-inner {
-      max-width: 960px;
+      max-width: 1180px;
       margin: 0 auto;
+    }
+    .integrity-header-row {
       display: flex;
-      gap: 16px;
-      align-items: flex-start;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      user-select: none;
     }
     .integrity-icon {
-      font-size: 24px;
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #e0e7ff, #ede9fe);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
       flex-shrink: 0;
-      margin-top: 2px;
     }
+    .integrity-header-text { flex: 1; }
     .integrity-content h3.integrity-title {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
-      color: #1e3a5f;
-      margin: 0 0 10px 0;
+      color: #1e1b4b;
+      margin: 0;
+      line-height: 1.3;
     }
-    .integrity-content p {
-      font-size: 13px;
-      color: #374151;
-      line-height: 1.65;
-      margin: 0 0 8px 0;
-    }
-    .integrity-content p:last-child { margin-bottom: 0; }
     .integrity-badge {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
       color: #dc2626;
       background: #fef2f2;
       border: 1px solid #fca5a5;
       border-radius: 6px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
-      padding: 3px 10px;
-      margin-bottom: 10px;
+      padding: 2px 8px;
+      margin-top: 4px;
       letter-spacing: 0.02em;
+    }
+    .integrity-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--brand);
+      background: var(--brand-lt);
+      border: none;
+      border-radius: 999px;
+      padding: 5px 12px;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: var(--transition);
+    }
+    .integrity-toggle-btn:hover { background: rgba(79,70,229,.15); }
+    .integrity-toggle-btn svg {
+      width: 13px; height: 13px;
+      transition: transform var(--transition);
+    }
+    .integrity-toggle-btn.open svg { transform: rotate(180deg); }
+    .integrity-body {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height .4s cubic-bezier(.16,1,.3,1), opacity .3s;
+      opacity: 0;
+    }
+    .integrity-body.open {
+      max-height: 600px;
+      opacity: 1;
+    }
+    .integrity-body-inner {
+      padding-top: 14px;
+      padding-left: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .integrity-content p {
+      font-size: 12.5px;
+      color: #374151;
+      line-height: 1.65;
+      margin: 0;
     }
 
     /* ── Service tabs ── */
     .service-tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
+      display: inline-flex;
+      background: rgba(241,242,250,.9);
+      border-radius: 999px;
+      padding: 4px;
+      gap: 3px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(99,102,241,.12);
     }
     .service-tab {
-      padding: 7px 18px;
+      padding: 8px 22px;
       border-radius: 999px;
-      border: 1.5px solid var(--border);
-      background: var(--surface);
+      border: none;
+      background: transparent;
       color: var(--muted);
       font-family: var(--font);
       font-size: .82rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       transition: var(--transition);
+      letter-spacing: -.01em;
     }
-    .service-tab:hover { border-color: var(--brand); color: var(--brand); }
+    .service-tab:hover { color: var(--brand); }
     .service-tab.active {
-      border-color: var(--brand);
+      background: #fff;
       color: var(--brand);
-      background: var(--brand-lt);
+      box-shadow: 0 2px 10px rgba(79,70,229,.15), 0 1px 3px rgba(0,0,0,.06);
     }
 
     /* hidden select kept for JS compatibility */
@@ -810,17 +930,40 @@
   <!-- Academic Integrity Statement -->
   <div class="integrity-banner">
     <div class="integrity-banner-inner">
-      <div class="integrity-icon">📋</div>
       <div class="integrity-content">
-        <h3 class="integrity-title" data-i18n="integrity_title">Statement on Academic Integrity in Editing and Data Analytics Services</h3>
-        <div class="integrity-badge">⛔ No Ghostwriting, No Authorship Selling</div>
-        <p data-i18n="integrity_p1">Our academic editing and data analytics services are designed to support researchers in preparing high-quality manuscripts while upholding rigorous standards of academic integrity, consistent with guidelines from bodies such as COPE (Committee on Publication Ethics).</p>
-        <p data-i18n="integrity_p2">Our editing work focuses on language, clarity, structure, and formatting in line with journal requirements. We do not create, rewrite, or substantively alter a manuscript's intellectual content, arguments, or conclusions. Our data analytics support is based entirely on data and parameters provided by the client; we do not fabricate, falsify, or manipulate data or results.</p>
-        <p data-i18n="integrity_p3">We do not offer ghostwriting services. We will not produce manuscripts or sections intended for submission under another person's name without that person's genuine intellectual contribution, and we do not accept or imply authorship credit for our work. Clients are encouraged to disclose any editorial or analytical assistance received, as required by their target journal or institution.</p>
-        <p data-i18n="integrity_p4">Our role is strictly supportive: authors retain full ownership of their research, ideas, and authorship, and our services are never a substitute for the scholarly contribution of the named authors.</p>
+        <div class="integrity-header-row" onclick="toggleIntegrity()">
+          <div class="integrity-icon">📋</div>
+          <div class="integrity-header-text">
+            <h3 class="integrity-title" data-i18n="integrity_title">Statement on Academic Integrity in Editing and Data Analytics Services</h3>
+            <div class="integrity-badge">⛔ No Ghostwriting, No Authorship Selling</div>
+          </div>
+          <button class="integrity-toggle-btn" id="integrityToggleBtn">
+            Read more
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+        </div>
+        <div class="integrity-body" id="integrityBody">
+          <div class="integrity-body-inner">
+            <p data-i18n="integrity_p1">Our academic editing and data analytics services are designed to support researchers in preparing high-quality manuscripts while upholding rigorous standards of academic integrity, consistent with guidelines from bodies such as COPE (Committee on Publication Ethics).</p>
+            <p data-i18n="integrity_p2">Our editing work focuses on language, clarity, structure, and formatting in line with journal requirements. We do not create, rewrite, or substantively alter a manuscript's intellectual content, arguments, or conclusions. Our data analytics support is based entirely on data and parameters provided by the client; we do not fabricate, falsify, or manipulate data or results.</p>
+            <p data-i18n="integrity_p3">We do not offer ghostwriting services. We will not produce manuscripts or sections intended for submission under another person's name without that person's genuine intellectual contribution, and we do not accept or imply authorship credit for our work. Clients are encouraged to disclose any editorial or analytical assistance received, as required by their target journal or institution.</p>
+            <p data-i18n="integrity_p4">Our role is strictly supportive: authors retain full ownership of their research, ideas, and authorship, and our services are never a substitute for the scholarly contribution of the named authors.</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+  <script>
+    function toggleIntegrity() {
+      const body = document.getElementById('integrityBody');
+      const btn  = document.getElementById('integrityToggleBtn');
+      const open = body.classList.toggle('open');
+      btn.classList.toggle('open', open);
+      btn.childNodes[0].textContent = open ? 'Close ' : 'Read more ';
+    }
+  </script>
 
   <main class="page">
 
