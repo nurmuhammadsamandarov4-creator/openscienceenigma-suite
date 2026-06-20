@@ -227,7 +227,8 @@ function seedSiteContentIfMissing() {
       }
     ],
     softScienceBoard: [
-      vacantMember(), vacantMember(), vacantMember(), vacantMember(), vacantMember()
+      { name: 'Dilbar Khasanova', role: 'Soft Science Board Member', imageUrl: '/images/dilbar_khasanova.jpg' },
+      vacantMember(), vacantMember(), vacantMember(), vacantMember()
     ],
     hardScienceBoard: [
       vacantMember(), vacantMember(), vacantMember(), vacantMember(), vacantMember()
