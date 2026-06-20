@@ -217,18 +217,19 @@ function getSiteContent(key, fallbackObj) {
 
 // Always upsert team seed so real member data stays current across deploys
 function seedSiteContentIfMissing() {
-  const vacantMember = () => ({ name: 'Vacant', role: '', imageUrl: '/assets/vacant.jpg' });
+  const vacantMember = () => ({ name: 'Vacant', role: '', imageUrl: '/images/vacant.jpg' });
   upsertSiteContent('team', {
     members: [
       {
         name: 'Oybek Eshbayev',
         role: 'CEO & Founder',
-        imageUrl: '/assets/oybek.jpg'
+        imageUrl: '/images/oybek_eshbayev.jpg'
       }
     ],
     softScienceBoard: [
-      { name: 'Dilbar Khasanova', role: 'Soft Science Board Member', imageUrl: '/images/dilbar_khasanova.jpg' },
-      vacantMember(), vacantMember(), vacantMember(), vacantMember()
+      { name: 'Dilbar Khasanova', role: 'Education & Outreach', imageUrl: '/images/dilbar_khasanova.jpg' },
+      { name: 'Dilfuza Shakirova', role: 'Social Impact Analyst', imageUrl: '/images/dilfuza_shakirova.jpg' },
+      vacantMember(), vacantMember(), vacantMember()
     ],
     hardScienceBoard: [
       vacantMember(), vacantMember(), vacantMember(), vacantMember(), vacantMember()
