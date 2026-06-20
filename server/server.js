@@ -227,8 +227,8 @@ function seedSiteContentIfMissing() {
       }
     ],
     softScienceBoard: [
-      { name: 'Dilbar Khasanova', role: 'Education & Outreach', imageUrl: '/images/dilbar_khasanova.jpg' },
-      { name: 'Dilfuza Shakirova', role: 'Social Impact Analyst', imageUrl: '/images/dilfuza_shakirova.jpg' },
+      { name: 'Dilbar Khasanova', role: 'PhD | Applied Linguistics & ESP', imageUrl: '/images/dilbar_khasanova.jpg' },
+      { name: 'Dilfuza Shakirova', role: 'PhD | Marketing & Higher Education', imageUrl: '/images/dilfuza_shakirova.jpg' },
       vacantMember(), vacantMember(), vacantMember()
     ],
     hardScienceBoard: [
