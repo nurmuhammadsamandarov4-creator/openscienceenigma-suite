@@ -41,12 +41,13 @@ async function loadTeamSection() {
         const safeRole = escapeHtml(role || '');
         const safeDesc = escapeHtml(desc || '');
         const safeImg = escapeHtml(imageUrl || '');
+        const vacant = /^vacant$/i.test(name.trim());
         return `
 <div class="ose-electric-card">
   <div class="ose-electric-inner group relative overflow-hidden">
     <img src="${safeImg}" alt="${safeName}" class="team-img transition-transform duration-500 group-hover:scale-110" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=600'" />
     <h3 class="team-name">${safeName || 'Untitled'}</h3>
-    <p class="team-role">${safeRole}</p>
+    ${vacant ? '' : `<p class="team-role">${safeRole}</p>`}
     ${safeDesc ? `<div class="absolute inset-0 bg-black/80 flex items-center justify-center p-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm text-center overflow-y-auto backdrop-blur-sm" style="z-index: 10;"><p class="leading-relaxed" style="font-size: 13px; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">${safeDesc}</p></div>` : ''}
   </div>
 </div>`;
