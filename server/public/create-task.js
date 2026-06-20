@@ -25,6 +25,7 @@ function escapeHtml(str) {
 // Global lists to hold dynamic service values and files in memory
 let loadedServicesList = [];
 let selectedFiles = [];
+let cart = {}; // { SVC100: 1, SVC200: 2 }
 
 // DOM Elements
 const filesEl = document.getElementById("files");
@@ -148,75 +149,98 @@ function removeFile(index) {
   renderFileList();
 }
 
-// Interactive Cards selection sync
-function selectServiceCard(code) {
-  const cards = document.querySelectorAll(".service-card");
-  cards.forEach(c => {
-    if (c.dataset.code === code) {
-      c.classList.add("active");
-    } else {
-      c.classList.remove("active");
-    }
-  });
-
-  if (serviceSelect) {
-    serviceSelect.value = code;
-    serviceSelect.dispatchEvent(new Event("change"));
-  }
-
-  // Only SVC300 (Custom Statistical Support) allows custom amount entry
-  const wrapper = document.getElementById("customAmountWrapper");
-  if (customAmountInput) {
-    if (code === "SVC300") {
-      customAmountInput.disabled = false;
-      if (wrapper) wrapper.style.opacity = "1";
-      if (wrapper) wrapper.style.pointerEvents = "auto";
-    } else {
-      customAmountInput.disabled = true;
-      customAmountInput.value = "";
-      if (wrapper) wrapper.style.opacity = "0.35";
-      if (wrapper) wrapper.style.pointerEvents = "none";
-    }
-  }
-
-  updateOrderSummary(code);
+// ── Cart functions ──
+function addToCart(code) {
+  if (!cart[code]) cart[code] = 0;
+  cart[code]++;
+  renderCartUI();
+  updateCartSummary();
 }
 
-function updateOrderSummary(code) {
-  let display = 0;
-  let original = 0;
-  let disc = false;
-  let name = "";
+function updateCartQty(code, delta) {
+  if (!cart[code]) cart[code] = 0;
+  cart[code] = Math.max(0, cart[code] + delta);
+  if (cart[code] === 0) delete cart[code];
+  renderCartUI();
+  updateCartSummary();
+}
 
-  const customVal = customAmountInput && customAmountInput.value ? Number(customAmountInput.value) : 0;
-  if (customVal > 0) {
-    display = customVal * 100;
-    original = customVal * 100;
-    name = "Custom Service";
-    if (serviceCardsContainer) serviceCardsContainer.classList.add("disabled-cards");
-    if (clearCustomAmountBtn) clearCustomAmountBtn.style.display = "block";
-  } else {
-    if (serviceCardsContainer) serviceCardsContainer.classList.remove("disabled-cards");
-    if (clearCustomAmountBtn) clearCustomAmountBtn.style.display = "none";
-    const service = loadedServicesList.find(s => s.code === code);
-    if (!service) return;
-    display = (service.display_price_cents != null ? service.display_price_cents : service.price_cents);
-    original = (service.original_price_cents != null ? service.original_price_cents : service.price_cents);
-    disc = !!service.discount_applied && Number(display) < Number(original);
-    name = service.name;
+function renderCartUI() {
+  loadedServicesList.forEach(s => {
+    const qty = cart[s.code] || 0;
+    const addBtn  = document.getElementById(`add-btn-${s.code}`);
+    const qtyCtrl = document.getElementById(`qty-ctrl-${s.code}`);
+    const qtyNum  = document.getElementById(`qty-num-${s.code}`);
+    const card    = document.querySelector(`.service-card[data-code="${s.code}"]`);
+    if (addBtn)  addBtn.style.display  = qty > 0 ? "none" : "flex";
+    if (qtyCtrl) qtyCtrl.classList.toggle("visible", qty > 0);
+    if (qtyNum)  qtyNum.textContent = qty;
+    if (card)    card.classList.toggle("active", qty > 0);
+  });
+}
+
+function updateCartSummary() {
+  const items = loadedServicesList.filter(s => (cart[s.code] || 0) > 0);
+  const summaryBody = document.querySelector(".summary-body");
+  if (!summaryBody) return;
+
+  // Find or create cart items container (replaces plan/price rows)
+  let cartItemsEl = document.getElementById("summaryCartItems");
+  if (!cartItemsEl) {
+    cartItemsEl = document.createElement("div");
+    cartItemsEl.id = "summaryCartItems";
+    cartItemsEl.className = "summary-cart-items";
+    // Insert before the divider
+    const divider = summaryBody.querySelector(".summary-divider");
+    if (divider) divider.before(cartItemsEl);
+    else summaryBody.prepend(cartItemsEl);
+    // Hide static plan/price rows
+    if (planNameEl) planNameEl.closest(".summary-row")?.style.setProperty("display", "none");
+    if (originalPriceEl) originalPriceEl.closest(".summary-row")?.style.setProperty("display", "none");
   }
 
-  if (planNameEl) planNameEl.textContent = name;
-  if (originalPriceEl) originalPriceEl.textContent = fmtUSD(original);
+  let totalCents = 0;
 
-  if (disc) {
+  if (items.length === 0) {
+    cartItemsEl.innerHTML = `<div class="summary-cart-empty">No services selected</div>`;
+    if (totalPriceEl) totalPriceEl.textContent = "$0.00";
+    if (discountRowEl) discountRowEl.style.display = "none";
+    window.__cartTotal = 0;
+    return;
+  }
+
+  let totalDiscount = 0;
+  let html = "";
+  items.forEach(s => {
+    const qty = cart[s.code];
+    const priceCents    = s.display_price_cents  != null ? s.display_price_cents  : s.price_cents;
+    const originalCents = s.original_price_cents != null ? s.original_price_cents : s.price_cents;
+    const lineCents = priceCents * qty;
+    const lineOriginal  = originalCents * qty;
+    totalCents   += lineCents;
+    totalDiscount += (lineOriginal - lineCents);
+    html += `
+      <div class="summary-cart-item">
+        <div class="summary-cart-item-left">
+          <span class="summary-cart-item-name">${escapeHtml(s.name)}</span>
+          <span class="summary-cart-item-qty">×${qty}</span>
+        </div>
+        <span class="summary-cart-item-price">${fmtUSD(lineCents)}</span>
+      </div>`;
+  });
+
+  cartItemsEl.innerHTML = html;
+
+  if (totalDiscount > 0) {
     if (discountRowEl) discountRowEl.style.display = "flex";
-    if (discountAmountEl) discountAmountEl.textContent = "-" + fmtUSD(original - display);
+    if (discountAmountEl) discountAmountEl.textContent = "-" + fmtUSD(totalDiscount);
   } else {
     if (discountRowEl) discountRowEl.style.display = "none";
   }
 
-  if (totalPriceEl) totalPriceEl.textContent = fmtUSD(display);
+  if (totalPriceEl) totalPriceEl.textContent = fmtUSD(totalCents);
+  window.__cartTotal = totalCents;
+  window.__cartItems = items.map(s => ({ name: s.name, code: s.code, qty: cart[s.code], price: (s.display_price_cents != null ? s.display_price_cents : s.price_cents) / 100 }));
 }
 
 if (customAmountInput) {
@@ -298,25 +322,42 @@ async function loadServices() {
         const priceDisplay = fmtUSD(display);
         const originalDisplay = disc ? `<span class="service-card-original-price">${fmtUSD(original)}</span>` : "";
 
+        const perOrder = (window.t && window.t("per_order")) || "/ order";
         card.innerHTML = `
           ${discBadge}
           <div style="width: 100%;">
             <div class="service-card-header">
               <div class="service-card-title">${escapeHtml(s.name)}</div>
-              <div class="service-card-select-indicator"></div>
             </div>
             <div class="service-card-price">
-              ${priceDisplay} ${originalDisplay} <span>${(window.t && window.t("per_order")) || "/ order"}</span>
+              ${priceDisplay} ${originalDisplay} <span>${perOrder}</span>
             </div>
           </div>
-          <ul class="service-card-features">
-            ${featuresHtml}
-          </ul>
+          <ul class="service-card-features">${featuresHtml}</ul>
+          <div class="card-footer">
+            <button class="btn-add-cart" id="add-btn-${s.code}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+              Add
+            </button>
+            <div class="qty-control" id="qty-ctrl-${s.code}">
+              <button class="qty-btn minus" id="minus-${s.code}">−</button>
+              <span class="qty-number" id="qty-num-${s.code}">1</span>
+              <button class="qty-btn" id="plus-${s.code}">+</button>
+            </div>
+          </div>
         `;
 
-        card.addEventListener("click", () => {
-          if (serviceCardsContainer && serviceCardsContainer.classList.contains("disabled-cards")) return;
-          selectServiceCard(s.code);
+        card.querySelector(`#add-btn-${s.code}`).addEventListener("click", (e) => {
+          e.stopPropagation();
+          addToCart(s.code);
+        });
+        card.querySelector(`#minus-${s.code}`).addEventListener("click", (e) => {
+          e.stopPropagation();
+          updateCartQty(s.code, -1);
+        });
+        card.querySelector(`#plus-${s.code}`).addEventListener("click", (e) => {
+          e.stopPropagation();
+          updateCartQty(s.code, 1);
         });
 
         serviceCardsContainer.appendChild(card);
@@ -331,8 +372,6 @@ async function loadServices() {
       document.querySelectorAll('.service-card').forEach(card => {
         card.style.display = card.dataset.group === tabName ? '' : 'none';
       });
-      const firstVisible = document.querySelector(`.service-card[data-group="${tabName}"]`);
-      if (firstVisible) selectServiceCard(firstVisible.dataset.code);
     }
 
     document.querySelectorAll('.service-tab').forEach(btn => {
@@ -353,27 +392,8 @@ async function loadServices() {
     }
   }
 
-  // Visual/note updates when select changes
-  serviceSelect.addEventListener("change", () => {
-    const code = serviceSelect.value;
-    const text = serviceSelect.options[serviceSelect.selectedIndex]?.textContent || code;
-    if (serviceNote) {
-      serviceNote.textContent = (window.t ? window.t("selected_service") : "Tanlangan servis") + ": " + text;
-      serviceNote.style.display = "block";
-    }
-    
-    // Sync active class to cards
-    const cards = document.querySelectorAll(".service-card");
-    cards.forEach(c => {
-      if (c.dataset.code === code) {
-        c.classList.add("active");
-      } else {
-        c.classList.remove("active");
-      }
-    });
-
-    updateOrderSummary(code);
-  });
+  // Initialize empty cart summary
+  updateCartSummary();
 }
 
 loadServices().then(() => {
@@ -486,19 +506,28 @@ submitBtn.addEventListener("click", async () => {
     return;
   }
 
-  let serviceCode = serviceSelect ? String(serviceSelect.value || "").trim() : "SVC100";
+  let serviceCode = "SVC100";
   let customAmountCents = 0;
 
-  if (window.__cartMode && window.__cartMode.totalCents > 0) {
+  if (window.__cartTotal > 0) {
+    // Multi-service cart
+    customAmountCents = window.__cartTotal;
+    const codes = Object.keys(cart);
+    serviceCode = codes.length === 1 ? codes[0] : "CART";
+    // Append cart detail to description
+    const cartDetail = (window.__cartItems || []).map(i => `${i.name} ×${i.qty} = $${(i.price * i.qty).toFixed(2)}`).join(", ");
+    if (cartDetail) descEl.value = descEl.value + `\n\n[Services: ${cartDetail}]`;
+  } else if (window.__cartMode && window.__cartMode.totalCents > 0) {
     customAmountCents = window.__cartMode.totalCents;
     serviceCode = (window.__cartMode.cart[0]?.service || serviceCode).toUpperCase();
-    // Clear cart after successful order (done below after res.ok)
   } else if (customAmountInput && customAmountInput.value) {
     const val = Number(customAmountInput.value);
     if (val > 0) {
       serviceCode = "CUSTOM";
       customAmountCents = Math.round(val * 100);
     }
+  } else if (serviceSelect) {
+    serviceCode = String(serviceSelect.value || "SVC100").trim();
   }
 
   submitBtn.disabled = true;
