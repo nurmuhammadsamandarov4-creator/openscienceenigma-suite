@@ -71,7 +71,7 @@
 
       // Team
       team_title: "Jamoamiz",
-      team_desc: "AI asosidagi mahsulotlar kelajagini yaratayotgan quruvchilar, dizaynerlar va muhandislar jamoasi.",
+      team_desc: "Ilmiy izlanishlar va ma'lumotlar tahlili kelajagini yaratayotgan tadqiqotchilar va data olimlari jamoasi.",
       board_soft_science: "Ijtimoiy fanlar kengashi",
       board_hard_science: "Tabiiy fanlar kengashi",
 
@@ -406,7 +406,7 @@
 
       // Team
       team_title: "Наша команда",
-      team_desc: "Команда разработчиков, дизайнеров и инженеров, создающих будущее AI‑продуктов.",
+      team_desc: "Команда исследователей и специалистов по данным, создающих будущее научного анализа и статистики.",
       board_soft_science: "Совет по социальным наукам",
       board_hard_science: "Совет по естественным наукам",
       testimonials_see_more: "Смотреть больше",
@@ -725,7 +725,7 @@
 
       // Team
       team_title: "Meet Our Team",
-      team_desc: "A passionate team of builders, designers, and engineers shaping the future of AI-powered products.",
+      team_desc: "A passionate team of researchers, data scientists, and analysts shaping the future of scientific and statistical analysis.",
       board_soft_science: "Board of Soft Science",
       board_hard_science: "Board of Hard Science",
       testimonials_see_more: "See more",
