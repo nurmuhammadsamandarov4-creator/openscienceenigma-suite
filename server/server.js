@@ -220,12 +220,13 @@ function seedSiteContentIfMissing() {
   const vacantMember = () => ({ name: 'Vacant', role: '', imageUrl: '/images/vacant.jpg' });
   upsertSiteContent('team', {
     members: [
+      vacantMember(),
       {
         name: 'Oybek Eshbayev',
         role: 'CEO & Founder',
         imageUrl: '/images/oybek_eshbayev.jpg'
       },
-      vacantMember(), vacantMember()
+      vacantMember()
     ],
     softScienceBoard: [
       { name: 'Dilbar Khasanova', role: 'PhD | Applied Linguistics & ESP', imageUrl: '/images/dilbar_khasanova.jpg' },
