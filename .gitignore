@@ -48,3 +48,4 @@ Archive.zip
 !server/public/assets/*.png
 !server/public/assets/*.jpg
 !server/public/assets/*.ico
+.vercel
