@@ -61,11 +61,10 @@ async function loadTeamSection() {
       }
     };
 
-    // Filter out vacant/placeholder members
     const isVacant = (m) => /^vacant$/i.test(String(m.name || '').trim());
-    const realMembers = members.filter(m => m && !isVacant(m));
 
     const renderCard = (m) => {
+      const vacant = isVacant(m);
       const name = escapeHtml(String(m.name || ''));
       const role = escapeHtml(String(m.role || ''));
       const desc = escapeHtml(String(m.description || ''));
@@ -77,16 +76,16 @@ async function loadTeamSection() {
   </div>
   <div style="padding:20px 24px 24px;text-align:center;width:100%;">
     <h3 style="font-size:18px;font-weight:700;color:#0f172a;margin:0 0 4px;">${name}</h3>
-    <p style="font-size:13px;font-weight:500;color:#64748b;margin:0 0 ${desc ? '12px' : '0'};">${role}</p>
+    ${vacant ? '' : `<p style="font-size:13px;font-weight:500;color:#64748b;margin:0 0 ${desc ? '12px' : '0'};">${role}</p>`}
     ${desc ? `<p style="font-size:13px;color:#94a3b8;line-height:1.6;margin:0;">${desc}</p>` : ''}
   </div>
 </div>`;
     };
 
     const mainSection = grid.closest('section');
-    if (realMembers.length) {
+    if (members.length) {
       grid.style.cssText = 'display:flex;flex-wrap:wrap;gap:24px;justify-content:center;';
-      grid.innerHTML = realMembers.map(renderCard).join('');
+      grid.innerHTML = members.map(renderCard).join('');
       if (mainSection) mainSection.style.display = '';
     } else {
       if (mainSection) mainSection.style.display = 'none';

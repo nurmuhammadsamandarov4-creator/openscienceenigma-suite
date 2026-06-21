@@ -224,7 +224,8 @@ function seedSiteContentIfMissing() {
         name: 'Oybek Eshbayev',
         role: 'CEO & Founder',
         imageUrl: '/images/oybek_eshbayev.jpg'
-      }
+      },
+      vacantMember(), vacantMember()
     ],
     softScienceBoard: [
       { name: 'Dilbar Khasanova', role: 'PhD | Applied Linguistics & ESP', imageUrl: '/images/dilbar_khasanova.jpg' },
